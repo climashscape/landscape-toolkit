@@ -1,0 +1,61 @@
+{
+  "format": 1,
+  "restore": {
+    "G:\\CODE\\landscape toolkit\\src\\LandscapeToolkit.csproj": {}
+  },
+  "projects": {
+    "G:\\CODE\\landscape toolkit\\src\\LandscapeToolkit.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "G:\\CODE\\landscape toolkit\\src\\LandscapeToolkit.csproj",
+        "projectName": "LandscapeToolkit",
+        "projectPath": "G:\\CODE\\landscape toolkit\\src\\LandscapeToolkit.csproj",
+        "packagesPath": "C:\\Users\\氣相\\.nuget\\packages\\",
+        "outputPath": "G:\\CODE\\landscape toolkit\\src\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\氣相\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "Grasshopper": {
+              "target": "Package",
+              "version": "[7.13.21348.13001, )"
+            },
+            "RhinoCommon": {
+              "target": "Package",
+              "version": "[7.13.21348.13001, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

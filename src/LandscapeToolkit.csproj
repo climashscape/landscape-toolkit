@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <Version>1.0.0</Version>
+    <Title>LandscapeToolkit</Title>
+    <Description>High-standard landscape modeling and analysis tools for Rhino + Grasshopper.</Description>
+    <TargetExt>.gha</TargetExt>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="7.13.21348.13001" />
+    <PackageReference Include="RhinoCommon" Version="7.13.21348.13001" />
+  </ItemGroup>
+
+</Project>

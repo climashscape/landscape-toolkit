@@ -1,0 +1,4 @@
+- [x] RoadNetworkComponent compiles and generates valid Quad Mesh from curve input.
+- [x] RoadNetworkComponent handles intersections (boolean union) correctly.
+- [x] PlotGeneratorComponent compiles and generates Quad Mesh infill for closed curves.
+- [x] Generated meshes are primarily Quad Meshes (minimal triangles).

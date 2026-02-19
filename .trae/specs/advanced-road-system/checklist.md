@@ -1,0 +1,6 @@
+- [ ] Project documentation (README.md) is comprehensive and in Chinese.
+- [ ] Folder structure includes `src/Optimization` and `src/Data`.
+- [ ] Advanced Road Network supports multiple road types/widths.
+- [ ] Road output is separated by layer.
+- [ ] Plaza connection generates valid fillets.
+- [ ] Path Optimizer component runs and smooths/optimizes input curves.
