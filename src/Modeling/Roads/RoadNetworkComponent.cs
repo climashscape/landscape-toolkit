@@ -17,6 +17,8 @@ namespace LandscapeToolkit.Modeling
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.RoadNetwork;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Centerlines", "C", "Road centerlines (Curves/Polylines)", GH_ParamAccess.list);
@@ -68,7 +70,7 @@ namespace LandscapeToolkit.Modeling
             }
         }
 
-        protected override System.Drawing.Bitmap Icon => null; // TODO: Add Icon
+
 
         public override Guid ComponentGuid => new Guid("12345678-1234-1234-1234-1234567890ab"); // Ensure unique GUID
     }

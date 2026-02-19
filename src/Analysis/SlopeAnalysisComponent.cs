@@ -15,6 +15,8 @@ namespace LandscapeToolkit.Analysis
         {
         }
 
+        protected override Bitmap Icon => Icons.SlopeAnalysis;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "M", "Input mesh to analyze", GH_ParamAccess.item);
@@ -98,7 +100,7 @@ namespace LandscapeToolkit.Analysis
             return Color.FromArgb(r, g, b);
         }
 
-        protected override System.Drawing.Bitmap Icon => null; // TODO: Add icon
+
 
         public override Guid ComponentGuid => new Guid("9e8d7c6b-5a4f-3e2d-1c0b-a9b8c7d6e5f4");
     }

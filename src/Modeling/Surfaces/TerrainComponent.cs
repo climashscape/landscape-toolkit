@@ -15,6 +15,8 @@ namespace LandscapeToolkit.Modeling
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.Terrain;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGeometryParameter("Input", "G", "Input Points or Curves (Contours)", GH_ParamAccess.list);
@@ -131,7 +133,7 @@ namespace LandscapeToolkit.Modeling
             }
         }
 
-        protected override System.Drawing.Bitmap Icon => null; // TODO: Add icon
+
 
         public override Guid ComponentGuid => new Guid("2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e");
     }

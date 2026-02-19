@@ -15,6 +15,8 @@ namespace LandscapeToolkit.Analysis
         {
         }
 
+        protected override Bitmap Icon => Icons.SolarAnalysis;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "M", "Input mesh to analyze", GH_ParamAccess.item);
@@ -102,7 +104,7 @@ namespace LandscapeToolkit.Analysis
             return Color.FromArgb(r, g, b);
         }
 
-        protected override System.Drawing.Bitmap Icon => null;
+
         public override Guid ComponentGuid => new Guid("3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f");
     }
 }

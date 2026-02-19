@@ -14,6 +14,8 @@ namespace LandscapeToolkit.Modeling
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.Wall;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Curve", "C", "Base curve for the wall", GH_ParamAccess.item);
@@ -86,7 +88,7 @@ namespace LandscapeToolkit.Modeling
             }
         }
 
-        protected override System.Drawing.Bitmap Icon => null; // TODO: Add icon
+
 
         public override Guid ComponentGuid => new Guid("1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d");
     }

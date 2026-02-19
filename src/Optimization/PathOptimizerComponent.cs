@@ -14,6 +14,8 @@ namespace LandscapeToolkit.Optimization
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.PathOptimizer;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Curves", "C", "Input curves to optimize", GH_ParamAccess.list);
@@ -48,7 +50,7 @@ namespace LandscapeToolkit.Optimization
             DA.SetDataList(0, optimized);
         }
 
-        protected override System.Drawing.Bitmap Icon => null;
+
         public override Guid ComponentGuid => new Guid("1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f");
     }
 }

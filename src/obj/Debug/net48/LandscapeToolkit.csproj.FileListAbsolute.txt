@@ -1,0 +1,10 @@
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.csproj.AssemblyReference.cache
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.GeneratedMSBuildEditorConfig.editorconfig
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.AssemblyInfoInputs.cache
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.AssemblyInfo.cs
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.csproj.CoreCompileInputs.cache
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.sourcelink.json
+G:\CODE\landscape toolkit\src\bin\Debug\net48\LandscapeToolkit.gha
+G:\CODE\landscape toolkit\src\bin\Debug\net48\LandscapeToolkit.pdb
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.gha
+G:\CODE\landscape toolkit\src\obj\Debug\net48\LandscapeToolkit.pdb

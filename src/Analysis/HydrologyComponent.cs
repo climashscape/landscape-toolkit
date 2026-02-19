@@ -14,6 +14,8 @@ namespace LandscapeToolkit.Analysis
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.Hydrology;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "M", "Input terrain mesh", GH_ParamAccess.item);
@@ -105,7 +107,7 @@ namespace LandscapeToolkit.Analysis
             return path;
         }
 
-        protected override System.Drawing.Bitmap Icon => null;
+
         public override Guid ComponentGuid => new Guid("4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a");
     }
 }

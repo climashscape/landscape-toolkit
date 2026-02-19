@@ -16,6 +16,8 @@ namespace LandscapeToolkit.Modeling
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.PlotGenerator;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Boundaries", "B", "Boundary curves defining plots", GH_ParamAccess.list);
@@ -149,7 +151,7 @@ namespace LandscapeToolkit.Modeling
             DA.SetDataList(0, resultMeshes);
         }
 
-        protected override System.Drawing.Bitmap Icon => null;
+
 
         public override Guid ComponentGuid => new Guid("9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f");
     }

@@ -18,6 +18,8 @@ namespace LandscapeToolkit.Optimization
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.WoolyPathOptimizer;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddRectangleParameter("Bounds", "B", "Simulation boundary", GH_ParamAccess.item);
@@ -85,7 +87,7 @@ namespace LandscapeToolkit.Optimization
             }
         }
 
-        protected override System.Drawing.Bitmap Icon => null;
+
         public override Guid ComponentGuid => new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef");
     }
 }

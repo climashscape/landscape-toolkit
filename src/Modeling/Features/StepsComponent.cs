@@ -15,6 +15,8 @@ namespace LandscapeToolkit.Modeling
         {
         }
 
+        protected override System.Drawing.Bitmap Icon => Icons.Steps;
+
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Path", "C", "Centerline path for the steps", GH_ParamAccess.item);
@@ -60,7 +62,7 @@ namespace LandscapeToolkit.Modeling
             }
         }
 
-        protected override System.Drawing.Bitmap Icon => null; // TODO: Add Icon
+
 
         public override Guid ComponentGuid => new Guid("87654321-4321-4321-4321-210987654321"); // Ensure unique GUID
     }
