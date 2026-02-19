@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Rhino.Geometry;
+using LandscapeToolkit.Data;
+using LandscapeToolkit.Data.Graph;
 
 namespace LandscapeToolkit.Modeling.Roads
 {
@@ -11,14 +13,41 @@ namespace LandscapeToolkit.Modeling.Roads
     public class QuadRoadGenerator
     {
         public List<Curve> Centerlines { get; set; }
-        public double RoadWidth { get; set; }
-        public double IntersectionRadius { get; set; }
+        public List<double> RoadWidths { get; set; }
+        public double DefaultWidth { get; set; } = 6.0;
+        public double DefaultIntersectionRadius { get; set; } = 9.0;
 
-        public QuadRoadGenerator(List<Curve> curves, double width)
+        public QuadRoadGenerator(List<Curve> curves, List<double> widths = null)
         {
             Centerlines = curves;
-            RoadWidth = width;
-            IntersectionRadius = width * 1.5; // Default junction size
+            RoadWidths = new List<double>();
+
+            if (widths != null && widths.Count > 0)
+            {
+                if (widths.Count == 1)
+                {
+                    // Single width applies to all
+                    for (int i = 0; i < curves.Count; i++) RoadWidths.Add(widths[0]);
+                }
+                else if (widths.Count == curves.Count)
+                {
+                    RoadWidths = widths;
+                }
+                else
+                {
+                    // Mismatch: Cycle or pad with last
+                    for (int i = 0; i < curves.Count; i++)
+                    {
+                        if (i < widths.Count) RoadWidths.Add(widths[i]);
+                        else RoadWidths.Add(widths[widths.Count - 1]);
+                    }
+                }
+            }
+            else
+            {
+                // Use default
+                for(int i=0; i<curves.Count; i++) RoadWidths.Add(DefaultWidth);
+            }
         }
 
         /// <summary>
@@ -29,7 +58,7 @@ namespace LandscapeToolkit.Modeling.Roads
         {
             // Step 1: Clean and Node Identification
             // 步骤1：清理曲线并识别节点（路口）
-            var graph = BuildGraph(Centerlines);
+            var graph = BuildGraph(Centerlines, RoadWidths);
 
             // Step 2: Generate Junction Meshes (3-way, 4-way, N-way)
             // 步骤2：生成路口网格
@@ -62,68 +91,370 @@ namespace LandscapeToolkit.Modeling.Roads
             return finalMesh;
         }
 
-        private RoadGraph BuildGraph(List<Curve> curves)
+        private RoadGraph BuildGraph(List<Curve> inputCurves, List<double> inputWidths)
         {
-            // TODO: Intersect all curves, split them at intersections, and build a graph topology.
-            // 待实现：打断所有曲线，建立图结构 (Node-Edge)。
-            return new RoadGraph();
+            RoadGraph graph = new RoadGraph();
+            double tolerance = 0.01; // Intersection tolerance
+
+            // 1. Shatter curves at intersections
+            // Need to track which original curve (and thus which width) a segment belongs to.
+            // Map segment index to original index
+            
+            // Simplified approach: Re-shatter logic but propagate width
+            // This is complex because one curve splits into multiple.
+            // We need to store (Curve, Width) pairs or just map back.
+            
+            // Let's attach UserData or just use parallel lists carefully.
+            
+            // Shatter logic
+            // Collect all split parameters
+            Dictionary<int, List<double>> splitParams = new Dictionary<int, List<double>>();
+            for (int i = 0; i < inputCurves.Count; i++) splitParams[i] = new List<double>();
+
+            for (int i = 0; i < inputCurves.Count; i++)
+            {
+                for (int j = i + 1; j < inputCurves.Count; j++)
+                {
+                    var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(inputCurves[i], inputCurves[j], tolerance, tolerance);
+                    if (events != null)
+                    {
+                        foreach (var e in events)
+                        {
+                            if (e.IsPoint)
+                            {
+                                splitParams[i].Add(e.ParameterA);
+                                splitParams[j].Add(e.ParameterB);
+                            }
+                        }
+                    }
+                }
+            }
+
+            List<Curve> allSegments = new List<Curve>();
+            List<double> allSegmentWidths = new List<double>();
+
+            for (int i = 0; i < inputCurves.Count; i++)
+            {
+                var curve = inputCurves[i];
+                double w = (inputWidths != null && i < inputWidths.Count) ? inputWidths[i] : DefaultWidth;
+                
+                var params_ = splitParams[i];
+                params_.Sort();
+                
+                var splits = curve.Split(params_);
+                if (splits != null)
+                {
+                    foreach(var s in splits)
+                    {
+                        allSegments.Add(s);
+                        allSegmentWidths.Add(w);
+                    }
+                }
+                else
+                {
+                    allSegments.Add(curve);
+                    allSegmentWidths.Add(w);
+                }
+            }
+            
+            // Filter short segments
+            for (int i = allSegments.Count - 1; i >= 0; i--)
+            {
+                if (allSegments[i].GetLength() < tolerance)
+                {
+                    allSegments.RemoveAt(i);
+                    allSegmentWidths.RemoveAt(i);
+                }
+            }
+
+            // 2. Build Nodes and Edges
+            for (int i = 0; i < allSegments.Count; i++)
+            {
+                Curve seg = allSegments[i];
+                double w = allSegmentWidths[i];
+                
+                Point3d start = seg.PointAtStart;
+                Point3d end = seg.PointAtEnd;
+                
+                RoadNode startNode = GetOrCreateNode(graph, start, tolerance);
+                RoadNode endNode = GetOrCreateNode(graph, end, tolerance);
+                
+                RoadEdge edge = new RoadEdge(seg, startNode, endNode);
+                
+                // Assign Type
+                // For now, we create a new Type for each unique width, or just generic
+                edge.Type = new RoadType("Generic", w, w * 1.5, "Default");
+                
+                graph.Edges.Add(edge);
+                
+                startNode.ConnectedEdges.Add(edge);
+                endNode.ConnectedEdges.Add(edge);
+            }
+
+            return graph;
+        }
+
+        private RoadNode GetOrCreateNode(RoadGraph graph, Point3d pt, double tolerance)
+        {
+            // Simple linear search. For performance, use RTree.
+            foreach (var node in graph.Nodes)
+            {
+                if (node.Position.DistanceTo(pt) < tolerance) return node;
+            }
+            var newNode = new RoadNode(pt);
+            graph.Nodes.Add(newNode);
+            return newNode;
         }
 
         private Mesh CreateJunctionMesh(RoadNode node)
         {
-            // Strategy:
-            // 1. Sort connected edges by angle.
-            // 2. Create a central polygon (or point).
-            // 3. Connect center to edge endpoints.
-            // 4. Subdivide to Quads.
-            
-            // 策略：
-            // 对于 3-Way (三岔路口): 使用 Y 型拓扑。
-            // 对于 4-Way (十字路口): 使用 Grid 拓扑。
-            
             Mesh mesh = new Mesh();
-            // ... Implementation of topology templates ...
+            int edgeCount = node.ConnectedEdges.Count;
+
+            // 1. Sort edges by angle
+            var sortedEdges = SortEdgesByAngle(node);
+            
+            // 2. Calculate corner points
+            List<Point3d> cornerPoints = new List<Point3d>();
+            List<Point3d> connectionPoints = new List<Point3d>(); 
+
+            foreach (var edge in sortedEdges)
+            {
+                double w = edge.Type.Width;
+                double r = edge.Type.FilletRadius; // Use radius from edge type (derived from width)
+                
+                Vector3d tangent = edge.GetTangentAtNode(node);
+                Point3d centerOnEdge = node.Position + tangent * r;
+                connectionPoints.Add(centerOnEdge);
+
+                Vector3d perp = Vector3d.CrossProduct(tangent, Vector3d.ZAxis);
+                perp.Unitize();
+                
+                Point3d left = centerOnEdge + perp * (w * 0.5);
+                Point3d right = centerOnEdge - perp * (w * 0.5);
+                
+                cornerPoints.Add(left);
+                cornerPoints.Add(right);
+            }
+
+            // 3. Generate Topology based on degree
+            if (edgeCount == 1) // Dead End
+            {
+                Point3d p1 = cornerPoints[0];
+                Point3d p2 = cornerPoints[1];
+                Vector3d dir = sortedEdges[0].GetTangentAtNode(node);
+                double w = sortedEdges[0].Type.Width;
+                double r = sortedEdges[0].Type.FilletRadius;
+                
+                mesh.Vertices.Add(p1);
+                mesh.Vertices.Add(p2);
+                mesh.Vertices.Add(node.Position); 
+                
+                Point3d pEnd = node.Position + dir * (r + w * 0.5);
+                mesh.Vertices.Add(p1);
+                mesh.Vertices.Add(p2);
+                mesh.Vertices.Add(pEnd - (p2-node.Position)); 
+                mesh.Vertices.Add(pEnd - (p1-node.Position)); 
+                mesh.Faces.AddFace(0, 1, 2, 3);
+            }
+            else if (edgeCount == 2) // Corner
+            {
+                mesh.Vertices.Add(cornerPoints[1]); // Edge1 Right
+                mesh.Vertices.Add(cornerPoints[0]); // Edge1 Left
+                mesh.Vertices.Add(cornerPoints[2]); // Edge2 Left
+                mesh.Vertices.Add(cornerPoints[3]); // Edge2 Right
+                mesh.Faces.AddFace(0, 1, 2, 3);
+            }
+            else if (edgeCount >= 3) // 3-Way, 4-Way, N-Way
+            {
+                // Generalized Fan/Star Topology
+                mesh.Vertices.Add(node.Position); // 0
+                List<int> centerIndices = new List<int>();
+                List<int> leftIndices = new List<int>();
+                List<int> rightIndices = new List<int>();
+                List<int> valleyIndices = new List<int>();
+
+                for (int i = 0; i < edgeCount; i++)
+                {
+                    mesh.Vertices.Add(connectionPoints[i]);
+                    centerIndices.Add(mesh.Vertices.Count - 1);
+                    mesh.Vertices.Add(cornerPoints[i * 2]);
+                    leftIndices.Add(mesh.Vertices.Count - 1);
+                    mesh.Vertices.Add(cornerPoints[i * 2 + 1]);
+                    rightIndices.Add(mesh.Vertices.Count - 1);
+                }
+                
+                // Valley points (between edges)
+                for (int i = 0; i < edgeCount; i++)
+                {
+                    int next = (i + 1) % edgeCount;
+                    Point3d pRight = cornerPoints[i * 2 + 1]; // Current edge Right
+                    Point3d pNextLeft = cornerPoints[next * 2]; // Next edge Left
+                    
+                    Point3d valley = (pRight + pNextLeft) * 0.5;
+                    valley = (valley + node.Position) * 0.5;
+                    mesh.Vertices.Add(valley);
+                    valleyIndices.Add(mesh.Vertices.Count - 1);
+                }
+                
+                // Faces
+                for (int i = 0; i < edgeCount; i++)
+                {
+                    int prev = (i + edgeCount - 1) % edgeCount;
+                    // Left Quad
+                    mesh.Faces.AddFace(0, centerIndices[i], leftIndices[i], valleyIndices[prev]);
+                    // Right Quad
+                    mesh.Faces.AddFace(0, valleyIndices[i], rightIndices[i], centerIndices[i]);
+                }
+            }
+            
             return mesh;
+        }
+
+        private List<RoadEdge> SortEdgesByAngle(RoadNode node)
+        {
+            var edges = new List<RoadEdge>(node.ConnectedEdges);
+            edges.Sort((a, b) =>
+            {
+                Vector3d dirA = a.GetTangentAtNode(node);
+                Vector3d dirB = b.GetTangentAtNode(node);
+                double angleA = Math.Atan2(dirA.Y, dirA.X);
+                double angleB = Math.Atan2(dirB.Y, dirB.X);
+                return angleA.CompareTo(angleB);
+            });
+            return edges;
         }
 
         private Mesh CreateStreetStrip(RoadEdge edge)
         {
-            // Strategy:
-            // 1. Offset centerline left and right.
-            // 2. Divide into segments based on length.
-            // 3. Create Quad faces between left and right points.
+            double w = edge.Type.Width;
+            double r = edge.Type.FilletRadius;
+
+            Curve c = edge.Curve;
+            if (c == null) return new Mesh();
             
+            double len = c.GetLength();
+            double startDist = r;
+            double endDist = len - r;
+
+            if (endDist <= startDist) return new Mesh();
+
+            // Trim curve to valid length
+            // We need parameters for start and end distance
+            double tStart, tEnd;
+            c.LengthParameter(startDist, out tStart);
+            c.LengthParameter(endDist, out tEnd);
+
+            Curve trimmed = c.Trim(new Interval(tStart, tEnd));
+            
+            if (trimmed == null) return new Mesh();
+
+            double trimmedLen = trimmed.GetLength();
+            int segCount = (int)(trimmedLen / w); // Try to keep quads square
+            if (segCount < 1) segCount = 1;
+            
+            double[] params_ = trimmed.DivideByCount(segCount, true);
+            if (params_ == null) return new Mesh();
+
             Mesh mesh = new Mesh();
-            // ... Implementation of lofting/strip generation ...
+            
+            for (int i = 0; i < params_.Length; i++)
+            {
+                double t = params_[i];
+                Point3d pt = trimmed.PointAt(t);
+                Vector3d tan = trimmed.TangentAt(t);
+                Vector3d perp = Vector3d.CrossProduct(tan, Vector3d.ZAxis);
+                perp.Unitize();
+
+                Point3d left = pt + perp * (w * 0.5);
+                Point3d right = pt - perp * (w * 0.5);
+
+                mesh.Vertices.Add(left);
+                mesh.Vertices.Add(right);
+            }
+
+            for (int i = 0; i < segCount; i++)
+            {
+                int baseIdx = i * 2;
+                // Add quad face (0, 1, 3, 2) order
+                mesh.Faces.AddFace(baseIdx, baseIdx + 1, baseIdx + 3, baseIdx + 2);
+            }
+
             return mesh;
         }
 
         private Mesh RelaxMesh(Mesh input)
         {
             // Laplacian smoothing logic
-            // P_new = P_old + 0.5 * (Average(Neighbors) - P_old)
-            // Keep boundary vertices fixed!
+            // 1. Identify boundary vertices (naked edges) to pin them
+            bool[] isBoundary = input.GetNakedEdgePointStatus();
+            
+            // 2. Build adjacency list
+            var topo = input.TopologyEdges;
+            int vertexCount = input.Vertices.Count;
+            Point3d[] newVertices = new Point3d[vertexCount];
+
+            // 3. Iterations
+            int iterations = 3;
+            double strength = 0.5;
+
+            for (int iter = 0; iter < iterations; iter++)
+            {
+                for (int i = 0; i < vertexCount; i++)
+                {
+                    if (isBoundary[i])
+                    {
+                        newVertices[i] = input.Vertices[i];
+                        continue;
+                    }
+
+                    // Get neighbors
+                    int[] connectedEdges = input.TopologyVertices.ConnectedEdges(input.TopologyVertices.TopologyVertexIndex(i));
+                    Point3d sum = Point3d.Origin;
+                    int count = 0;
+
+                    foreach (int edgeIndex in connectedEdges)
+                    {
+                        // Get the other vertex of the edge
+                        var pair = topo.GetTopologyVertices(edgeIndex);
+                        int otherTopoIndex = (pair.I == input.TopologyVertices.TopologyVertexIndex(i)) ? pair.J : pair.I;
+                        // Convert topo index back to vertex index (first one)
+                        // Note: Mesh.TopologyVertices maps to multiple Mesh.Vertices if they are coincident but not welded.
+                        // Here we assume welded mesh for simplicity in logic, or just take the first.
+                        // However, strictly speaking, we should use TopologyVertices for smoothing.
+                        
+                        // Let's use a simpler approach: finding adjacent vertices via faces
+                        // Actually, TopologyVertices is robust.
+                        
+                        // Get the point from the topo vertex
+                        Point3d neighborPt = input.TopologyVertices[otherTopoIndex];
+                        sum += neighborPt;
+                        count++;
+                    }
+
+                    if (count > 0)
+                    {
+                        Point3d avg = sum / count;
+                        Point3d current = input.Vertices[i]; // Implicit conversion from Point3f to Point3d
+                        Vector3d move = avg - current;
+                        newVertices[i] = current + move * strength;
+                    }
+                    else
+                    {
+                        newVertices[i] = input.Vertices[i];
+                    }
+                }
+
+                // Update mesh
+                for (int i = 0; i < vertexCount; i++)
+                {
+                    input.Vertices[i] = new Point3f((float)newVertices[i].X, (float)newVertices[i].Y, (float)newVertices[i].Z);
+                }
+            }
+            
+            input.Normals.ComputeNormals();
+            input.Compact();
             return input;
         }
-    }
-
-    // Placeholder classes for Graph structure
-    public class RoadGraph 
-    {
-        public List<RoadNode> Nodes { get; set; } = new List<RoadNode>();
-        public List<RoadEdge> Edges { get; set; } = new List<RoadEdge>();
-    }
-
-    public class RoadNode 
-    {
-        public Point3d Position { get; set; }
-        public List<RoadEdge> ConnectedEdges { get; set; }
-    }
-
-    public class RoadEdge 
-    {
-        public Curve Curve { get; set; }
-        public RoadNode StartNode { get; set; }
-        public RoadNode EndNode { get; set; }
     }
 }

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landscape Toolkit - Documentation</title>
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --secondary: #27ae60;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e1e4e8;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        h1 { margin: 0; font-size: 2.5rem; }
+        .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 1rem; }
+        
+        nav {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover { color: var(--primary); }
+        .tab-btn.active { 
+            color: var(--primary); 
+            border-bottom-color: var(--primary); 
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .grid.active { display: grid; }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .card h3 { margin: 0 0 0.5rem 0; color: var(--text); }
+        .card p { color: #666; font-size: 0.9rem; flex-grow: 1; }
+        
+        .card-links {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .card-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .card-links a:hover { text-decoration: underline; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .version-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        /* Changelog Styles */
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 30px;
+            border-left: 2px solid var(--border);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        .timeline-content h3 { margin-top: 0; }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 4rem;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 1rem;
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.3s;
+        }
+        .download-btn:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Landscape Toolkit <span class="version-tag">v1.0.0</span></h1>
+    <p class="subtitle">High-performance parametric landscape design tools for Rhino/Grasshopper</p>
+    <a href="../dist/LandscapeToolkit_v1.0.0.zip" class="download-btn">Download v1.0.0</a>
+</header>
+
+<nav>
+    <button class="tab-btn active" onclick="showTab('modeling')">Modeling</button>
+    <button class="tab-btn" onclick="showTab('optimization')">Optimization</button>
+    <button class="tab-btn" onclick="showTab('analysis')">Analysis</button>
+    <button class="tab-btn" onclick="showTab('workflows')">Workflows</button>
+    <button class="tab-btn" onclick="showTab('changelog')">Changelog</button>
+</nav>
+
+<main>
+    <!-- Modeling Tab -->
+    <div id="modeling" class="grid active">
+        <div class="card">
+            <div class="card-icon">🛣️</div>
+            <h3>Quad Road Network</h3>
+            <p>Generate high-quality all-quad mesh road networks from centerlines. Perfect for SubD workflows.</p>
+            <div class="card-links">
+                <a href="Components/en/QuadRoadNetwork.md">English Doc</a>
+                <a href="Components/zh/QuadRoadNetwork.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🏞️</div>
+            <h3>Landscape Terrain</h3>
+            <p>Create smooth, flowing "Class-A" terrain surfaces from contours or points using relaxation.</p>
+            <div class="card-links">
+                <a href="Components/en/Terrain.md">English Doc</a>
+                <a href="Components/zh/Terrain.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🏘️</div>
+            <h3>Plot Generator</h3>
+            <p>Automatically extract and mesh enclosed plots from road boundaries.</p>
+            <div class="card-links">
+                <a href="Components/en/PlotGenerator.md">English Doc</a>
+                <a href="Components/zh/PlotGenerator.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🪜</div>
+            <h3>Landscape Steps</h3>
+            <p>Parametric step generation that adapts to path slope and length.</p>
+            <div class="card-links">
+                <a href="Components/en/Steps.md">English Doc</a>
+                <a href="Components/zh/Steps.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🧱</div>
+            <h3>Landscape Wall</h3>
+            <p>Generate retaining walls with thickness and height control.</p>
+            <div class="card-links">
+                <a href="Components/en/Wall.md">English Doc</a>
+                <a href="Components/zh/Wall.md">中文文档</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optimization Tab -->
+    <div id="optimization" class="grid">
+        <div class="card">
+            <div class="card-icon">🦠</div>
+            <h3>Wooly Path Optimizer</h3>
+            <p>Bio-mimetic Slime Mold algorithm for finding organic, efficient path networks.</p>
+            <div class="card-links">
+                <a href="Components/en/WoolyPathOptimizer.md">English Doc</a>
+                <a href="Components/zh/WoolyPathOptimizer.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">➰</div>
+            <h3>Bio-Path Optimizer</h3>
+            <p>Simple Laplacian smoothing to relax rigid hand-drawn sketches.</p>
+            <div class="card-links">
+                <a href="Components/en/PathOptimizer.md">English Doc</a>
+                <a href="Components/zh/PathOptimizer.md">中文文档</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Tab -->
+    <div id="analysis" class="grid">
+        <div class="card">
+            <div class="card-icon">📐</div>
+            <h3>Slope Analysis</h3>
+            <p>Real-time slope visualization with color gradients for terrain assessment.</p>
+            <div class="card-links">
+                <a href="Components/en/SlopeAnalysis.md">English Doc</a>
+                <a href="Components/zh/SlopeAnalysis.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">☀️</div>
+            <h3>Solar Analysis</h3>
+            <p>Fast solar exposure estimation using mesh normals (Sun/Shadow map).</p>
+            <div class="card-links">
+                <a href="Components/en/SolarAnalysis.md">English Doc</a>
+                <a href="Components/zh/SolarAnalysis.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">💧</div>
+            <h3>Hydrology Analysis</h3>
+            <p>Simulate surface water runoff and identify drainage paths using steepest descent.</p>
+            <div class="card-links">
+                <a href="Components/en/Hydrology.md">English Doc</a>
+                <a href="Components/zh/Hydrology.md">中文文档</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflows Tab -->
+    <div id="workflows" class="grid">
+        <div class="card">
+            <div class="card-icon">✏️</div>
+            <h3>Sketch to Road</h3>
+            <p>Tutorial: Converting 2D sketches into 3D road networks.</p>
+            <div class="card-links">
+                <a href="Workflows/en/Sketch_to_Road.md">English</a>
+                <a href="Workflows/zh/Sketch_to_Road.md">中文教程</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🌲</div>
+            <h3>Terrain & Planting</h3>
+            <p>Tutorial: Best practices for terrain sculpting and plant scattering.</p>
+            <div class="card-links">
+                <a href="Workflows/en/Terrain_Planting.md">English</a>
+                <a href="Workflows/zh/Terrain_Planting.md">中文教程</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Changelog Tab -->
+    <div id="changelog" class="timeline" style="display: none;">
+        <div class="timeline-item">
+            <div class="timeline-date">2026-02-20</div>
+            <div class="timeline-content">
+                <h3>v1.0.0 - Initial Release</h3>
+                <ul>
+                    <li><strong>Roads</strong>: Quad Road Network with variable width support.</li>
+                    <li><strong>Terrain</strong>: Class-A surface generation and Plot meshing.</li>
+                    <li><strong>Analysis</strong>: Slope, Solar, and Hydrology tools.</li>
+                    <li><strong>Optimization</strong>: Wooly Path (Slime Mold) and Bio-Path (Laplacian).</li>
+                    <li><strong>Features</strong>: Parametric Steps and Walls.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 Landscape Toolkit. Open Source under MIT License.</p>
+</footer>
+
+<script>
+    function showTab(tabId) {
+        // Hide all grids/sections
+        document.querySelectorAll('.grid, .timeline').forEach(el => {
+            el.style.display = 'none';
+            el.classList.remove('active');
+        });
+        
+        // Deactivate all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab
+        const selected = document.getElementById(tabId);
+        if (selected.classList.contains('grid')) {
+            selected.style.display = 'grid';
+            // Small timeout to allow display:grid to apply before adding class for animation
+            setTimeout(() => selected.classList.add('active'), 10);
+        } else {
+            selected.style.display = 'block';
+        }
+        
+        // Activate button
+        event.target.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

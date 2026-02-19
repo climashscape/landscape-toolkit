@@ -48,19 +48,16 @@ namespace LandscapeToolkit.Modeling.Surfaces
             // Use Rhino's Patch or Triangulation
             // Planar triangulation then warp? Or just a simple grid if rectangular.
             // Using a simple triangulation for now.
-            Mesh m = Mesh.CreateFromClosedPolyline(boundary, MeshingParameters.Default);
-            return m;
+            Curve c = boundary.ToPolylineCurve();
+            Mesh mesh = Mesh.CreateFromPlanarBoundary(c, MeshingParameters.Default, 0.01);
+            if (mesh != null)
+                return mesh;
+            return new Mesh();
         }
 
         private bool[] IdentifyBoundaryVertices(Mesh mesh)
         {
-            bool[] fixedMask = new bool[mesh.Vertices.Count];
-            var nakedEdges = mesh.GetNakedEdges(); 
-            // Mark vertices on naked edges as fixed
-            foreach(var edge in nakedEdges) {
-                // ... logic to find vertex indices ...
-            }
-            return fixedMask;
+            return mesh.GetNakedEdgePointStatus();
         }
 
         private Mesh RelaxStep(Mesh mesh, bool[] fixedMask, List<Point3d> attractors)

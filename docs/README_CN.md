@@ -53,11 +53,23 @@ src/
 *   **地形拟合**: 使用 `Relaxation` (松弛) 算法使网格在边界约束下自然过渡。
 *   **交互逻辑**: 监听 Rhino 文档事件，实现“手拉线稿，实时生成”。
 
-## 4. 开发计划 (Development Roadmap)
-1.  **Phase 1**: 完成基础路网生成的四边面逻辑，解决路口（3-way, 4-way）的自动布线。
-2.  **Phase 2**: 实现地块封面的 SubD 算法，确保与路网边界的 G1/G2 连续。
-3.  **Phase 3**: 开发竖向构件（台阶、墙）的自适应生成。
-4.  **Phase 4**: 集成环境分析工具，建立数据仪表盘。
+## 4. 开发进度 (Development Status)
+*   **Phase 1**: [已完成] 基础路网生成的四边面逻辑，解决路口（3-way, 4-way）的自动布线。
+*   **Phase 2**: [已完成] 实现地块封面的 SubD 算法，确保与路网边界的 G1/G2 连续。
+*   **Phase 3**: [已完成] 开发竖向构件（台阶、墙）的自适应生成。
+*   **Phase 4**: [已完成] 集成环境分析工具（坡度、光照、水文），建立数据仪表盘。
+
+## 5. 文档索引 (Documentation Index)
+
+### 用户指南 (User Guides)
+*   [**Component Reference (运算器参考手册)**](Components/README.md)
+*   [**Workflows (工作流指南)**](Workflows/README.md)
+
+### 核心技术 (Core Technology)
+*   [**Core Logic (核心实现逻辑)**](Core_Logic/README.md)
+    *   [路网生成 (Roads)](Core_Logic/Roads_Implementation.md)
+    *   [地形处理 (Surfaces)](Core_Logic/Surfaces_Implementation.md)
+    *   [环境分析 (Analysis)](Core_Logic/Analysis_Implementation.md)
 
 ---
 *文档维护者: Trae AI Assistant*

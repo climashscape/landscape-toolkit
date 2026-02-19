@@ -11,10 +11,10 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("LandscapeToolkit")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("High-standard landscape modeling and analysis tools for Rhino + Grasshopper.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3dfc67e52382a4186e8270737858714784c4b5c1")]
 [assembly: System.Reflection.AssemblyProductAttribute("LandscapeToolkit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LandscapeToolkit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

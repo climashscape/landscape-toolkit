@@ -20,7 +20,7 @@ namespace LandscapeToolkit.Modeling
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Centerlines", "C", "Road centerlines (Curves/Polylines)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Width", "W", "Road width", GH_ParamAccess.item, 6.0);
+            pManager.AddNumberParameter("Widths", "W", "Road widths (List matched to curves, or single value)", GH_ParamAccess.list, 6.0);
             pManager.AddNumberParameter("Fillet", "F", "Intersection fillet radius", GH_ParamAccess.item, 3.0);
         }
 
@@ -33,11 +33,11 @@ namespace LandscapeToolkit.Modeling
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             List<Curve> curves = new List<Curve>();
-            double width = 6.0;
+            List<double> widths = new List<double>();
             double fillet = 3.0;
 
             if (!DA.GetDataList(0, curves)) return;
-            if (!DA.GetData(1, ref width)) return;
+            if (!DA.GetDataList(1, widths)) return;
             if (!DA.GetData(2, ref fillet)) return;
 
             // Pre-validation
@@ -45,9 +45,8 @@ namespace LandscapeToolkit.Modeling
             if (curves.Count == 0) return;
 
             // Initialize the Generator
-            // 使用核心生成器逻辑
-            QuadRoadGenerator generator = new QuadRoadGenerator(curves, width);
-            generator.IntersectionRadius = fillet;
+            QuadRoadGenerator generator = new QuadRoadGenerator(curves, widths);
+            generator.DefaultIntersectionRadius = fillet; // Use fillet as radius base
 
             try 
             {
