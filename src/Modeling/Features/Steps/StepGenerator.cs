@@ -83,7 +83,10 @@ namespace LandscapeToolkit.Modeling.Features.Steps
                 // Create Solid Block (Extrude Down)
                 // Downward extrusion ensures solid footing
                 Curve profile = rect.ToNurbsCurve();
-                Extrusion ext = Extrusion.Create(profile, -Riser, true); 
+                // Extrude in direction of -Z (Down).
+                // Normal is -Z. Extrusion.Create(crv, height, cap) extrudes along normal.
+                // Height should be positive to go along -Z.
+                Extrusion ext = Extrusion.Create(profile, Riser, true); 
                 
                 if (ext != null)
                 {

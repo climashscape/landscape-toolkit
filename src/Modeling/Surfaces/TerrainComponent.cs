@@ -3,7 +3,7 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
-namespace LandscapeToolkit.Modeling
+namespace LandscapeToolkit.Modeling.Surfaces
 {
     public class TerrainComponent : GH_Component
     {
@@ -54,9 +54,15 @@ namespace LandscapeToolkit.Modeling
                     if (len > 0)
                     {
                         // Adaptive division based on length, e.g., every 1 unit
-                        // Or just simple division for now
-                        crv.DivideByCount(Math.Max(10, (int)len), true, out Point3d[] pts);
-                        if (pts != null) points.AddRange(pts);
+                        int count = Math.Max(10, (int)len);
+                        double[] t = crv.DivideByCount(count, true);
+                        if (t != null)
+                        {
+                            foreach(double p in t)
+                            {
+                                points.Add(crv.PointAt(p));
+                            }
+                        }
                     }
                 }
             }

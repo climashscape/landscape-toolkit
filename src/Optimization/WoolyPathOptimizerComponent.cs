@@ -12,7 +12,21 @@ namespace LandscapeToolkit.Optimization
 
         public WoolyPathOptimizerComponent()
           : base("Wooly Path Optimizer", "WoolyPath",
-              "Bio-mimetic path optimization using Slime Mold / Physarum Polycephalum algorithm.",
+              "Bio-mimetic path optimization using Slime Mold (Physarum) algorithm.\n" +
+              "Process Flow:\n" +
+              "1. Initialize: Create agent population and trail map grid within bounds.\n" +
+              "2. Sense: Agents sense trail pheromones ahead (Left/Front/Right).\n" +
+              "3. Move: Agents rotate towards strongest signal and move forward.\n" +
+              "4. Deposit: Agents deposit trail pheromones at new position.\n" +
+              "5. Diffuse & Decay: Pheromones diffuse to neighbors and decay over time.\n" +
+              "6. Visualize: Output trail map as mesh and agent positions.\n\n" +
+              "处理流程：\n" +
+              "1. 初始化：在边界内创建代理种群和轨迹网格。\n" +
+              "2. 感知：代理感知前方的轨迹信息素（左/前/右）。\n" +
+              "3. 移动：代理转向信号最强的方向并前进。\n" +
+              "4. 沉积：代理在新位置留下轨迹信息素。\n" +
+              "5. 扩散与衰减：信息素向邻居扩散并随时间衰减。\n" +
+              "6. 可视化：输出轨迹图网格和代理位置。",
               "Landscape", "Optimization")
         {
         }
@@ -89,6 +103,6 @@ namespace LandscapeToolkit.Optimization
         }
 
 
-        public override Guid ComponentGuid => new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef");
+        public override Guid ComponentGuid => new Guid("e229914d-0d41-4ffb-b2ef-d82d4d6795c9");
     }
 }

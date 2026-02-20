@@ -26,7 +26,8 @@ namespace LandscapeToolkit.Modeling.Features.Walls
             
             // Resample
             PolylineCurve resampled = Path.ToPolyline(0, 0, 0, 0, 0, 0.1, 0, segmentLength, true);
-            if (resampled == null || !resampled.TryGetPolyline(out Polyline polyline))
+            Polyline polyline;
+            if (resampled == null || !resampled.TryGetPolyline(out polyline))
             {
                 // Fallback to control points or end points
                 if (!Path.TryGetPolyline(out polyline))
@@ -35,163 +36,170 @@ namespace LandscapeToolkit.Modeling.Features.Walls
                 }
             }
 
-            // 2. Adjust Z to Terrain
-            Polyline baseLine = new Polyline(polyline);
-            Polyline topLine = new Polyline(polyline);
+            if (polyline.Count < 2) return new List<Brep>();
 
+            // 2. Generate Offset Points (Left/Right) based on Centerline Tangents
+            // This ensures vertex count match for Lofting
+            
+            Polyline leftBase = new Polyline();
+            Polyline rightBase = new Polyline();
+            Polyline leftTop = new Polyline();
+            Polyline rightTop = new Polyline();
+
+            double halfThick = Thickness / 2.0;
             double maxZ = double.MinValue;
-            double minZ = double.MaxValue;
 
-            for(int i=0; i<baseLine.Count; i++)
+            // Pre-calculate tangents for offset direction
+            Vector3d[] tangents = new Vector3d[polyline.Count];
+            for (int i = 0; i < polyline.Count; i++)
             {
-                Point3d pt = baseLine[i];
-                double z = pt.Z;
-
-                if (Terrain != null)
+                if (i == 0)
                 {
-                    Point3d rayOrigin = new Point3d(pt.X, pt.Y, 10000);
-                    Ray3d ray = new Ray3d(rayOrigin, -Vector3d.ZAxis);
-                    double t = Rhino.Geometry.Intersect.Intersection.MeshRay(Terrain, ray);
-                    if (t > 0) z = ray.PointAt(t).Z;
+                    tangents[i] = polyline[1] - polyline[0];
                 }
-                
-                baseLine[i] = new Point3d(pt.X, pt.Y, z);
-                if (z > maxZ) maxZ = z;
-                if (z < minZ) minZ = z;
+                else if (i == polyline.Count - 1)
+                {
+                    tangents[i] = polyline[i] - polyline[i - 1];
+                }
+                else
+                {
+                    // Average of incoming and outgoing vectors for smooth corner
+                    Vector3d v1 = polyline[i] - polyline[i - 1];
+                    Vector3d v2 = polyline[i + 1] - polyline[i];
+                    v1.Unitize();
+                    v2.Unitize();
+                    tangents[i] = v1 + v2;
+                }
+                tangents[i].Unitize();
             }
 
-            // 3. Set Top Z
-            for(int i=0; i<topLine.Count; i++)
+            // First pass: Calculate Base Z and Max Z (for LevelTop)
+            List<double> baseZs = new List<double>();
+            
+            for(int i = 0; i < polyline.Count; i++)
             {
-                Point3d basePt = baseLine[i];
-                double topZ;
+                Point3d centerPt = polyline[i];
+                double z = centerPt.Z;
+
+                // Terrain Projection
+                if (Terrain != null)
+                {
+                    Point3d rayOrigin = new Point3d(centerPt.X, centerPt.Y, 10000);
+                    Ray3d ray = new Ray3d(rayOrigin, -Vector3d.ZAxis);
+                    double t = Rhino.Geometry.Intersect.Intersection.MeshRay(Terrain, ray);
+                    
+                    if (t > 0) 
+                    {
+                        z = ray.PointAt(t).Z;
+                    }
+                    else
+                    {
+                        // Try finding closest point if ray fails (e.g. edge case)
+                        Point3d closest = Terrain.ClosestPoint(centerPt);
+                        // Check if closest is reasonable (e.g. within some XY distance)
+                        if (new Point3d(closest.X, closest.Y, 0).DistanceTo(new Point3d(centerPt.X, centerPt.Y, 0)) < 5.0)
+                        {
+                            z = closest.Z;
+                        }
+                    }
+                }
                 
+                baseZs.Add(z);
+                if (z > maxZ) maxZ = z;
+            }
+
+            // Second pass: Construct 4 corner points for each station
+            for(int i = 0; i < polyline.Count; i++)
+            {
+                Point3d centerPt = polyline[i];
+                double baseZ = baseZs[i];
+                
+                // Calculate Offset Vector
+                Vector3d tangent = tangents[i];
+                // Rotate 90 degrees around Z
+                Vector3d normal = new Vector3d(-tangent.Y, tangent.X, 0);
+                if (!normal.Unitize())
+                {
+                     // Fallback for vertical segments (tangent is vertical)
+                     normal = Vector3d.XAxis;
+                }
+                
+                Point3d ptLeft = centerPt + normal * halfThick;
+                Point3d ptRight = centerPt - normal * halfThick;
+                
+                // Update Z
+                ptLeft.Z = baseZ;
+                ptRight.Z = baseZ;
+                
+                leftBase.Add(ptLeft);
+                rightBase.Add(ptRight);
+                
+                // Calculate Top Z
+                double topZ;
                 if (LevelTop)
                 {
-                    // If LevelTop, we want the wall to be at least Height tall at the highest point?
-                    // Or constant elevation? Usually constant elevation.
-                    // Let's set topZ to maxZ + Height
                     topZ = maxZ + Height;
                 }
                 else
                 {
-                    topZ = basePt.Z + Height;
+                    topZ = baseZ + Height;
                 }
                 
-                topLine[i] = new Point3d(basePt.X, basePt.Y, topZ);
+                leftTop.Add(new Point3d(ptLeft.X, ptLeft.Y, topZ));
+                rightTop.Add(new Point3d(ptRight.X, ptRight.Y, topZ));
             }
 
-            // 4. Create Wall Brep
-            // Construct solid from offsets to ensure thickness centered on path
-            
-            // Project to XY for consistent offsetting
-            Polyline xyPoly = new Polyline(polyline);
-            for(int i=0; i<xyPoly.Count; i++) xyPoly[i] = new Point3d(xyPoly[i].X, xyPoly[i].Y, 0);
-            Curve xyCurve = xyPoly.ToPolylineCurve();
-            
-            double halfThick = Thickness / 2.0;
-            
-            Curve[] leftOffsets = xyCurve.Offset(Plane.WorldXY, halfThick, 0.01, CurveOffsetCornerStyle.Sharp);
-            Curve[] rightOffsets = xyCurve.Offset(Plane.WorldXY, -halfThick, 0.01, CurveOffsetCornerStyle.Sharp);
-            
+            // 3. Create Wall Brep
+            // We have 4 perfectly matching polylines.
+            // Create a closed Brep.
+
             List<Brep> result = new List<Brep>();
             
-            if (leftOffsets != null && leftOffsets.Length > 0 && rightOffsets != null && rightOffsets.Length > 0)
-            {
-                // Assume simple path for now - take first offset
-                Curve leftCrv = leftOffsets[0];
-                Curve rightCrv = rightOffsets[0];
-                
-                // Resample offsets to match original point count/distribution if possible, 
-                // but Offset changes structure. 
-                // Better to just sample Z for the new curves.
-                
-                // Helper to apply Z
-                Curve ApplyZ(Curve inputCrv, bool isTop)
-                {
-                    if (!inputCrv.TryGetPolyline(out Polyline p)) 
-                    {
-                        // Convert if needed
-                         p = inputCrv.ToPolyline(0,0,0,0,0,0.1,0,1.0,true).ToPolyline();
-                    }
-                    
-                    Polyline newP = new Polyline(p);
-                    for(int i=0; i<newP.Count; i++)
-                    {
-                        Point3d pt = newP[i];
-                        double z = 0;
-                        
-                        // Get Base Z
-                        if (Terrain != null)
-                        {
-                            Point3d rayOrigin = new Point3d(pt.X, pt.Y, 10000);
-                            Ray3d ray = new Ray3d(rayOrigin, -Vector3d.ZAxis);
-                            double t = Rhino.Geometry.Intersect.Intersection.MeshRay(Terrain, ray);
-                            if (t > 0) z = ray.PointAt(t).Z;
-                            else z = Path.PointAtStart.Z; // Fallback
-                        }
-                        else
-                        {
-                            // Use closest point on original 3D path to get Z?
-                            // Or just flat?
-                            // Let's use original path Z
-                            if (Path.ClosestPoint(pt, out double t))
-                            {
-                                z = Path.PointAt(t).Z;
-                            }
-                        }
-                        
-                        if (isTop)
-                        {
-                            if (LevelTop)
-                                z = maxZ + Height; // Use maxZ calculated earlier? Re-calc might be safer but maxZ is from center
-                            else
-                                z += Height;
-                        }
-                        
-                        newP[i] = new Point3d(pt.X, pt.Y, z);
-                    }
-                    return newP.ToPolylineCurve();
-                }
-                
-                Curve leftBase = ApplyZ(leftCrv, false);
-                Curve leftTop = ApplyZ(leftCrv, true);
-                Curve rightBase = ApplyZ(rightCrv, false);
-                Curve rightTop = ApplyZ(rightCrv, true);
-                
-                // Create surfaces
-                Brep[] loftsLeft = Brep.CreateFromLoft(new Curve[]{leftBase, leftTop}, Point3d.Unset, Point3d.Unset, LoftType.Normal, false);
-                Brep[] loftsRight = Brep.CreateFromLoft(new Curve[]{rightBase, rightTop}, Point3d.Unset, Point3d.Unset, LoftType.Normal, false);
-                Brep[] loftsTop = Brep.CreateFromLoft(new Curve[]{leftTop, rightTop}, Point3d.Unset, Point3d.Unset, LoftType.Normal, false);
-                Brep[] loftsBottom = Brep.CreateFromLoft(new Curve[]{leftBase, rightBase}, Point3d.Unset, Point3d.Unset, LoftType.Normal, false);
+            // Convert to Curves
+            Curve cLB = leftBase.ToPolylineCurve();
+            Curve cRB = rightBase.ToPolylineCurve();
+            Curve cLT = leftTop.ToPolylineCurve();
+            Curve cRT = rightTop.ToPolylineCurve();
 
-                if (loftsLeft != null && loftsLeft.Length > 0 && 
-                    loftsRight != null && loftsRight.Length > 0 &&
-                    loftsTop != null && loftsTop.Length > 0 &&
-                    loftsBottom != null && loftsBottom.Length > 0)
-                {
-                    Brep sLeft = loftsLeft[0];
-                    Brep sRight = loftsRight[0];
-                    Brep sTop = loftsTop[0];
-                    Brep sBottom = loftsBottom[0];
-                    
-                    // Join
-                    Brep[] joined = Brep.JoinBreps(new Brep[]{sLeft, sRight, sTop, sBottom}, 0.01);
-                    if (joined != null && joined.Length > 0)
-                    {
-                        Brep wall = joined[0];
-                        wall = wall.CapPlanarHoles(0.01); // Cap ends
-                        result.Add(wall);
-                    }
-                }
-            }
-            else
+            // Create Lofts
+            // Side 1: Left Face
+            Brep[] sLeft = Brep.CreateFromLoft(new Curve[] { cLB, cLT }, Point3d.Unset, Point3d.Unset, LoftType.Straight, false);
+            // Side 2: Right Face
+            Brep[] sRight = Brep.CreateFromLoft(new Curve[] { cRB, cRT }, Point3d.Unset, Point3d.Unset, LoftType.Straight, false);
+            // Top Face
+            Brep[] sTop = Brep.CreateFromLoft(new Curve[] { cLT, cRT }, Point3d.Unset, Point3d.Unset, LoftType.Straight, false);
+            // Bottom Face (optional if you want closed solid, usually yes for walls)
+            Brep[] sBottom = Brep.CreateFromLoft(new Curve[] { cLB, cRB }, Point3d.Unset, Point3d.Unset, LoftType.Straight, false);
+
+            if (sLeft != null && sRight != null && sTop != null && sBottom != null &&
+                sLeft.Length > 0 && sRight.Length > 0 && sTop.Length > 0 && sBottom.Length > 0)
             {
-                // Fallback: simple extrusion of center line (surface)
-                Curve baseCrv = baseLine.ToPolylineCurve();
-                Curve topCrv = topLine.ToPolylineCurve();
-                Brep[] lofts = Brep.CreateFromLoft(new Curve[] { baseCrv, topCrv }, Point3d.Unset, Point3d.Unset, LoftType.Normal, false);
-                if (lofts != null) result.AddRange(lofts);
+                // Join all faces
+                List<Brep> faces = new List<Brep>();
+                faces.AddRange(sLeft);
+                faces.AddRange(sRight);
+                faces.AddRange(sTop);
+                faces.AddRange(sBottom);
+                
+                // Cap ends (Start and End faces)
+                // Since we have matching start/end points, we can create planar surfaces
+                
+                // Start Face
+                Polyline startPoly = new Polyline(new Point3d[] { leftBase[0], rightBase[0], rightTop[0], leftTop[0], leftBase[0] });
+                Brep startFace = Brep.CreatePlanarBreps(startPoly.ToPolylineCurve(), 0.01)?[0];
+                if (startFace != null) faces.Add(startFace);
+
+                // End Face
+                int last = polyline.Count - 1;
+                Polyline endPoly = new Polyline(new Point3d[] { leftBase[last], rightBase[last], rightTop[last], leftTop[last], leftBase[last] });
+                Brep endFace = Brep.CreatePlanarBreps(endPoly.ToPolylineCurve(), 0.01)?[0];
+                if (endFace != null) faces.Add(endFace);
+
+                Brep[] joined = Brep.JoinBreps(faces, 0.01);
+                if (joined != null && joined.Length > 0)
+                {
+                    result.Add(joined[0]);
+                }
             }
 
             return result;

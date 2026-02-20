@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using LandscapeToolkit.Modeling.Features.Steps; // Import the Logic namespace
 
-namespace LandscapeToolkit.Modeling
+namespace LandscapeToolkit.Modeling.Features
 {
     public class StepsComponent : GH_Component
     {
@@ -53,7 +53,7 @@ namespace LandscapeToolkit.Modeling
                 Width = width,
                 Tread = tread,
                 Riser = riser,
-                AdaptToTerrain = (terrain != null),
+                AdaptToTerrain = terrain != null,
                 Terrain = terrain
             };
 

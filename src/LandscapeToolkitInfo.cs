@@ -16,7 +16,7 @@ namespace LandscapeToolkit
 
         public override Guid Id => new Guid("7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d");
 
-        public override string AuthorName => "User";
+        public override string AuthorName => "Landscape Toolkit Team";
 
         public override string AuthorContact => "";
 

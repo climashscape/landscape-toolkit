@@ -12,20 +12,43 @@ namespace LandscapeToolkit.Optimization
             if (curve == null || !curve.IsValid) return null;
 
             // Convert to Polyline for processing
-            if (!curve.TryGetPolyline(out Polyline polyline))
+            // Use ToPolyline with strict tolerance to keep shape
+            var polyCurve = curve.ToPolyline(0, 0, 0.1, 0, 0, 0, 0, 0, true);
+            if (polyCurve == null || !polyCurve.TryGetPolyline(out Polyline polyline))
             {
-                // Resample if not a polyline
-                // Use length-based division for uniform segments
-                double len = curve.GetLength();
-                int count = (int)(len / 2.0); // Every 2 units? Or fixed count?
-                if (count < 10) count = 10;
-                
-                curve.DivideByCount(count, true, out Point3d[] pts);
-                if (pts == null) return curve;
-                polyline = new Polyline(pts);
+                // Resample if conversion fails (e.g. single line segment)
+                if (curve.IsLinear(0.01))
+                {
+                    // Linear curve: just divide it
+                     polyline = new Polyline(new Point3d[] { curve.PointAtStart, curve.PointAtEnd });
+                     // Subdivide for flexibility
+                     for(int k=0; k<3; k++) polyline.Insert(1, (polyline[0]+polyline[1])*0.5);
+                }
+                else
+                {
+                    double[] t = curve.DivideByCount(20, true);
+                    if (t == null) return curve;
+                    Point3d[] pts = new Point3d[t.Length];
+                    for(int i=0; i<t.Length; i++) pts[i] = curve.PointAt(t[i]);
+                    polyline = new Polyline(pts);
+                }
             }
 
-            if (polyline.Count < 3) return curve;
+            if (polyline.Count < 3) 
+            {
+                 // Insert points if too few
+                 while(polyline.Count < 10)
+                 {
+                     Polyline newPl = new Polyline();
+                     newPl.Add(polyline[0]);
+                     for(int i=0; i<polyline.Count-1; i++)
+                     {
+                         newPl.Add((polyline[i] + polyline[i+1])*0.5);
+                         newPl.Add(polyline[i+1]);
+                     }
+                     polyline = newPl;
+                 }
+            }
 
             Point3d[] vertices = polyline.ToArray();
             Point3d[] newVertices = new Point3d[vertices.Length];

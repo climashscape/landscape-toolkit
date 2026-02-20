@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using LandscapeToolkit.Modeling.Features.Boardwalks;
 
-namespace LandscapeToolkit.Modeling
+namespace LandscapeToolkit.Modeling.Features
 {
     public class BoardwalkComponent : GH_Component
     {

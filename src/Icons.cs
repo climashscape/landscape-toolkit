@@ -332,32 +332,32 @@ namespace LandscapeToolkit
         };
 
         // Standard GH Component Properties
-        public static Bitmap MainIcon => CreateIcon(WithBackground(CategoryColors.Modeling, DrawMainIcon));
+        public static readonly Bitmap MainIcon = CreateIcon(WithBackground(CategoryColors.Modeling, DrawMainIcon));
         
         // Modeling
-        public static Bitmap RoadNetwork => CreateIcon(WithBackground(CategoryColors.Modeling, DrawRoadNetwork));
-        public static Bitmap Terrain => CreateIcon(WithBackground(CategoryColors.Modeling, DrawTerrain));
-        public static Bitmap PlotGenerator => CreateIcon(WithBackground(CategoryColors.Modeling, DrawPlotGenerator));
-        public static Bitmap Steps => CreateIcon(WithBackground(CategoryColors.Modeling, DrawSteps));
-        public static Bitmap Wall => CreateIcon(WithBackground(CategoryColors.Modeling, DrawWall));
-        public static Bitmap Boardwalk => CreateIcon(WithBackground(CategoryColors.Modeling, DrawBoardwalk));
-        public static Bitmap Scatter => CreateIcon(WithBackground(CategoryColors.Modeling, DrawScatter));
-        public static Bitmap MinimalSurface => CreateIcon(WithBackground(CategoryColors.Modeling, DrawMinimalSurface));
+        public static readonly Bitmap RoadNetwork = CreateIcon(WithBackground(CategoryColors.Modeling, DrawRoadNetwork));
+        public static readonly Bitmap Terrain = CreateIcon(WithBackground(CategoryColors.Modeling, DrawTerrain));
+        public static readonly Bitmap PlotGenerator = CreateIcon(WithBackground(CategoryColors.Modeling, DrawPlotGenerator));
+        public static readonly Bitmap Steps = CreateIcon(WithBackground(CategoryColors.Modeling, DrawSteps));
+        public static readonly Bitmap Wall = CreateIcon(WithBackground(CategoryColors.Modeling, DrawWall));
+        public static readonly Bitmap Boardwalk = CreateIcon(WithBackground(CategoryColors.Modeling, DrawBoardwalk));
+        public static readonly Bitmap Scatter = CreateIcon(WithBackground(CategoryColors.Modeling, DrawScatter));
+        public static readonly Bitmap MinimalSurface = CreateIcon(WithBackground(CategoryColors.Modeling, DrawMinimalSurface));
         
         // Analysis
-        public static Bitmap SlopeAnalysis => CreateIcon(WithBackground(CategoryColors.Analysis, DrawSlopeAnalysis));
-        public static Bitmap SolarAnalysis => CreateIcon(WithBackground(CategoryColors.Analysis, DrawSolarAnalysis));
-        public static Bitmap WindShadowAnalysis => CreateIcon(WithBackground(CategoryColors.Analysis, DrawWindShadowAnalysis));
-        public static Bitmap CarbonAnalysis => CreateIcon(WithBackground(CategoryColors.Analysis, DrawCarbonAnalysis));
+        public static readonly Bitmap SlopeAnalysis = CreateIcon(WithBackground(CategoryColors.Analysis, DrawSlopeAnalysis));
+        public static readonly Bitmap SolarAnalysis = CreateIcon(WithBackground(CategoryColors.Analysis, DrawSolarAnalysis));
+        public static readonly Bitmap WindShadowAnalysis = CreateIcon(WithBackground(CategoryColors.Analysis, DrawWindShadowAnalysis));
+        public static readonly Bitmap CarbonAnalysis = CreateIcon(WithBackground(CategoryColors.Analysis, DrawCarbonAnalysis));
         
         // Hydrology
-        public static Bitmap Hydrology => CreateIcon(WithBackground(CategoryColors.Hydrology, DrawHydrology));
+        public static readonly Bitmap Hydrology = CreateIcon(WithBackground(CategoryColors.Hydrology, DrawHydrology));
         
         // Optimization
-        public static Bitmap PathOptimizer => CreateIcon(WithBackground(CategoryColors.Optimization, DrawPathOptimizer));
-        public static Bitmap WoolyPathOptimizer => CreateIcon(WithBackground(CategoryColors.Optimization, DrawWoolyPathOptimizer));
+        public static readonly Bitmap PathOptimizer = CreateIcon(WithBackground(CategoryColors.Optimization, DrawPathOptimizer));
+        public static readonly Bitmap WoolyPathOptimizer = CreateIcon(WithBackground(CategoryColors.Optimization, DrawWoolyPathOptimizer));
         
         // Utility
-        public static Bitmap RhinoPicker => CreateIcon(WithBackground(CategoryColors.Utility, DrawRhinoPicker));
+        public static readonly Bitmap RhinoPicker = CreateIcon(WithBackground(CategoryColors.Utility, DrawRhinoPicker));
     }
 }

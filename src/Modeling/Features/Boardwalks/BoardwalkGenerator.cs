@@ -33,9 +33,24 @@ namespace LandscapeToolkit.Modeling.Features.Boardwalks
 
             // 1. Generate Deck (Sweep)
             // Create a rectangle profile perpendicular to start of curve
-            if (Path.PerpendicularFrameAt(Path.Domain.Min, out Plane startPlane))
+            double tStart = Path.Domain.Min;
+            Point3d startPt = Path.PointAt(tStart);
+            Vector3d startTangent = Path.TangentAt(tStart);
+            
+            // Construct a horizontal frame
+            Vector3d startRight = Vector3d.CrossProduct(startTangent, Vector3d.ZAxis);
+            if (startRight.Length < 1e-6) startRight = Vector3d.XAxis; // Handle vertical path
+            startRight.Unitize();
+            
+            Vector3d startUp = Vector3d.CrossProduct(startRight, startTangent);
+            startUp.Unitize();
+            
+            Plane startPlane = new Plane(startPt, startRight, startUp);
+
+            if (startPlane.IsValid)
             {
                 // Deck profile: Rectangle centered on path
+                // X is Width (Horizontal), Y is Thickness (Vertical)
                 double deckThickness = 0.15;
                 Rectangle3d rect = new Rectangle3d(startPlane, new Interval(-Width / 2, Width / 2), new Interval(-deckThickness, 0));
                 Curve profile = rect.ToNurbsCurve();

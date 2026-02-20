@@ -11,7 +11,19 @@ namespace LandscapeToolkit.Modeling
     {
         public PlotGeneratorComponent()
           : base("Plot Generator", "PlotGen",
-              "Generates plot regions from boundary curves using QuadRemesh.",
+              "Generates plot regions from boundary curves.\n" +
+              "Process Flow:\n" +
+              "1. Pre-process: Project all boundary curves to XY plane.\n" +
+              "2. Region Detection: Identify enclosed planar regions using Boolean operations.\n" +
+              "3. Surface Creation: Convert regions into Planar Breps.\n" +
+              "4. Meshing: Apply QuadRemesh to each region to generate clean topology.\n" +
+              "5. Output: Return list of plot meshes.\n\n" +
+              "处理流程：\n" +
+              "1. 预处理：将所有边界曲线投影到XY平面。\n" +
+              "2. 区域检测：使用布尔运算识别封闭的平面区域。\n" +
+              "3. 曲面创建：将区域转换为平面Brep。\n" +
+              "4. 网格化：对每个区域应用四边面重构（QuadRemesh）以生成整洁的拓扑。\n" +
+              "5. 输出：返回地块网格列表。",
               "Landscape", "Modeling")
         {
         }
@@ -41,12 +53,14 @@ namespace LandscapeToolkit.Modeling
             // 1. Find enclosed regions
             // Try Curve.CreateBooleanRegions first as it handles intersecting lines better
             Plane plane = Plane.WorldXY;
-            // Try to use plane of first curve if valid
-            if (boundaries.Count > 0 && boundaries[0].TryGetPlane(out Plane firstPlane))
+            // Project all boundaries to XY plane first to handle spatial curves
+            List<Curve> projectedBoundaries = new List<Curve>();
+            foreach(var c in boundaries)
             {
-                plane = firstPlane;
+                var pc = Curve.ProjectToPlane(c, plane);
+                if (pc != null) projectedBoundaries.Add(pc);
             }
-
+            
             double tolerance = RhinoDoc.ActiveDoc?.ModelAbsoluteTolerance ?? 0.01;
             
             Brep[] regionBreps = null;
@@ -64,7 +78,8 @@ namespace LandscapeToolkit.Modeling
                 
                 if (createMethod != null)
                 {
-                    var regionResults = createMethod.Invoke(null, new object[] { boundaries, plane, false, tolerance });
+                    // Use projected boundaries
+                    var regionResults = createMethod.Invoke(null, new object[] { projectedBoundaries, plane, false, tolerance });
                     
                     if (regionResults != null)
                     {
@@ -102,9 +117,9 @@ namespace LandscapeToolkit.Modeling
             
             if (regionBreps == null || regionBreps.Length == 0)
             {
-                // Fallback: direct Brep.CreatePlanarBreps on original boundaries
-                // Useful if boundaries are already closed loops but maybe not strictly planar-intersecting in the same way
-                regionBreps = Brep.CreatePlanarBreps(boundaries, tolerance);
+                // Fallback: direct Brep.CreatePlanarBreps on original boundaries (if they happen to be planar)
+                // Or use projected
+                regionBreps = Brep.CreatePlanarBreps(projectedBoundaries, tolerance);
             }
 
             if (regionBreps == null || regionBreps.Length == 0)

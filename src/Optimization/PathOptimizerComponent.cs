@@ -9,7 +9,17 @@ namespace LandscapeToolkit.Optimization
     {
         public PathOptimizerComponent()
           : base("Bio-Path Optimizer", "BioPath",
-              "Optimizes curves using bio-inspired relaxation (Laplacian smoothing) to create natural paths.",
+              "Optimizes curves using bio-inspired relaxation.\n" +
+              "Process Flow:\n" +
+              "1. Resample: Convert input curves to high-resolution polylines.\n" +
+              "2. Pin: Fix start and end points (anchors).\n" +
+              "3. Relax: Apply iterative Laplacian smoothing (average neighbor positions) to internal vertices.\n" +
+              "4. Reconstruct: Convert smoothed polylines back to NURBS curves.\n\n" +
+              "处理流程：\n" +
+              "1. 重采样：将输入曲线转换为高分辨率多段线。\n" +
+              "2. 锚定：固定起点和终点。\n" +
+              "3. 松弛：对内部顶点应用迭代拉普拉斯平滑（取邻居平均值）。\n" +
+              "4. 重建：将平滑后的多段线转换回NURBS曲线。",
               "Landscape", "Optimization")
         {
         }

@@ -52,6 +52,8 @@ namespace LandscapeToolkit.Analysis
             // Loop through vertices for smooth gradient visualization
             // Angle is between Normal and Z-Axis.
             
+            Color[] colors = new Color[coloredMesh.Vertices.Count];
+
             for (int i = 0; i < coloredMesh.Vertices.Count; i++)
             {
                 Vector3d normal = coloredMesh.Normals[i];
@@ -63,10 +65,11 @@ namespace LandscapeToolkit.Analysis
                 double angleDeg = Rhino.RhinoMath.ToDegrees(angleRad);
                 
                 // Map angle to color
-                Color color = GetColor(angleDeg, range.Min, range.Max);
-                coloredMesh.VertexColors.Add(color);
+                colors[i] = GetColor(angleDeg, range.Min, range.Max);
             }
-
+            
+            coloredMesh.VertexColors.SetColors(colors);
+            
             DA.SetData(0, coloredMesh);
         }
 

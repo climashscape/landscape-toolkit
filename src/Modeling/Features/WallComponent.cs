@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using LandscapeToolkit.Modeling.Features.Walls;
 
-namespace LandscapeToolkit.Modeling
+namespace LandscapeToolkit.Modeling.Features
 {
     public class WallComponent : GH_Component
     {

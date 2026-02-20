@@ -4,7 +4,6 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LandscapeToolkit.Integration
 {
@@ -56,11 +55,13 @@ namespace LandscapeToolkit.Integration
             var doc = RhinoDoc.ActiveDoc;
             if (doc == null) return;
 
-            var settings = new ObjectEnumeratorSettings();
-            settings.NormalObjects = true;
-            settings.LockedObjects = false;
-            settings.HiddenObjects = false;
-            settings.ReferenceObjects = true; // Support worksession files? Maybe optional.
+            var settings = new ObjectEnumeratorSettings
+            {
+                NormalObjects = true,
+                LockedObjects = false,
+                HiddenObjects = false,
+                ReferenceObjects = true // Support worksession files? Maybe optional.
+            };
 
             ObjectType typeMask = ObjectType.AnyObject;
             if (!string.IsNullOrEmpty(typeFilter) && !typeFilter.Equals("All", StringComparison.OrdinalIgnoreCase))

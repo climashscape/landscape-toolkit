@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using LandscapeToolkit.Modeling.Features.Scatter;
 
-namespace LandscapeToolkit.Modeling
+namespace LandscapeToolkit.Modeling.Features
 {
     public class ScatterComponent : GH_Component
     {

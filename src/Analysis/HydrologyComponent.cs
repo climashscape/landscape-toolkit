@@ -2,6 +2,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+using LandscapeToolkit;
 
 namespace LandscapeToolkit.Analysis
 {
@@ -44,19 +45,22 @@ namespace LandscapeToolkit.Analysis
             Random rnd = new Random();
             BoundingBox bbox = mesh.GetBoundingBox(true);
 
+            // Batch project start points for performance
+            Point3d[] startPoints = new Point3d[count];
             for (int i = 0; i < count; i++)
             {
-                // Random start point on XY plane projected to mesh
                 double x = bbox.Min.X + rnd.NextDouble() * (bbox.Max.X - bbox.Min.X);
                 double y = bbox.Min.Y + rnd.NextDouble() * (bbox.Max.Y - bbox.Min.Y);
-                Point3d start = new Point3d(x, y, bbox.Max.Z + 1.0);
-                
-                // Project
-                Point3d[] projected = Rhino.Geometry.Intersect.Intersection.ProjectPointsToMeshes(new Mesh[] { mesh }, new Point3d[] { start }, new Vector3d(0, 0, -1), 0.01);
-                
-                if (projected != null && projected.Length > 0)
+                startPoints[i] = new Point3d(x, y, bbox.Max.Z + 1.0);
+            }
+
+            Point3d[] projected = Rhino.Geometry.Intersect.Intersection.ProjectPointsToMeshes(new Mesh[] { mesh }, startPoints, new Vector3d(0, 0, -1), 0.01);
+            
+            if (projected != null)
+            {
+                foreach(var pt in projected)
                 {
-                    List<Point3d> path = TraceDrop(mesh, projected[0]);
+                    List<Point3d> path = TraceDrop(mesh, pt);
                     if (path.Count > 1)
                     {
                         flowLines.Add(new PolylineCurve(path));

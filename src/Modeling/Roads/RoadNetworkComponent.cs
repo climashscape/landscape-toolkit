@@ -3,6 +3,7 @@ using Rhino;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+using LandscapeToolkit;
 
 namespace LandscapeToolkit.Modeling.Roads
 {
@@ -10,7 +11,21 @@ namespace LandscapeToolkit.Modeling.Roads
     {
         public RoadNetworkComponent()
           : base("Quad Road Network", "QuadRoad",
-              "Generates a high-quality Quad Mesh road network from centerlines, suitable for SubD workflows.",
+              "Generates a high-quality Quad Mesh road network from centerlines.\n" +
+              "Process Flow:\n" +
+              "1. Pre-process: Flatten curves to XY plane and shatter at intersections.\n" +
+              "2. Build Graph: Identify nodes (junctions) and edges (streets).\n" +
+              "3. Generate Junctions: Create 3-way, 4-way, or N-way intersection meshes with dynamic fillets.\n" +
+              "4. Generate Streets: Create quad strip meshes connecting junctions.\n" +
+              "5. Combine & Weld: Merge all meshes and weld vertices for smooth continuity.\n" +
+              "6. Relax: Apply optional Laplacian smoothing for better flow.\n\n" +
+              "处理流程：\n" +
+              "1. 预处理：将曲线压平至XY平面并在交点处打断。\n" +
+              "2. 构建图：识别节点（路口）和边（街道）。\n" +
+              "3. 生成路口：生成带动态倒角的三岔、四岔或多岔路口网格。\n" +
+              "4. 生成街道：创建连接路口的四边面带状网格。\n" +
+              "5. 合并与焊接：合并所有网格并焊接顶点以保证连续性。\n" +
+              "6. 松弛：应用可选的拉普拉斯平滑以优化网格流动。",
               "Landscape", "Modeling")
         {
         }

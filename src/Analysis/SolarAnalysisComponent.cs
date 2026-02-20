@@ -3,6 +3,7 @@ using Rhino.Geometry;
 using System;
 using System.Drawing;
 using System.Collections.Generic;
+using LandscapeToolkit;
 
 namespace LandscapeToolkit.Analysis
 {
@@ -47,7 +48,8 @@ namespace LandscapeToolkit.Analysis
             Vector3d sunVector = -sunDir;
             sunVector.Unitize();
 
-            List<double> exposures = new List<double>();
+            Color[] colors = new Color[coloredMesh.Vertices.Count];
+            List<double> exposures = new List<double>(coloredMesh.Vertices.Count);
 
             for (int i = 0; i < coloredMesh.Vertices.Count; i++)
             {
@@ -64,8 +66,10 @@ namespace LandscapeToolkit.Analysis
                 exposures.Add(exposure);
 
                 // Color map applied via GetColor
-                coloredMesh.VertexColors.Add(GetColor(exposure));
+                colors[i] = GetColor(exposure);
             }
+            
+            coloredMesh.VertexColors.SetColors(colors);
 
             DA.SetData(0, coloredMesh);
             DA.SetDataList(1, exposures);
