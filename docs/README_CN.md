@@ -2,9 +2,9 @@
 
 [**English Documentation**](README.md)
 
-**当前版本: 1.2.1**
+**当前版本: 1.2.2**
 
-> **v1.2.1 更新**: 全面统一了插件与网页的 UI 设计，采用带立体感的“卡片式”图标，并规范了分类色系。详情请参阅 [UI 设计规范](Dev_Guides/UI_Design_Standards_zh.md)。
+> **v1.2.2 更新**: 全面更新了项目文档，同步了版本号，并进行了内容一致性检查。
 
 ## 1. 项目愿景 (Project Vision)
 本项目旨在为景观设计师提供一套基于 Rhino/Grasshopper 的高效建模与分析工具集。核心理念是从**二维线稿**出发，通过参数化算法实时推导生成高质量的**三维四边面 (Quad Mesh) 路网**、地形以及景观构筑物，并集成多维度的环境分析功能，实现“设计-分析-优化”的闭环工作流。
@@ -17,6 +17,7 @@
     *   **四边面拓扑 (Quad Topology)**: 摒弃传统的 Trimmed Surface，采用纯网格建模，确保模型轻量且易于细分 (SubD)。
     *   **实时推导**: 拖动中心线，路网宽度、倒角、路口连接实时更新。
     *   **层级管理**: 支持不同等级道路（主路、次路、小径）的材质与构造衔接。
+    *   **多级路网**: 专用的多级路网组件，支持 L1/L2/L3 优先路口与喇叭口连接。
     *   **仿生微调 (Wooly Path)**: 引入羊毛线/粘菌算法，对生硬的直线进行自然化平滑处理。
 
 ### 2.2 场地与地形 (Surfaces & Terrain)
@@ -34,6 +35,7 @@
 ### 2.4 环境分析 (Environmental Analysis)
 *   **多目标优化**:
     *   **坡度/土方**: 计算填挖方量，优化场地标高。
+    *   **空间句法**: 分析路网的集成度与穿行度，评估可达性。
     *   **水文分析**: 汇水区识别、径流模拟。
     *   **微气候**: 风环境（CFD简易模拟）、热舒适度 (UTCI)、光照时数。
     *   **碳汇估算**: 基于植物量估算生态效益。
@@ -75,15 +77,15 @@ src/
 
 ### 用户指南 (User Guides)
 *   [**UI Design Standards (UI 设计规范)**](Dev_Guides/UI_Design_Standards_zh.md)
-*   [**Component Reference (运算器参考手册)**](Components/README.md)
-*   [**Workflows (工作流指南)**](Workflows/README.md)
+*   [**Component Reference (运算器参考手册)**](Components/zh/README.md)
+*   [**Workflows (工作流指南)**](Workflows/zh/README.md)
 
 ### 核心技术 (Core Technology)
-*   [**Core Logic (核心实现逻辑)**](Core_Logic/README.md)
-    *   [路网生成 (Roads)](Core_Logic/Roads_Implementation.md)
-    *   [地形处理 (Surfaces)](Core_Logic/Surfaces_Implementation.md)
-    *   [构筑物生成 (Features)](Core_Logic/Features_Implementation.md)
-    *   [环境分析 (Analysis)](Core_Logic/Analysis_Implementation.md)
+*   [**Core Logic (核心实现逻辑)**](Core_Logic/zh/README.md)
+    *   [路网生成 (Roads)](Core_Logic/zh/Roads_Implementation.md)
+    *   [地形处理 (Surfaces)](Core_Logic/zh/Surfaces_Implementation.md)
+    *   [构筑物生成 (Features)](Core_Logic/zh/Features_Implementation.md)
+    *   [环境分析 (Analysis)](Core_Logic/zh/Analysis_Implementation.md)
 
 ---
 *文档维护者: Landscape Toolkit Dev Team*

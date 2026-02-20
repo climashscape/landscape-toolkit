@@ -20,6 +20,6 @@ namespace LandscapeToolkit
 
         public override string AuthorContact => "";
 
-        public override string Version => "1.2.1";
+        public override string Version => "1.2.2";
     }
 }

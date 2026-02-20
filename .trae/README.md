@@ -33,6 +33,7 @@
 | **Analysis Tools** | ✅ Completed | 包含坡度、光照、风影、碳汇与水文分析。 |
 | **Integration Tools** | ✅ Completed | 包含 Rhino 对象拾取器 (RhinoPicker) 与 GIS 接口。 |
 | **UI Unification** | ✅ Completed (v1.2.1) | 统一插件与网页 UI，采用 3D 卡片式设计与标准色系。 |
+| **Documentation Update** | ✅ Completed (v1.2.2) | 全面更新文档，同步版本号与翻译。 |
 
 ---
 *Maintained by Landscape Toolkit Dev Team*

@@ -8,6 +8,7 @@ This directory contains detailed documentation for each Grasshopper component in
 
 ## Modeling
 *   [**Quad Road Network**](QuadRoadNetwork.md) - Generate high-quality quad mesh road networks.
+*   [**Multi-Level Road Network**](MultiLevelRoad.md) - Hierarchical road system with priority junctions (L1/L2/L3).
 *   [**Plot Generator**](PlotGenerator.md) - Create plot regions from closed boundaries.
 *   [**Landscape Terrain**](Terrain.md) - Create smooth terrain meshes from contours or points.
 *   [**Landscape Steps**](Steps.md) - Parametric step generation along paths.
@@ -20,6 +21,7 @@ This directory contains detailed documentation for each Grasshopper component in
 *   [**Rhino Picker**](RhinoPicker.md) - Select Rhino objects by Layer, Name, or Type directly within Grasshopper.
 
 ## Analysis
+*   [**Space Syntax Analysis**](SpaceSyntax.md) - Analyze network integration and choice (accessibility).
 *   [**Carbon Analysis**](CarbonAnalysis.md) - Estimate carbon sequestration benefits of trees and green space.
 *   [**Wind Shadow Analysis**](WindShadowAnalysis.md) - Simplified wind environment/obstruction analysis.
 *   [**Slope Analysis**](SlopeAnalysis.md) - Visualize terrain slope gradients.

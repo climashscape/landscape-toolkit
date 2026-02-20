@@ -342,7 +342,7 @@ namespace LandscapeToolkit.Analysis
             
             Parallel.For(0, n, i =>
             {
-                var result = BFS_MeanDepth(adj, i, n, radius);
+                var result = BFS_MeanDepth(adj, i, radius);
                 meanDepth[i] = result.Item1;
                 counts[i] = result.Item2;
             });
@@ -351,13 +351,12 @@ namespace LandscapeToolkit.Analysis
             return meanDepth;
         }
 
-        private Tuple<double, int> BFS_MeanDepth(List<List<int>> adj, int startNode, int n, double radius)
+        private Tuple<double, int> BFS_MeanDepth(List<List<int>> adj, int startNode, double radius)
         {
             Queue<int> q = new Queue<int>();
             q.Enqueue(startNode);
             
-            Dictionary<int, int> dist = new Dictionary<int, int>();
-            dist[startNode] = 0;
+            var dist = new Dictionary<int, int> { [startNode] = 0 };
 
             long totalDepth = 0;
             int count = 0;
@@ -391,8 +390,7 @@ namespace LandscapeToolkit.Analysis
 
         private double[] ComputeIntegration(List<List<int>> adj, int n, double radius)
         {
-            int[] nodeCounts;
-            double[] md = ComputeMeanDepth(adj, n, radius, out nodeCounts);
+            double[] md = ComputeMeanDepth(adj, n, radius, out int[] nodeCounts);
             double[] integration = new double[n];
 
             for (int i = 0; i < n; i++)
@@ -403,7 +401,7 @@ namespace LandscapeToolkit.Analysis
                     continue;
                 }
 
-                double k = (double)nodeCounts[i];
+                double k = nodeCounts[i];
                 if (k < 3) 
                 {
                     integration[i] = 0;
@@ -479,7 +477,7 @@ namespace LandscapeToolkit.Analysis
                         int w = S.Pop();
                         foreach (int v in P[w])
                         {
-                            delta[v] += (sigma[v] / sigma[w]) * (1 + delta[w]);
+                            delta[v] += sigma[v] / sigma[w] * (1 + delta[w]);
                         }
                         if (w != s)
                         {
@@ -546,7 +544,8 @@ namespace LandscapeToolkit.Analysis
         {
             // Simple Blue-Cyan-Green-Yellow-Red gradient
             // 0.0 -> 0.25 -> 0.5 -> 0.75 -> 1.0
-            byte r = 0, g = 0, b = 0;
+            byte r = 0, b = 0;
+            byte g;
 
             if (value < 0.25)
             {
@@ -576,7 +575,7 @@ namespace LandscapeToolkit.Analysis
             return Color.FromArgb(r, g, b);
         }
 
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override Bitmap Icon => null;
         public override Guid ComponentGuid => new Guid("98765432-1234-5678-90ab-cdef12345678");
     }
 }

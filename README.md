@@ -1,13 +1,13 @@
 # Landscape Toolkit (景观工具箱)
 
-[![Version](https://img.shields.io/badge/Version-1.2.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.2-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Documentation](https://img.shields.io/badge/Docs-Interactive-green.svg)](https://climashscape.github.io/landscape-toolkit/)
 
 **High-Performance Landscape Architecture Toolkit for Rhino + Grasshopper**
 **专为景观设计师打造的全流程参数化设计系统**
 
-> **New in v1.2.1**: Unified UI design with 3D "Tile" icons and standardized category colors. Check out the [UI Design Standards](docs/Dev_Guides/UI_Design_Standards.md) for details.
+> **New in v1.2.2**: Comprehensive documentation update, version synchronization, and content consistency checks.
 
 ---
 
@@ -39,6 +39,7 @@ The output `.gha` and `.zip` files will be in the `dist/` directory.
 | Component | Description | Docs |
 | :--- | :--- | :--- |
 | **Quad Road Network** | 生成高质量的全四边面路网，支持分级与 SubD 工作流。 | [English](docs/Components/en/QuadRoadNetwork.md) / [中文](docs/Components/zh/QuadRoadNetwork.md) |
+| **Multi-Level Road** | 支持 L1/L2/L3 分级的多级路网生成系统，具备优先路口处理。 | [English](docs/Components/en/MultiLevelRoad.md) / [中文](docs/Components/zh/MultiLevelRoad.md) |
 | **Landscape Terrain** | 从等高线或散点生成光顺的 "Class-A" 地形曲面。 | [English](docs/Components/en/Terrain.md) / [中文](docs/Components/zh/Terrain.md) |
 | **Plot Generator** | 自动提取路网围合区域，生成规整的地块网格。 | [English](docs/Components/en/PlotGenerator.md) / [中文](docs/Components/zh/PlotGenerator.md) |
 | **Landscape Steps** | 沿路径自动生成适应坡度的参数化台阶。 | [English](docs/Components/en/Steps.md) / [中文](docs/Components/zh/Steps.md) |
@@ -58,6 +59,7 @@ The output `.gha` and `.zip` files will be in the `dist/` directory.
 | Component | Description | Docs |
 | :--- | :--- | :--- |
 | **Slope Analysis** | 实时地形坡度可视化分析。 | [English](docs/Components/en/SlopeAnalysis.md) / [中文](docs/Components/zh/SlopeAnalysis.md) |
+| **Space Syntax** | 空间句法分析（集成度、穿行度、深度），评估路网可达性。 | [English](docs/Components/en/SpaceSyntax.md) / [中文](docs/Components/zh/SpaceSyntax.md) |
 | **Solar Analysis** | 基于法线的快速光照暴露度估算。 | [English](docs/Components/en/SolarAnalysis.md) / [中文](docs/Components/zh/SolarAnalysis.md) |
 | **Wind Shadow** | 基于射线投射的简易风环境/遮挡分析。 | [English](docs/Components/en/WindShadowAnalysis.md) / [中文](docs/Components/zh/WindShadowAnalysis.md) |
 | **Carbon Analysis** | 估算乔木与绿地的固碳效益。 | [English](docs/Components/en/CarbonAnalysis.md) / [中文](docs/Components/zh/CarbonAnalysis.md) |

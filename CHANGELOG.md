@@ -2,6 +2,15 @@
 
 All notable changes to the **Landscape Toolkit** project will be documented in this file.
 
+## [1.2.2] - 2026-02-20
+
+### Changed (更新)
+- **Documentation**:
+    - Synchronized version numbers across all documentation files (v1.2.2).
+    - Added missing documentation for **Multi-Level Road Network** and **Space Syntax Analysis**.
+    - Updated project introductory text and progress tracking.
+    - Verified Chinese/English translations and file links.
+
 ## [1.2.1] - 2026-02-20
 
 ### Changed (界面更新)

@@ -2,9 +2,9 @@
 
 [**中文文档 (Chinese Documentation)**](README_CN.md)
 
-**Current Version: 1.2.1**
+**Current Version: 1.2.2**
 
-> **New in v1.2.1**: Unified UI design with 3D "Tile" icons and standardized category colors. Check out the [UI Design Standards](../Dev_Guides/UI_Design_Standards.md) for details.
+> **New in v1.2.2**: Comprehensive documentation update, version synchronization, and content consistency checks.
 
 ## 1. Project Vision
 This project aims to provide a set of efficient modeling and analysis tools for landscape designers based on Rhino/Grasshopper. The core philosophy is to generate high-quality **3D Quad Mesh Road Networks**, terrain, and landscape structures in real-time from **2D Sketches** through parametric algorithms, integrating multi-dimensional environmental analysis to achieve a "Design-Analysis-Optimization" closed-loop workflow.
@@ -17,6 +17,7 @@ This project aims to provide a set of efficient modeling and analysis tools for 
     *   **Quad Topology**: Abandoning traditional Trimmed Surfaces in favor of pure mesh modeling ensures lightweight models that are easy to subdivide (SubD).
     *   **Real-time Derivation**: Drag centerlines to update road width, fillets, and junction connections in real-time.
     *   **Hierarchy Management**: Supports material and construction transitions for different road levels (Primary, Secondary, Trails).
+    *   **Multi-Level Logic**: Dedicated component for L1/L2/L3 priority networks with bell-mouth connections.
     *   **Bio-Mimetic Tuning (Wooly Path)**: Introduces Wooly/Slime Mold algorithms to naturally smooth rigid straight lines.
 
 ### 2.2 Surfaces & Terrain
@@ -34,6 +35,7 @@ This project aims to provide a set of efficient modeling and analysis tools for 
 ### 2.4 Environmental Analysis
 *   **Multi-Objective Optimization**:
     *   **Slope/Earthwork**: Calculates cut and fill volumes to optimize site grading.
+    *   **Space Syntax**: Analyzes network integration and choice to evaluate accessibility.
     *   **Hydrology**: Catchment area identification, runoff simulation.
     *   **Microclimate**: Wind environment (simplified CFD), Thermal Comfort (UTCI), Solar Hours.
     *   **Carbon Sequestration**: Estimates ecological benefits based on biomass.

@@ -13,6 +13,7 @@
 - **COMPONENTS**
   - **Roads & Paths**
     - ![Road](assets/icons/road_network.png) [Quad Road Network](Components/en/QuadRoadNetwork.md)
+    - ![MultiRoad](assets/icons/road_network.png) [Multi-Level Road](Components/en/MultiLevelRoad.md)
     - ![Bio](assets/icons/path_optimizer.png) [Bio-Path Optimizer](Components/en/PathOptimizer.md)
     - ![Wooly](assets/icons/wooly_path_optimizer.png) [Wooly Path Optimizer](Components/en/WoolyPathOptimizer.md)
   
@@ -29,6 +30,7 @@
     - ![Scatter](assets/icons/scatter.png) [Scatter System](Components/en/Scatter.md)
 
   - **Analysis Tools**
+    - ![SpaceSyntax](assets/icons/path_optimizer.png) [Space Syntax](Components/en/SpaceSyntax.md)
     - ![Slope](assets/icons/slope_analysis.png) [Slope Analysis](Components/en/SlopeAnalysis.md)
     - ![Solar](assets/icons/solar_analysis.png) [Solar Analysis](Components/en/SolarAnalysis.md)
     - ![Hydrology](assets/icons/hydrology.png) [Hydrology](Components/en/Hydrology.md)
