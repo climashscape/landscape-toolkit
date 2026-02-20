@@ -23,9 +23,13 @@
   <script>
     window.$docsify = {
       name: 'Landscape Toolkit',
-      nameLink: '/landscape-toolkit/',
+      nameLink: 'index.html',
       repo: 'https://github.com/climashscape/landscape-toolkit',
       loadSidebar: true,
+      alias: {
+        '.*?/zh/_sidebar.md': '/_sidebar_zh.md',
+        '.*?/_sidebar.md': '/_sidebar.md'
+      },
       subMaxLevel: 3,
       auto2top: true,
       search: 'auto', // default

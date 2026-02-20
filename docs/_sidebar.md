@@ -5,17 +5,11 @@
   * [Technical Architecture](README.md?id=_3-technical-architecture)
   * [Development Status](README.md?id=_4-development-status)
 * [🇨🇳 中文主页](README_CN.md)
-  * [项目愿景](README_CN.md?id=_1-项目愿景-project-vision)
-  * [核心功能模块](README_CN.md?id=_2-核心功能模块-core-modules)
-  * [技术架构](README_CN.md?id=_3-技术架构-technical-architecture)
-  * [开发进度](README_CN.md?id=_4-开发进度-development-status)
 
 - **COMPONENTS**
   - **Roads & Paths**
     - ![Road](assets/icons/road_network.png) [Quad Road Network](Components/en/QuadRoadNetwork.md)
     - ![MultiRoad](assets/icons/road_network.png) [Multi-Level Road](Components/en/MultiLevelRoad.md)
-    - ![Bio](assets/icons/path_optimizer.png) [Bio-Path Optimizer](Components/en/PathOptimizer.md)
-    - ![Wooly](assets/icons/wooly_path_optimizer.png) [Wooly Path Optimizer](Components/en/WoolyPathOptimizer.md)
   
   - **Terrain & Surfaces**
     - ![Terrain](assets/icons/terrain.png) [Terrain](Components/en/Terrain.md)
@@ -36,6 +30,10 @@
     - ![Hydrology](assets/icons/hydrology.png) [Hydrology](Components/en/Hydrology.md)
     - ![Carbon](assets/icons/carbon_analysis.png) [Carbon Analysis](Components/en/CarbonAnalysis.md)
     - ![Wind](assets/icons/wind_shadow_analysis.png) [Wind Shadow](Components/en/WindShadowAnalysis.md)
+
+  - **Optimization**
+    - ![Bio](assets/icons/path_optimizer.png) [Bio-Path Optimizer](Components/en/PathOptimizer.md)
+    - ![Wooly](assets/icons/wooly_path_optimizer.png) [Wooly Path Optimizer](Components/en/WoolyPathOptimizer.md)
 
 - **WORKFLOWS**
   - [Sketch to Road](Workflows/en/Sketch_to_Road.md)
