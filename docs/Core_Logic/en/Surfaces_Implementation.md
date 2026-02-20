@@ -28,68 +28,15 @@ We adopt the following hybrid strategy to ensure **G0 Continuity (Position)** or
     *   Generate a high-density "Transition Strip" at the interface between the road network and terrain.
     *   Outer vertices are welded to the road, and inner vertices participate in terrain relaxation.
 
-### 1.3 Vertical & Slope Control
+### 1.3 Minimal Surface Algorithm (New in v1.1.0)
+The `MinimalSurface` component implements a physics-based relaxation solver:
+*   **Initialization**: A coarse mesh is generated within the boundary using constrained Delaunay triangulation or Quad grid mapping.
+*   **Dynamic Relaxation**: Vertices are treated as particles connected by springs. The system iteratively minimizes the total energy (simulating soap film surface tension) until equilibrium is reached.
+*   **Mean Curvature Flow**: The algorithm effectively minimizes Mean Curvature ($H = 0$) at every internal point.
+
+### 1.4 Vertical & Slope Control
 *   **Boundary Elevation**: Get elevation `Z` from road network edges.
 *   **Internal Adjustment**:
     1.  **Point Attractor**: Place control points inside the plot to raise or lower their `Z` value to simulate mounds or depressions.
     2.  **Curve Attractor**: Use contours to constrain internal terrain.
     3.  **Slope Analysis Feedback**: Calculate slope in real-time; if it exceeds a set value (e.g., 25%), automatically adjust control point positions or heights.
-
----
-
-## 2. Landscape Features Generation
-Generate specific structures based on the terrain surface.
-
-### 2.1 Steps Generation
-*   **Input**: Path Curve + Terrain Surface.
-*   **Algorithm**:
-    1.  **Sample Points**: Sample points along the path at fixed intervals (e.g., 0.3m).
-    2.  **Height Check**: Check the height difference $\Delta H$ between adjacent points.
-    3.  **Tread & Riser Calculation**:
-        *   If $\Delta H > H_{max}$ (e.g., 0.15m), steps need to be inserted.
-        *   Calculate the number of steps and riser height using the formula $2R + T = 600 \sim 640mm$.
-    4.  **Geometry Construction**: Generate step solids (Brep) or meshes (Mesh).
-
-### 2.2 Retaining Wall Generation
-*   **Input**: Boundary Curve + Terrain on both sides.
-*   **Algorithm**:
-    1.  **Offset**: Offset half the wall thickness to the high and low sides respectively.
-    2.  **Loft**: Loft between the offset lines to generate the wall body.
-    3.  **Top Cap**: Generate the coping.
-    4.  **Foundation**: Automatically generate foundation depth based on wall height.
-
-### 2.3 Scatter System
-*   **Input**: Region or Curve.
-*   **Algorithm**:
-    1.  **Poisson Disk Sampling**: Blue noise sampling to ensure uniform and natural distribution of objects (no overlapping).
-    2.  **Instance Placement**: Instantiate prefabricated models (e.g., trees, streetlights) at sampling points.
-    3.  **Randomization**: Randomly rotate and scale instances to add natural variation.
-
----
-
-## 3. Code Reference
-Implemented in `src/Modeling/Surfaces/PlotGeneratorComponent.cs` and `src/Modeling/Features/StepsComponent.cs`:
-
-```csharp
-public class PlotGenerator 
-{
-    public Polyline Boundary { get; set; }
-    
-    public Mesh GenerateMinimalSurface(int uCount, int vCount) 
-    {
-        // 1. Create Initial Grid
-        var mesh = CreateGridFromBoundary(Boundary, uCount, vCount);
-        
-        // 2. Relax Mesh (Physics Simulation)
-        var kangaroo = new KangarooSolver();
-        kangaroo.AddGoal(new SpringGoal(mesh.Edges));
-        
-        // CRITICAL: Lock Boundary Vertices to prevent SubD shrinkage
-        kangaroo.AddGoal(new AnchorGoal(mesh.BoundaryVertices)); 
-        
-        kangaroo.Solve();
-        
-        return kangaroo.OutputMesh;
-    }
-}
-```

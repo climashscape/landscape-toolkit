@@ -1,5 +1,9 @@
 # Landscape Toolkit (景观工具箱) - 工程规划文档
 
+**当前版本: 1.2.1**
+
+> **v1.2.1 更新**: 全面统一了插件与网页的 UI 设计，采用带立体感的“卡片式”图标，并规范了分类色系。详情请参阅 [UI 设计规范](Dev_Guides/UI_Design_Standards_zh.md)。
+
 ## 1. 项目愿景 (Project Vision)
 本项目旨在为景观设计师提供一套基于 Rhino/Grasshopper 的高效建模与分析工具集。核心理念是从**二维线稿**出发，通过参数化算法实时推导生成高质量的**三维四边面 (Quad Mesh) 路网**、地形以及景观构筑物，并集成多维度的环境分析功能，实现“设计-分析-优化”的闭环工作流。
 
@@ -56,8 +60,9 @@ src/
 ## 4. 开发进度 (Development Status)
 *   **Phase 1**: [已完成] 基础路网生成的四边面逻辑，解决路口（3-way, 4-way）的自动布线。
 *   **Phase 2**: [已完成] 实现地块封面的 SubD 算法，确保与路网边界的 G1/G2 连续。
-*   **Phase 3**: [已完成] 开发竖向构件（台阶、墙）的自适应生成。
-*   **Phase 4**: [已完成] 集成环境分析工具（坡度、光照、水文），建立数据仪表盘。
+*   **Phase 3**: [已完成] 开发竖向构件（台阶、墙）的自适应生成，以及 v1.1.0 新增的栈道与散布系统。
+*   **Phase 4**: [已完成] 集成环境分析工具（坡度、光照、水文、碳汇、风影），建立数据仪表盘。
+*   **Phase 5**: [进行中] 高级 GIS 集成与施工图自动生成。
 
 ## 5. 文档索引 (Documentation Index)
 
@@ -69,8 +74,9 @@ src/
 *   [**Core Logic (核心实现逻辑)**](Core_Logic/README.md)
     *   [路网生成 (Roads)](Core_Logic/Roads_Implementation.md)
     *   [地形处理 (Surfaces)](Core_Logic/Surfaces_Implementation.md)
+    *   [构筑物生成 (Features)](Core_Logic/Features_Implementation.md)
     *   [环境分析 (Analysis)](Core_Logic/Analysis_Implementation.md)
 
 ---
-*文档维护者: Trae AI Assistant*
-*最后更新: 2026-02-19*
+*文档维护者: Landscape Toolkit Dev Team*
+*最后更新: 2026-02-20*

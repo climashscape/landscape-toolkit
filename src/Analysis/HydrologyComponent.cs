@@ -16,13 +16,13 @@ namespace LandscapeToolkit.Analysis
 
         protected override System.Drawing.Bitmap Icon => Icons.Hydrology;
 
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "M", "Input terrain mesh", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Raindrops", "N", "Number of raindrops to simulate", GH_ParamAccess.item, 500);
         }
 
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddCurveParameter("FlowLines", "F", "Flow paths", GH_ParamAccess.list);
         }
@@ -69,11 +69,10 @@ namespace LandscapeToolkit.Analysis
 
         private List<Point3d> TraceDrop(Mesh mesh, Point3d start)
         {
-            List<Point3d> path = new List<Point3d>();
-            path.Add(start);
+            List<Point3d> path = new List<Point3d> { start };
             Point3d current = start;
             
-            for (int step = 0; step < 100; step++) // Max steps
+            for (int step = 0; step < 1000; step++) // Max steps increased
             {
                 // Find steepest descent
                 // Get normal at current point
@@ -84,7 +83,7 @@ namespace LandscapeToolkit.Analysis
                 // Slope vector = Project gravity (0,0,-1) onto plane defined by normal
                 // V_slope = g - (g dot n) * n
                 Vector3d g = new Vector3d(0, 0, -1);
-                Vector3d slope = g - (g * normal) * normal;
+                Vector3d slope = g - g * normal * normal;
                 
                 if (slope.Length < 0.01) break; // Flat area or local minima
                 
@@ -108,6 +107,6 @@ namespace LandscapeToolkit.Analysis
         }
 
 
-        public override Guid ComponentGuid => new Guid("4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a");
+        public override Guid ComponentGuid => new Guid("4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9b");
     }
 }

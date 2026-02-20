@@ -6,8 +6,8 @@
     <title>Landscape Toolkit - Documentation</title>
     <style>
         :root {
-            --primary: #2ecc71;
-            --secondary: #27ae60;
+            --primary: #228B22; /* ForestGreen */
+            --secondary: #1E90FF; /* DodgerBlue */
             --bg: #f8f9fa;
             --text: #2c3e50;
             --card-bg: #ffffff;
@@ -93,9 +93,10 @@
         }
         
         .card-icon {
-            font-size: 2rem;
+            width: 48px;
+            height: 48px;
             margin-bottom: 1rem;
-            color: var(--primary);
+            object-fit: contain;
         }
         
         .card h3 { margin: 0 0 0.5rem 0; color: var(--text); }
@@ -190,9 +191,9 @@
 <body>
 
 <header>
-    <h1>Landscape Toolkit <span class="version-tag">v1.0.0</span></h1>
+    <h1>Landscape Toolkit <span class="version-tag">v1.2.1</span></h1>
     <p class="subtitle">High-performance parametric landscape design tools for Rhino/Grasshopper</p>
-    <a href="../dist/LandscapeToolkit_v1.0.0.zip" class="download-btn">Download v1.0.0</a>
+    <a href="../dist/LandscapeToolkit_v1.2.1.zip" class="download-btn">Download v1.2.1</a>
 </header>
 
 <nav>
@@ -207,48 +208,84 @@
     <!-- Modeling Tab -->
     <div id="modeling" class="grid active">
         <div class="card">
-            <div class="card-icon">🛣️</div>
+            <img src="assets/icons/road_network.png" class="card-icon" alt="Quad Road Network">
             <h3>Quad Road Network</h3>
             <p>Generate high-quality all-quad mesh road networks from centerlines. Perfect for SubD workflows.</p>
             <div class="card-links">
-                <a href="Components/en/QuadRoadNetwork.md">English Doc</a>
-                <a href="Components/zh/QuadRoadNetwork.md">中文文档</a>
+                <a href="docs.html#/Components/en/QuadRoadNetwork.md">English Doc</a>
+                <a href="docs.html#/Components/zh/QuadRoadNetwork.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">🏞️</div>
+            <img src="assets/icons/terrain.png" class="card-icon" alt="Landscape Terrain">
             <h3>Landscape Terrain</h3>
             <p>Create smooth, flowing "Class-A" terrain surfaces from contours or points using relaxation.</p>
             <div class="card-links">
-                <a href="Components/en/Terrain.md">English Doc</a>
-                <a href="Components/zh/Terrain.md">中文文档</a>
+                <a href="docs.html#/Components/en/Terrain.md">English Doc</a>
+                <a href="docs.html#/Components/zh/Terrain.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">🏘️</div>
+            <img src="assets/icons/plot_generator.png" class="card-icon" alt="Plot Generator">
             <h3>Plot Generator</h3>
             <p>Automatically extract and mesh enclosed plots from road boundaries.</p>
             <div class="card-links">
-                <a href="Components/en/PlotGenerator.md">English Doc</a>
-                <a href="Components/zh/PlotGenerator.md">中文文档</a>
+                <a href="docs.html#/Components/en/PlotGenerator.md">English Doc</a>
+                <a href="docs.html#/Components/zh/PlotGenerator.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">🪜</div>
+            <img src="assets/icons/steps.png" class="card-icon" alt="Landscape Steps">
             <h3>Landscape Steps</h3>
             <p>Parametric step generation that adapts to path slope and length.</p>
             <div class="card-links">
-                <a href="Components/en/Steps.md">English Doc</a>
-                <a href="Components/zh/Steps.md">中文文档</a>
+                <a href="docs.html#/Components/en/Steps.md">English Doc</a>
+                <a href="docs.html#/Components/zh/Steps.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">🧱</div>
+            <img src="assets/icons/wall.png" class="card-icon" alt="Landscape Wall">
             <h3>Landscape Wall</h3>
             <p>Generate retaining walls with thickness and height control.</p>
             <div class="card-links">
-                <a href="Components/en/Wall.md">English Doc</a>
-                <a href="Components/zh/Wall.md">中文文档</a>
+                <a href="docs.html#/Components/en/Wall.md">English Doc</a>
+                <a href="docs.html#/Components/zh/Wall.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="assets/icons/boardwalk.png" class="card-icon" alt="Boardwalk">
+            <h3>Boardwalk</h3>
+            <p>Generate raised boardwalks with customizable width and supports.</p>
+            <div class="card-links">
+                <a href="docs.html#/Components/en/Boardwalk.md">English Doc</a>
+                <a href="docs.html#/Components/zh/Boardwalk.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="assets/icons/scatter.png" class="card-icon" alt="Scatter System">
+            <h3>Scatter System</h3>
+            <p>Rule-based distribution of trees and furniture along paths or surfaces.</p>
+            <div class="card-links">
+                <a href="docs.html#/Components/en/Scatter.md">English Doc</a>
+                <a href="docs.html#/Components/zh/Scatter.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="assets/icons/minimal_surface.png" class="card-icon" alt="Minimal Surface">
+            <h3>Minimal Surface</h3>
+            <p>Create minimal surfaces from boundary curves using relaxation algorithms.</p>
+            <div class="card-links">
+                <a href="docs.html#/Components/en/MinimalSurface.md">English Doc</a>
+                <a href="docs.html#/Components/zh/MinimalSurface.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="assets/icons/rhino_picker.png" class="card-icon" alt="Rhino Picker">
+            <h3>Rhino Picker</h3>
+            <p>Directly filter and select Rhino objects by Layer, Name, or Type in GH.</p>
+            <div class="card-links">
+                <a href="docs.html#/Components/en/RhinoPicker.md">English Doc</a>
+                <a href="docs.html#/Components/zh/RhinoPicker.md">中文文档</a>
             </div>
         </div>
     </div>
@@ -256,21 +293,21 @@
     <!-- Optimization Tab -->
     <div id="optimization" class="grid">
         <div class="card">
-            <div class="card-icon">🦠</div>
+            <img src="assets/icons/wooly_path_optimizer.png" class="card-icon" alt="Wooly Path Optimizer">
             <h3>Wooly Path Optimizer</h3>
             <p>Bio-mimetic Slime Mold algorithm for finding organic, efficient path networks.</p>
             <div class="card-links">
-                <a href="Components/en/WoolyPathOptimizer.md">English Doc</a>
-                <a href="Components/zh/WoolyPathOptimizer.md">中文文档</a>
+                <a href="docs.html#/Components/en/WoolyPathOptimizer.md">English Doc</a>
+                <a href="docs.html#/Components/zh/WoolyPathOptimizer.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">➰</div>
+            <img src="assets/icons/path_optimizer.png" class="card-icon" alt="Bio-Path Optimizer">
             <h3>Bio-Path Optimizer</h3>
             <p>Simple Laplacian smoothing to relax rigid hand-drawn sketches.</p>
             <div class="card-links">
-                <a href="Components/en/PathOptimizer.md">English Doc</a>
-                <a href="Components/zh/PathOptimizer.md">中文文档</a>
+                <a href="docs.html#/Components/en/PathOptimizer.md">English Doc</a>
+                <a href="docs.html#/Components/zh/PathOptimizer.md">中文文档</a>
             </div>
         </div>
     </div>
@@ -278,30 +315,48 @@
     <!-- Analysis Tab -->
     <div id="analysis" class="grid">
         <div class="card">
-            <div class="card-icon">📐</div>
+            <img src="assets/icons/slope_analysis.png" class="card-icon" alt="Slope Analysis">
             <h3>Slope Analysis</h3>
             <p>Real-time slope visualization with color gradients for terrain assessment.</p>
             <div class="card-links">
-                <a href="Components/en/SlopeAnalysis.md">English Doc</a>
-                <a href="Components/zh/SlopeAnalysis.md">中文文档</a>
+                <a href="docs.html#/Components/en/SlopeAnalysis.md">English Doc</a>
+                <a href="docs.html#/Components/zh/SlopeAnalysis.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">☀️</div>
+            <img src="assets/icons/solar_analysis.png" class="card-icon" alt="Solar Analysis">
             <h3>Solar Analysis</h3>
             <p>Fast solar exposure estimation using mesh normals (Sun/Shadow map).</p>
             <div class="card-links">
-                <a href="Components/en/SolarAnalysis.md">English Doc</a>
-                <a href="Components/zh/SolarAnalysis.md">中文文档</a>
+                <a href="docs.html#/Components/en/SolarAnalysis.md">English Doc</a>
+                <a href="docs.html#/Components/zh/SolarAnalysis.md">中文文档</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">💧</div>
+            <img src="assets/icons/wind_shadow_analysis.png" class="card-icon" alt="Wind Shadow">
+            <h3>Wind Shadow</h3>
+            <p>Simplified wind environment analysis based on raycasting.</p>
+            <div class="card-links">
+                <a href="docs.html#/Components/en/WindShadowAnalysis.md">English Doc</a>
+                <a href="docs.html#/Components/zh/WindShadowAnalysis.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="assets/icons/carbon_analysis.png" class="card-icon" alt="Carbon Analysis">
+            <h3>Carbon Analysis</h3>
+            <p>Estimate carbon sequestration benefits of landscape designs.</p>
+            <div class="card-links">
+                <a href="docs.html#/Components/en/CarbonAnalysis.md">English Doc</a>
+                <a href="docs.html#/Components/zh/CarbonAnalysis.md">中文文档</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="assets/icons/hydrology.png" class="card-icon" alt="Hydrology Analysis">
             <h3>Hydrology Analysis</h3>
             <p>Simulate surface water runoff and identify drainage paths using steepest descent.</p>
             <div class="card-links">
-                <a href="Components/en/Hydrology.md">English Doc</a>
-                <a href="Components/zh/Hydrology.md">中文文档</a>
+                <a href="docs.html#/Components/en/Hydrology.md">English Doc</a>
+                <a href="docs.html#/Components/zh/Hydrology.md">中文文档</a>
             </div>
         </div>
     </div>
@@ -309,27 +364,60 @@
     <!-- Workflows Tab -->
     <div id="workflows" class="grid">
         <div class="card">
-            <div class="card-icon">✏️</div>
+            <img src="assets/icons/road_network.png" class="card-icon" alt="Sketch to Road">
             <h3>Sketch to Road</h3>
             <p>Tutorial: Converting 2D sketches into 3D road networks.</p>
             <div class="card-links">
-                <a href="Workflows/en/Sketch_to_Road.md">English</a>
-                <a href="Workflows/zh/Sketch_to_Road.md">中文教程</a>
+                <a href="docs.html#/Workflows/en/Sketch_to_Road.md">English</a>
+                <a href="docs.html#/Workflows/zh/Sketch_to_Road.md">中文教程</a>
             </div>
         </div>
         <div class="card">
-            <div class="card-icon">🌲</div>
+            <img src="assets/icons/terrain.png" class="card-icon" alt="Terrain & Planting">
             <h3>Terrain & Planting</h3>
             <p>Tutorial: Best practices for terrain sculpting and plant scattering.</p>
             <div class="card-links">
-                <a href="Workflows/en/Terrain_Planting.md">English</a>
-                <a href="Workflows/zh/Terrain_Planting.md">中文教程</a>
+                <a href="docs.html#/Workflows/en/Terrain_Planting.md">English</a>
+                <a href="docs.html#/Workflows/zh/Terrain_Planting.md">中文教程</a>
             </div>
         </div>
     </div>
 
     <!-- Changelog Tab -->
     <div id="changelog" class="timeline" style="display: none;">
+        <div class="timeline-item">
+            <div class="timeline-date">2026-02-20</div>
+            <div class="timeline-content">
+                <h3>v1.2.1 - UI & Design System</h3>
+                <ul>
+                    <li><strong>UI & Icons</strong>: Unified "Tile" design language with 3D effects.</li>
+                    <li><strong>Color Coding</strong>: Standardized colors for Modeling, Analysis, Hydrology, Optimization, and Utility.</li>
+                    <li><strong>Docs</strong>: Updated UI Design Standards.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-date">2026-02-20</div>
+            <div class="timeline-content">
+                <h3>v1.2.0 - Analysis & Integration</h3>
+                <ul>
+                    <li><strong>Analysis</strong>: Carbon Analysis, Wind Shadow Analysis.</li>
+                    <li><strong>Integration</strong>: Rhino Picker (Layer/Name selection).</li>
+                    <li><strong>Roads</strong>: Junction/Street outputs for material assignment.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-date">2026-02-20</div>
+            <div class="timeline-content">
+                <h3>v1.1.0 - Feature Update</h3>
+                <ul>
+                    <li><strong>Features</strong>: Boardwalk, Scatter System (Vegetation/Furniture).</li>
+                    <li><strong>Surfaces</strong>: Minimal Surface generation.</li>
+                    <li><strong>Integration</strong>: GIS Connector framework.</li>
+                </ul>
+            </div>
+        </div>
         <div class="timeline-item">
             <div class="timeline-date">2026-02-20</div>
             <div class="timeline-content">

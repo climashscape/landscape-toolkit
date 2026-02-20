@@ -1,5 +1,4 @@
 using Rhino.Geometry;
-using System.Collections.Generic;
 
 namespace LandscapeToolkit.Optimization
 {
@@ -13,8 +12,7 @@ namespace LandscapeToolkit.Optimization
             if (curve == null || !curve.IsValid) return null;
 
             // Convert to Polyline for processing
-            Polyline polyline;
-            if (!curve.TryGetPolyline(out polyline))
+            if (!curve.TryGetPolyline(out Polyline polyline))
             {
                 // Resample if not a polyline
                 // Use length-based division for uniform segments
@@ -22,8 +20,7 @@ namespace LandscapeToolkit.Optimization
                 int count = (int)(len / 2.0); // Every 2 units? Or fixed count?
                 if (count < 10) count = 10;
                 
-                Point3d[] pts;
-                curve.DivideByCount(count, true, out pts);
+                curve.DivideByCount(count, true, out Point3d[] pts);
                 if (pts == null) return curve;
                 polyline = new Polyline(pts);
             }

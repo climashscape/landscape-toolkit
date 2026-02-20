@@ -26,8 +26,8 @@ namespace LandscapeToolkit.Optimization
         public BoundingBox Bounds { get; private set; }
         public double CellSize { get; private set; }
 
-        private List<Agent> Agents = new List<Agent>();
-        private Random _random = new Random();
+        private readonly List<Agent> Agents = new List<Agent>();
+        private readonly Random _random = new Random();
 
         public WoolyPathOptimizer(BoundingBox bounds, double resolution, int agentCount)
         {
@@ -100,7 +100,6 @@ namespace LandscapeToolkit.Optimization
                 }
                 
                 // Deposit trail
-                // 在当前位置留下足迹
                 DepositTrail(agent.Position);
             }
             
@@ -232,8 +231,7 @@ namespace LandscapeToolkit.Optimization
             sensorDir.Rotate(angleOffset, Vector3d.ZAxis);
             Point3d sensorPos = agent.Position + sensorDir * SensorDistance;
             
-            int gx, gy;
-            WorldToGrid(sensorPos, out gx, out gy);
+            WorldToGrid(sensorPos, out int gx, out int gy);
             
             if (gx >= 0 && gx < Width && gy >= 0 && gy < Height)
             {
@@ -244,8 +242,7 @@ namespace LandscapeToolkit.Optimization
 
         private void DepositTrail(Point3d pos)
         {
-            int gx, gy;
-            WorldToGrid(pos, out gx, out gy);
+            WorldToGrid(pos, out int gx, out int gy);
             if (gx >= 0 && gx < Width && gy >= 0 && gy < Height)
             {
                 TrailMap[gx, gy] = Math.Min(1.0, TrailMap[gx, gy] + 1.0); // Add pheromone, clamp at 1.0? Or let it accumulate?

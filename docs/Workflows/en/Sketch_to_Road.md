@@ -20,7 +20,7 @@ Use the **Bio-Path Optimizer** to smooth the original curves.
 Input the optimized curves into the **Quad Road Network** component.
 *   **Component**: `QuadRoad`
 *   **Parameters**:
-    *   `Width`: Set road width (e.g., 6.0m).
+    *   `Widths`: Set road width (single value e.g. 6.0m, or list for variable widths).
     *   `Fillet`: Set junction fillet radius (e.g., 3.0m).
 *   **Result**: Generates a road network mesh with pure quad topology.
 

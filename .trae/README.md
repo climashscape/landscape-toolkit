@@ -22,8 +22,12 @@
 
 | Spec Name | Status | Description |
 | :--- | :--- | :--- |
-| **Advanced Road System** | 🚧 In Progress | 包含路网分级、广场连接与仿生路径优化。 |
+| **Advanced Road System** | ✅ Completed | 包含路网分级、广场连接与仿生路径优化。 |
 | **Quad Road Network** | ✅ Completed | 基础的四边面路网生成与地块填充。 |
+| **Landscape Features** | ✅ Completed | 包含台阶、挡墙、栈道、散布系统与极小曲面。 |
+| **Analysis Tools** | ✅ Completed | 包含坡度、光照、风影、碳汇与水文分析。 |
+| **Integration Tools** | ✅ Completed | 包含 Rhino 对象拾取器 (RhinoPicker) 与 GIS 接口。 |
+| **UI Unification** | ✅ Completed (v1.2.1) | 统一插件与网页 UI，采用 3D 卡片式设计与标准色系。 |
 
 ---
 *Maintained by Landscape Toolkit Dev Team*

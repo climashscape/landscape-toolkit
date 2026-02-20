@@ -1,15 +1,17 @@
 # Landscape Toolkit (景观工具箱)
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.1-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Documentation](https://img.shields.io/badge/Docs-Interactive-green.svg)](docs/index.html)
+[![Documentation](https://img.shields.io/badge/Docs-Interactive-green.svg)](https://climashscape.github.io/landscape-toolkit/)
 
 **High-Performance Landscape Architecture Toolkit for Rhino + Grasshopper**
 **专为景观设计师打造的全流程参数化设计系统**
 
+> **New in v1.2.1**: Unified UI design with 3D "Tile" icons and standardized category colors. Check out the [UI Design Standards](docs/Dev_Guides/UI_Design_Standards.md) for details.
+
 ---
 
-### 🚀 [**Click Here for Interactive Documentation & Showcase**](docs/index.html)
+### 🚀 [**Click Here for Interactive Documentation & Showcase**](https://climashscape.github.io/landscape-toolkit/)
 访问交互式文档主页，体验更直观的工具展示与版本历史。
 
 ---
@@ -36,6 +38,10 @@ The output `.gha` and `.zip` files will be in the `dist/` directory.
 | **Plot Generator** | 自动提取路网围合区域，生成规整的地块网格。 | [English](docs/Components/en/PlotGenerator.md) / [中文](docs/Components/zh/PlotGenerator.md) |
 | **Landscape Steps** | 沿路径自动生成适应坡度的参数化台阶。 | [English](docs/Components/en/Steps.md) / [中文](docs/Components/zh/Steps.md) |
 | **Landscape Wall** | 快速生成具有厚度的挡土墙或种植池边缘。 | [English](docs/Components/en/Wall.md) / [中文](docs/Components/zh/Wall.md) |
+| **Boardwalk** | 生成带有支撑柱和扶手的架空栈道。 | [English](docs/Components/en/Boardwalk.md) / [中文](docs/Components/zh/Boardwalk.md) |
+| **Scatter System** | 依据规则随机散布乔木、路灯或座椅等配景。 | [English](docs/Components/en/Scatter.md) / [中文](docs/Components/zh/Scatter.md) |
+| **Minimal Surface** | 基于松弛算法生成极小曲面张拉结构。 | [English](docs/Components/en/MinimalSurface.md) / [中文](docs/Components/zh/MinimalSurface.md) |
+| **Rhino Picker** | 直接在 GH 中按图层或名称拾取 Rhino 对象。 | [English](docs/Components/en/RhinoPicker.md) / [中文](docs/Components/zh/RhinoPicker.md) |
 
 ### 🦠 Optimization (仿生优化)
 | Component | Description | Docs |
@@ -48,6 +54,8 @@ The output `.gha` and `.zip` files will be in the `dist/` directory.
 | :--- | :--- | :--- |
 | **Slope Analysis** | 实时地形坡度可视化分析。 | [English](docs/Components/en/SlopeAnalysis.md) / [中文](docs/Components/zh/SlopeAnalysis.md) |
 | **Solar Analysis** | 基于法线的快速光照暴露度估算。 | [English](docs/Components/en/SolarAnalysis.md) / [中文](docs/Components/zh/SolarAnalysis.md) |
+| **Wind Shadow** | 基于射线投射的简易风环境/遮挡分析。 | [English](docs/Components/en/WindShadowAnalysis.md) / [中文](docs/Components/zh/WindShadowAnalysis.md) |
+| **Carbon Analysis** | 估算乔木与绿地的固碳效益。 | [English](docs/Components/en/CarbonAnalysis.md) / [中文](docs/Components/zh/CarbonAnalysis.md) |
 | **Hydrology Analysis** | 模拟地表径流与汇水路径 (最速下降法)。 | [English](docs/Components/en/Hydrology.md) / [中文](docs/Components/zh/Hydrology.md) |
 
 ---

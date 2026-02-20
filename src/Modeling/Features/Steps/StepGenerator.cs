@@ -1,5 +1,4 @@
 using Rhino.Geometry;
-using System;
 using System.Collections.Generic;
 
 namespace LandscapeToolkit.Modeling.Features.Steps
@@ -31,7 +30,6 @@ namespace LandscapeToolkit.Modeling.Features.Steps
             Curve xyPath = Curve.ProjectToPlane(Path, Plane.WorldXY);
             if (xyPath == null) return new List<Brep>();
 
-            double startZ = Path.PointAtStart.Z;
             double length = xyPath.GetLength();
             int count = (int)(length / Tread);
             
@@ -41,8 +39,7 @@ namespace LandscapeToolkit.Modeling.Features.Steps
             {
                 // 2. Calculate Position
                 double dist = i * Tread + (Tread / 2.0); // Center of tread
-                double t;
-                if (!xyPath.LengthParameter(dist, out t)) continue;
+                if (!xyPath.LengthParameter(dist, out double t)) continue;
 
                 Point3d center = xyPath.PointAt(t);
                 Vector3d tangent = xyPath.TangentAt(t);
@@ -53,13 +50,26 @@ namespace LandscapeToolkit.Modeling.Features.Steps
                 if (AdaptToTerrain && Terrain != null)
                 {
                     // Project center to terrain to find Z
-                    // TODO: Mesh Ray Intersection
-                    currentZ = startZ + (i * Riser); // Fallback
+                    Point3d rayOrigin = new Point3d(center.X, center.Y, 10000);
+                    Ray3d ray = new Ray3d(rayOrigin, -Vector3d.ZAxis);
+                    double tHit = Rhino.Geometry.Intersect.Intersection.MeshRay(Terrain, ray);
+                    
+                    if (tHit > 0)
+                    {
+                        currentZ = ray.PointAt(tHit).Z;
+                    }
+                    else
+                    {
+                        // Fallback to path Z if terrain miss
+                        currentZ = Path.PointAt(t).Z;
+                    }
                 }
                 else
                 {
-                    // Standard constant riser
-                    currentZ = startZ + (i * Riser);
+                    // Follow Path Z
+                    // 如果不贴合地形，则跟随路径的 Z 坐标
+                    // 这样可以支持有坡度的路径，而不仅仅是固定台阶高度
+                    currentZ = Path.PointAt(t).Z;
                 }
 
                 // 4. Construct Geometry

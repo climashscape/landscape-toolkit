@@ -12,8 +12,16 @@
 *   [**Landscape Terrain**](Terrain.md) - 从等高线或散点生成光滑地形网格。
 *   [**Landscape Steps**](Steps.md) - 沿路径生成参数化台阶。
 *   [**Landscape Wall**](Wall.md) - 生成具有厚度的竖向墙体。
+*   [**Boardwalk**](Boardwalk.md) - 生成带有支撑柱和扶手的架空栈道。
+*   [**Scatter System**](Scatter.md) - 依据规则随机散布乔木、路灯或座椅等配景。
+*   [**Minimal Surface**](MinimalSurface.md) - 基于松弛算法生成极小曲面张拉结构。
+
+## 集成 (Integration)
+*   [**Rhino Picker**](RhinoPicker.md) - 直接在 GH 中拾取 Rhino 对象（按图层/名称）。
 
 ## 分析 (Analysis)
+*   [**Carbon Analysis**](CarbonAnalysis.md) - 估算绿地与树木的固碳效益。
+*   [**Wind Shadow Analysis**](WindShadowAnalysis.md) - 简易风环境遮挡分析。
 *   [**Slope Analysis**](SlopeAnalysis.md) - 可视化地形坡度梯度。
 *   [**Solar Analysis**](SolarAnalysis.md) - 估算光照暴露度（受光/阴影图）。
 *   [**Hydrology Analysis**](Hydrology.md) - 模拟地表径流和排水路径。

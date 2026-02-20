@@ -17,15 +17,17 @@ namespace LandscapeToolkit.Modeling
 
         protected override System.Drawing.Bitmap Icon => Icons.Steps;
 
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Path", "C", "Centerline path for the steps", GH_ParamAccess.item);
             pManager.AddNumberParameter("Width", "W", "Width of the steps", GH_ParamAccess.item, 2.0);
             pManager.AddNumberParameter("Tread", "T", "Tread length (Run)", GH_ParamAccess.item, 0.3);
             pManager.AddNumberParameter("Riser", "R", "Riser height (Rise)", GH_ParamAccess.item, 0.15);
+            pManager.AddMeshParameter("Terrain", "M", "Optional terrain mesh to adapt steps to", GH_ParamAccess.item);
+            pManager[4].Optional = true;
         }
 
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddBrepParameter("Steps", "S", "Generated step geometry", GH_ParamAccess.list);
         }
@@ -36,11 +38,13 @@ namespace LandscapeToolkit.Modeling
             double width = 2.0;
             double tread = 0.3;
             double riser = 0.15;
+            Mesh terrain = null;
 
             if (!DA.GetData(0, ref path)) return;
             if (!DA.GetData(1, ref width)) return;
             if (!DA.GetData(2, ref tread)) return;
             if (!DA.GetData(3, ref riser)) return;
+            DA.GetData(4, ref terrain);
 
             // Use the Logic Class
             // 调用逻辑类，实现 UI 与 逻辑分离
@@ -48,7 +52,9 @@ namespace LandscapeToolkit.Modeling
             {
                 Width = width,
                 Tread = tread,
-                Riser = riser
+                Riser = riser,
+                AdaptToTerrain = (terrain != null),
+                Terrain = terrain
             };
 
             try 

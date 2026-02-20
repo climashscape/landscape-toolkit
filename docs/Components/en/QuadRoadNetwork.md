@@ -31,6 +31,8 @@ This component features specialized topology generation logic for landscape road
 | :--- | :--- | :--- | :--- |
 | **QuadMesh** | M | Mesh | The generated road network mesh. All-quad structure, ready for SubD conversion. |
 | **Graph** | G | Generic | Internal graph structure data (for debugging or advanced analysis). |
+| **Junctions** | J | Mesh (List) | Separate list of junction meshes (useful for assigning different materials). |
+| **Streets** | S | Mesh (List) | Separate list of street meshes (useful for assigning different materials). |
 
 ## 5. Tips
 *   **SubD Conversion**: It is recommended to connect the generated Mesh to the `SubD from Mesh` component in Grasshopper to achieve the final smooth road surface effect.

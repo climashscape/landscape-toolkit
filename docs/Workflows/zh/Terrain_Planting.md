@@ -22,9 +22,11 @@
 *   或者直接使用 `Terrain` 生成的地形表面。
 
 ### Step 2: 定义散布规则
-*   **组件**: `Scatter` (需自行实现或使用现有逻辑)
-*   **乔木**: 使用泊松盘采样 (Poisson Disk Sampling) 避免树木重叠。
-    *   间距: 5m - 8m
+*   **组件**: `Scatter System` (v1.1.0 新增)
+*   **参数**:
+    *   `TargetSurface`: 地形或地块网格。
+    *   `Type`: 0 (乔木)。
+    *   `MinDistance`: 5.0 (确保树木不重叠)。
 *   **灌木/地被**: 使用随机采样或噪波纹理控制密度。
 
 ### Step 3: 实例化 (Instancing)

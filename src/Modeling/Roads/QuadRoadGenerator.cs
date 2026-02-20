@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Rhino.Geometry;
 using LandscapeToolkit.Data;
 using LandscapeToolkit.Data.Graph;
@@ -16,10 +17,14 @@ namespace LandscapeToolkit.Modeling.Roads
         public List<double> RoadWidths { get; set; }
         public double DefaultWidth { get; set; } = 6.0;
         public double DefaultIntersectionRadius { get; set; } = 9.0;
+        public RoadGraph GeneratedGraph { get; private set; }
+        public List<Mesh> JunctionMeshes { get; private set; }
+        public List<Mesh> StreetMeshes { get; private set; }
 
         public QuadRoadGenerator(List<Curve> curves, List<double> widths = null)
         {
-            Centerlines = curves;
+            // Sanitize input: Remove null curves
+            Centerlines = curves?.Where(c => c != null).ToList() ?? new List<Curve>();
             RoadWidths = new List<double>();
 
             if (widths != null && widths.Count > 0)
@@ -27,16 +32,17 @@ namespace LandscapeToolkit.Modeling.Roads
                 if (widths.Count == 1)
                 {
                     // Single width applies to all
-                    for (int i = 0; i < curves.Count; i++) RoadWidths.Add(widths[0]);
+                    for (int i = 0; i < Centerlines.Count; i++) RoadWidths.Add(widths[0]);
                 }
-                else if (widths.Count == curves.Count)
+                else if (widths.Count == Centerlines.Count)
                 {
-                    RoadWidths = widths;
+                    // Copy to prevent external modification affecting this instance
+                    RoadWidths = new List<double>(widths);
                 }
                 else
                 {
                     // Mismatch: Cycle or pad with last
-                    for (int i = 0; i < curves.Count; i++)
+                    for (int i = 0; i < Centerlines.Count; i++)
                     {
                         if (i < widths.Count) RoadWidths.Add(widths[i]);
                         else RoadWidths.Add(widths[widths.Count - 1]);
@@ -46,7 +52,7 @@ namespace LandscapeToolkit.Modeling.Roads
             else
             {
                 // Use default
-                for(int i=0; i<curves.Count; i++) RoadWidths.Add(DefaultWidth);
+                for(int i=0; i<Centerlines.Count; i++) RoadWidths.Add(DefaultWidth);
             }
         }
 
@@ -59,30 +65,32 @@ namespace LandscapeToolkit.Modeling.Roads
             // Step 1: Clean and Node Identification
             // 步骤1：清理曲线并识别节点（路口）
             var graph = BuildGraph(Centerlines, RoadWidths);
+            GeneratedGraph = graph;
 
             // Step 2: Generate Junction Meshes (3-way, 4-way, N-way)
             // 步骤2：生成路口网格
-            var junctionMeshes = new List<Mesh>();
+            JunctionMeshes = new List<Mesh>();
             foreach (var node in graph.Nodes)
             {
-                junctionMeshes.Add(CreateJunctionMesh(node));
+                JunctionMeshes.Add(CreateJunctionMesh(node));
             }
 
             // Step 3: Generate Street Segments (Quad Strips)
             // 步骤3：生成路段网格（四边面带）
-            var streetMeshes = new List<Mesh>();
+            StreetMeshes = new List<Mesh>();
             foreach (var edge in graph.Edges)
             {
-                streetMeshes.Add(CreateStreetStrip(edge));
+                StreetMeshes.Add(CreateStreetStrip(edge));
             }
 
             // Step 4: Combine and Weld
             // 步骤4：合并并焊接顶点
             Mesh finalMesh = new Mesh();
-            finalMesh.Append(junctionMeshes);
-            finalMesh.Append(streetMeshes);
+            finalMesh.Append(JunctionMeshes);
+            finalMesh.Append(StreetMeshes);
             finalMesh.Vertices.CombineIdentical(true, true);
             finalMesh.Weld(3.14159); // Weld everything for smooth shading if needed
+            finalMesh.UnifyNormals(); // Ensure consistent normal direction
 
             // Step 5: Optional Relaxation (Laplacian Smoothing)
             // 步骤5：可选的松弛平滑，使网格流动更自然
@@ -139,6 +147,8 @@ namespace LandscapeToolkit.Modeling.Roads
                 double w = (inputWidths != null && i < inputWidths.Count) ? inputWidths[i] : DefaultWidth;
                 
                 var params_ = splitParams[i];
+                // Remove duplicates to avoid zero-length segments
+                params_ = params_.Distinct().ToList();
                 params_.Sort();
                 
                 var splits = curve.Split(params_);
@@ -179,11 +189,13 @@ namespace LandscapeToolkit.Modeling.Roads
                 RoadNode startNode = GetOrCreateNode(graph, start, tolerance);
                 RoadNode endNode = GetOrCreateNode(graph, end, tolerance);
                 
-                RoadEdge edge = new RoadEdge(seg, startNode, endNode);
-                
-                // Assign Type
-                // For now, we create a new Type for each unique width, or just generic
-                edge.Type = new RoadType("Generic", w, w * 1.5, "Default");
+                RoadEdge edge = new RoadEdge(seg, startNode, endNode)
+                {
+                    // Assign Type
+                    // For now, we create a new Type for each unique width, or just generic
+                    // Use DefaultIntersectionRadius if no specific logic overrides it
+                    Type = new RoadType("Generic", w, DefaultIntersectionRadius, "Default")
+                };
                 
                 graph.Edges.Add(edge);
                 
@@ -228,6 +240,12 @@ namespace LandscapeToolkit.Modeling.Roads
                 connectionPoints.Add(centerOnEdge);
 
                 Vector3d perp = Vector3d.CrossProduct(tangent, Vector3d.ZAxis);
+                if (perp.IsTiny(1e-6))
+                {
+                    // Handle vertical case (tangent is parallel to Z)
+                    perp = Vector3d.CrossProduct(tangent, Vector3d.XAxis);
+                    if (perp.IsTiny(1e-6)) perp = Vector3d.CrossProduct(tangent, Vector3d.YAxis);
+                }
                 perp.Unitize();
                 
                 Point3d left = centerOnEdge + perp * (w * 0.5);
@@ -341,9 +359,8 @@ namespace LandscapeToolkit.Modeling.Roads
 
             // Trim curve to valid length
             // We need parameters for start and end distance
-            double tStart, tEnd;
-            c.LengthParameter(startDist, out tStart);
-            c.LengthParameter(endDist, out tEnd);
+            c.LengthParameter(startDist, out double tStart);
+            c.LengthParameter(endDist, out double tEnd);
 
             Curve trimmed = c.Trim(new Interval(tStart, tEnd));
             
@@ -364,6 +381,11 @@ namespace LandscapeToolkit.Modeling.Roads
                 Point3d pt = trimmed.PointAt(t);
                 Vector3d tan = trimmed.TangentAt(t);
                 Vector3d perp = Vector3d.CrossProduct(tan, Vector3d.ZAxis);
+                if (perp.IsTiny(1e-6))
+                {
+                    perp = Vector3d.CrossProduct(tan, Vector3d.XAxis);
+                    if (perp.IsTiny(1e-6)) perp = Vector3d.CrossProduct(tan, Vector3d.YAxis);
+                }
                 perp.Unitize();
 
                 Point3d left = pt + perp * (w * 0.5);
@@ -385,14 +407,20 @@ namespace LandscapeToolkit.Modeling.Roads
 
         private Mesh RelaxMesh(Mesh input)
         {
+            if (input == null || input.Vertices.Count == 0) return input;
+
             // Laplacian smoothing logic
             // 1. Identify boundary vertices (naked edges) to pin them
             bool[] isBoundary = input.GetNakedEdgePointStatus();
+            if (isBoundary == null) return input;
             
             // 2. Build adjacency list
             var topo = input.TopologyEdges;
             int vertexCount = input.Vertices.Count;
             Point3d[] newVertices = new Point3d[vertexCount];
+            
+            // Initialize newVertices with current positions
+            for(int i=0; i<vertexCount; i++) newVertices[i] = input.Vertices[i];
 
             // 3. Iterations
             int iterations = 3;
@@ -400,33 +428,30 @@ namespace LandscapeToolkit.Modeling.Roads
 
             for (int iter = 0; iter < iterations; iter++)
             {
+                // Calculate new positions
+                Point3d[] currentIterVertices = new Point3d[vertexCount];
+                
                 for (int i = 0; i < vertexCount; i++)
                 {
                     if (isBoundary[i])
                     {
-                        newVertices[i] = input.Vertices[i];
+                        currentIterVertices[i] = newVertices[i];
                         continue;
                     }
 
-                    // Get neighbors
-                    int[] connectedEdges = input.TopologyVertices.ConnectedEdges(input.TopologyVertices.TopologyVertexIndex(i));
+                    int topoIndex = input.TopologyVertices.TopologyVertexIndex(i);
+                    int[] connectedEdges = input.TopologyVertices.ConnectedEdges(topoIndex);
+                    
                     Point3d sum = Point3d.Origin;
                     int count = 0;
 
                     foreach (int edgeIndex in connectedEdges)
                     {
-                        // Get the other vertex of the edge
                         var pair = topo.GetTopologyVertices(edgeIndex);
-                        int otherTopoIndex = (pair.I == input.TopologyVertices.TopologyVertexIndex(i)) ? pair.J : pair.I;
-                        // Convert topo index back to vertex index (first one)
-                        // Note: Mesh.TopologyVertices maps to multiple Mesh.Vertices if they are coincident but not welded.
-                        // Here we assume welded mesh for simplicity in logic, or just take the first.
-                        // However, strictly speaking, we should use TopologyVertices for smoothing.
+                        int otherTopoIndex = (pair.I == topoIndex) ? pair.J : pair.I;
                         
-                        // Let's use a simpler approach: finding adjacent vertices via faces
-                        // Actually, TopologyVertices is robust.
-                        
-                        // Get the point from the topo vertex
+                        // Get point from topology vertex
+                        // Note: TopologyVertices stores the representative point for welded vertices
                         Point3d neighborPt = input.TopologyVertices[otherTopoIndex];
                         sum += neighborPt;
                         count++;
@@ -435,21 +460,24 @@ namespace LandscapeToolkit.Modeling.Roads
                     if (count > 0)
                     {
                         Point3d avg = sum / count;
-                        Point3d current = input.Vertices[i]; // Implicit conversion from Point3f to Point3d
+                        Point3d current = newVertices[i];
                         Vector3d move = avg - current;
-                        newVertices[i] = current + move * strength;
+                        currentIterVertices[i] = current + move * strength;
                     }
                     else
                     {
-                        newVertices[i] = input.Vertices[i];
+                        currentIterVertices[i] = newVertices[i];
                     }
                 }
+                
+                // Update array for next iteration
+                newVertices = currentIterVertices;
+            }
 
-                // Update mesh
-                for (int i = 0; i < vertexCount; i++)
-                {
-                    input.Vertices[i] = new Point3f((float)newVertices[i].X, (float)newVertices[i].Y, (float)newVertices[i].Z);
-                }
+            // Update mesh vertices finally
+            for (int i = 0; i < vertexCount; i++)
+            {
+                input.Vertices[i] = new Point3f((float)newVertices[i].X, (float)newVertices[i].Y, (float)newVertices[i].Z);
             }
             
             input.Normals.ComputeNormals();

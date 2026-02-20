@@ -1,0 +1,16 @@
+feat: 发布 v1.2.1 版本，新增集成分析工具并升级 UI 设计系统
+
+- 新增集成与分析组件：
+  - RhinoPicker：支持按图层、名称或类型筛选拾取 Rhino 几何体
+  - CarbonAnalysis：用于估算碳汇效益
+  - WindShadowAnalysis：用于进行简易风影分析
+- 优化核心组件：
+  - RoadNetwork：新增 Junctions/Streets 独立输出，便于材质管理
+- 全新 UI 设计系统：
+  - 统一采用 "Tile" 风格与 3D 效果
+  - 标准化组件颜色分类（Modeling, Analysis, Hydrology, Optimization, Utility）
+  - 重绘所有组件图标，提升视觉识别度
+- 工程与文档：
+  - 新增中英文 UI 设计规范文档
+  - 清理构建产物，优化 .gitignore 配置
+  - 更新版本号至 1.2.1

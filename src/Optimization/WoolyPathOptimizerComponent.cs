@@ -1,7 +1,6 @@
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using System.Collections.Generic;
 
 namespace LandscapeToolkit.Optimization
 {
@@ -20,7 +19,7 @@ namespace LandscapeToolkit.Optimization
 
         protected override System.Drawing.Bitmap Icon => Icons.WoolyPathOptimizer;
 
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddRectangleParameter("Bounds", "B", "Simulation boundary", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Resolution", "Res", "Grid resolution (cells per side)", GH_ParamAccess.item, 100);
@@ -32,7 +31,7 @@ namespace LandscapeToolkit.Optimization
             pManager.AddBooleanParameter("Run", "Run", "Run simulation", GH_ParamAccess.item, false);
         }
 
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddMeshParameter("TrailMap", "M", "Visualization of trail map", GH_ParamAccess.item);
             pManager.AddPointParameter("Agents", "A", "Agent positions", GH_ParamAccess.list);
@@ -66,10 +65,12 @@ namespace LandscapeToolkit.Optimization
                 _bounds = currentBounds;
                 double cellSize = Math.Max(_bounds.Diagonal.X, _bounds.Diagonal.Y) / resolution;
                 
-                _optimizer = new WoolyPathOptimizer(_bounds, cellSize, count);
-                _optimizer.SensorDistance = sensorDist;
-                _optimizer.SensorAngle = sensorAngle;
-                _optimizer.TurnAngle = turnAngle;
+                _optimizer = new WoolyPathOptimizer(_bounds, cellSize, count)
+                {
+                    SensorDistance = sensorDist,
+                    SensorAngle = sensorAngle,
+                    TurnAngle = turnAngle
+                };
                 _currentIteration = 0;
             }
 

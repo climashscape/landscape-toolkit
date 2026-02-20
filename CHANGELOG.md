@@ -2,6 +2,40 @@
 
 All notable changes to the **Landscape Toolkit** project will be documented in this file.
 
+## [1.2.1] - 2026-02-20
+
+### Changed (界面更新)
+- **UI & Iconography**:
+    - **Unified Design Language**: Adopted a "Tile" style with category-specific rounded rectangle backgrounds.
+    - **3D Visual Effects**: Added linear gradients and inset borders to icons for a subtle 3D/tactile feel.
+    - **Color Coding**: Standardized colors for Modeling (Green), Analysis (OrangeRed), Hydrology (Blue), Optimization (Purple), and Utility (Gray).
+    - **High-Res Support**: All icons are now programmatically generated at high resolution (scalable to 128x128) for consistent web documentation.
+- **Documentation**:
+    - Updated [UI Design Standards](docs/Dev_Guides/UI_Design_Standards.md) with new specifications.
+    - Added Chinese translation for UI Standards ([UI_Design_Standards_zh.md](docs/Dev_Guides/UI_Design_Standards_zh.md)).
+
+## [1.2.0] - 2026-02-20
+
+### Added (新增功能)
+- **Integration**:
+    - `RhinoPickerComponent`: Select Rhino objects by Layer, Name, or Type directly within Grasshopper.
+- **Analysis**:
+    - `CarbonAnalysisComponent`: Estimates carbon sequestration based on trees and green areas.
+    - `WindShadowAnalysisComponent`: Simplified wind analysis using raycasting to visualize wind shadows.
+- **Road Network System**:
+    - `RoadNetworkComponent`: Added `Junctions` and `Streets` outputs to support better hierarchy management and material assignment.
+
+## [1.1.0] - 2026-02-20
+
+### Added (新增功能)
+- **Features & Planting**:
+    - `BoardwalkComponent`: Generates raised boardwalks with customizable width, supports, and railings.
+    - `ScatterComponent`: Rule-based distribution system for trees, street lights, and benches along paths or surfaces.
+- **Surface Modeling**:
+    - `MinimalSurfaceComponent`: Creates minimal surfaces (tensile structures) from boundary curves using relaxation algorithms.
+- **Integration**:
+    - `GISConnector`: Initial framework for future GIS data integration (Placeholder).
+
 ## [1.0.0] - 2026-02-20
 
 ### Added (新增功能)

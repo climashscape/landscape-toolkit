@@ -28,68 +28,15 @@
     *   在路网与地形的交界处，生成一圈高密度的“过渡带” (Transition Strip)。
     *   外侧顶点焊接在道路上，内侧顶点参与地形松弛。
 
-### 1.3 竖向与坡度控制 (Vertical & Slope Control)
+### 1.3 极小曲面算法 (Minimal Surface Algorithm - v1.1.0 新增)
+`MinimalSurface` 组件实现了一个基于物理的松弛求解器：
+*   **初始化 (Initialization)**: 使用约束 Delaunay 三角剖分或 Quad 网格映射在边界内生成粗糙网格。
+*   **动力学松弛 (Dynamic Relaxation)**: 顶点被视为由弹簧连接的粒子。系统迭代最小化总能量（模拟肥皂膜表面张力）直至达到平衡。
+*   **平均曲率流 (Mean Curvature Flow)**: 该算法有效地使每个内部点的平均曲率最小化 ($H = 0$)。
+
+### 1.4 竖向与坡度控制 (Vertical & Slope Control)
 *   **边界高程**: 从路网边缘获取高程 `Z`。
 *   **内部调整**:
     1.  **Point Attractor**: 在地块内部放置控制点，提升或降低其 `Z` 值以模拟土丘或洼地。
     2.  **Curve Attractor**: 使用等高线约束内部地形。
     3.  **Slope Analysis Feedback**: 实时计算坡度，若超过设定值（如 25%），自动调整控制点位置或高度。
-
----
-
-## 2. 景观构筑物生成 (Landscape Features Generation)
-基于地形曲面生成具体的构筑物。
-
-### 2.1 台阶生成 (Steps Generation)
-*   **输入**: 路径曲线 (Path Curve) + 地形 (Terrain Surface)。
-*   **算法**:
-    1.  **Sample Points**: 沿路径每隔一定距离（如 0.3m）采样点。
-    2.  **Height Check**: 检查相邻两点的高差 $\Delta H$。
-    3.  **Tread & Riser Calculation**:
-        *   如果 $\Delta H > H_{max}$ (如 0.15m)，则需要插入台阶。
-        *   根据公式 $2R + T = 600 \sim 640mm$ 计算踏步数和踢面高度。
-    4.  **Geometry Construction**: 生成台阶的实体 (Brep) 或网格 (Mesh)。
-
-### 2.2 挡土墙生成 (Retaining Wall Generation)
-*   **输入**: 分界线 (Boundary Curve) + 上下两侧地形。
-*   **算法**:
-    1.  **Offset**: 向高侧和低侧分别偏移墙厚的一半。
-    2.  **Loft**: 在偏移线之间放样生成墙体。
-    3.  **Top Cap**: 生成压顶 (Coping)。
-    4.  **Foundation**: 根据墙高自动生成基础深度。
-
-### 2.3 散布系统 (Scatter System)
-*   **输入**: 区域 (Region) 或 曲线 (Curve)。
-*   **算法**:
-    1.  **Poisson Disk Sampling**: 蓝噪声采样，确保物体分布均匀且自然（不重叠）。
-    2.  **Instance Placement**: 在采样点位置实例化预制的模型（如树木、路灯）。
-    3.  **Randomization**: 对实例进行随机旋转、缩放，增加自然感。
-
----
-
-## 3. 代码结构参考 (Code Reference)
-在 `src/Modeling/Surfaces/PlotGeneratorComponent.cs` 和 `src/Modeling/Features/StepsComponent.cs` 中实现：
-
-```csharp
-public class PlotGenerator 
-{
-    public Polyline Boundary { get; set; }
-    
-    public Mesh GenerateMinimalSurface(int uCount, int vCount) 
-    {
-        // 1. Create Initial Grid
-        var mesh = CreateGridFromBoundary(Boundary, uCount, vCount);
-        
-        // 2. Relax Mesh (Physics Simulation)
-        var kangaroo = new KangarooSolver();
-        kangaroo.AddGoal(new SpringGoal(mesh.Edges));
-        
-        // CRITICAL: Lock Boundary Vertices to prevent SubD shrinkage
-        kangaroo.AddGoal(new AnchorGoal(mesh.BoundaryVertices)); 
-        
-        kangaroo.Solve();
-        
-        return kangaroo.OutputMesh;
-    }
-}
-```

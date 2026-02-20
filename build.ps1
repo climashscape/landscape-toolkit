@@ -1,11 +1,10 @@
 # Landscape Toolkit Build Script
-# v1.0.0 Release
 
 $ErrorActionPreference = "Stop"
 
 $solutionDir = "src"
 $distDir = "dist"
-$version = "1.0.0"
+$version = Get-Content "VERSION" -Raw | ForEach-Object { $_.Trim() }
 
 Write-Host "Building Landscape Toolkit v$version..." -ForegroundColor Green
 

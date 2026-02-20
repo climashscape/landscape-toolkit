@@ -17,13 +17,13 @@ namespace LandscapeToolkit.Analysis
 
         protected override Bitmap Icon => Icons.SolarAnalysis;
 
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "M", "Input mesh to analyze", GH_ParamAccess.item);
             pManager.AddVectorParameter("SunDirection", "S", "Sun vector (light direction)", GH_ParamAccess.item, new Vector3d(-1, -1, -1));
         }
 
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddMeshParameter("Colored Mesh", "CM", "Mesh colored by exposure", GH_ParamAccess.item);
             pManager.AddNumberParameter("Exposure", "E", "Exposure values per vertex (0-1)", GH_ParamAccess.list);
@@ -63,16 +63,7 @@ namespace LandscapeToolkit.Analysis
                 
                 exposures.Add(exposure);
 
-                // Color map: Blue (Shadow) -> Yellow (Sun)
-                int r = (int)(exposure * 255);
-                int g = (int)(exposure * 255);
-                int b = (int)((1.0 - exposure) * 255);
-                
-                // Improved Heatmap: Blue -> Red
-                // 0.0 -> Blue (0, 0, 255)
-                // 0.5 -> Green (0, 255, 0)
-                // 1.0 -> Red (255, 0, 0)
-                
+                // Color map applied via GetColor
                 coloredMesh.VertexColors.Add(GetColor(exposure));
             }
 
@@ -84,7 +75,8 @@ namespace LandscapeToolkit.Analysis
         {
             // Simple thermal gradient
             // t is 0-1
-            int r = 0, g = 0, b = 0;
+            int r = 0, b = 0;
+            int g;
             
             if (t < 0.5)
             {

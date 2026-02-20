@@ -1,5 +1,9 @@
 # Landscape Toolkit - Project Documentation
 
+**Current Version: 1.2.1**
+
+> **New in v1.2.1**: Unified UI design with 3D "Tile" icons and standardized category colors. Check out the [UI Design Standards](../Dev_Guides/UI_Design_Standards.md) for details.
+
 ## 1. Project Vision
 This project aims to provide a set of efficient modeling and analysis tools for landscape designers based on Rhino/Grasshopper. The core philosophy is to generate high-quality **3D Quad Mesh Road Networks**, terrain, and landscape structures in real-time from **2D Sketches** through parametric algorithms, integrating multi-dimensional environmental analysis to achieve a "Design-Analysis-Optimization" closed-loop workflow.
 
@@ -56,12 +60,14 @@ src/
 ## 4. Development Status
 *   **Phase 1**: [Completed] Basic Quad Mesh logic for road networks, solving automatic layout for junctions (3-way, 4-way).
 *   **Phase 2**: [Completed] Implemented SubD algorithms for plot surfaces, ensuring G1/G2 continuity with road boundaries.
-*   **Phase 3**: [Completed] Developed adaptive generation for vertical features (Steps, Walls).
-*   **Phase 4**: [Completed] Integrated environmental analysis tools (Slope, Solar, Hydrology) and established data dashboards.
+*   **Phase 3**: [Completed] Developed adaptive generation for vertical features (Steps, Walls) and new v1.1.0 features (Boardwalks, Scatter System).
+*   **Phase 4**: [Completed] Integrated environmental analysis tools (Slope, Solar, Hydrology, Carbon, Wind Shadow) and established data dashboards.
+*   **Phase 5**: [In Progress] Advanced GIS integration and detailed construction drawing generation.
 
 ## 5. Documentation Index
 
 ### User Guides
+*   [**UI Design Standards**](Dev_Guides/UI_Design_Standards.md)
 *   [**Component Reference**](Components/README.md)
 *   [**Workflows**](Workflows/README.md)
 
@@ -69,8 +75,9 @@ src/
 *   [**Core Logic**](Core_Logic/README.md)
     *   [Roads Implementation](Core_Logic/Roads_Implementation.md)
     *   [Surfaces Implementation](Core_Logic/Surfaces_Implementation.md)
+    *   [Features Implementation](Core_Logic/Features_Implementation.md)
     *   [Analysis Implementation](Core_Logic/Analysis_Implementation.md)
 
 ---
-*Maintained by: Trae AI Assistant*
+*Maintained by: Landscape Toolkit Dev Team*
 *Last Updated: 2026-02-20*

@@ -48,36 +48,56 @@ namespace LandscapeToolkit.Modeling
             }
 
             double tolerance = RhinoDoc.ActiveDoc?.ModelAbsoluteTolerance ?? 0.01;
-
-            // Curve.CreateBooleanRegions finds enclosed regions from a set of curves
-            // combineRegions = false to get individual regions
-            var regionResults = Curve.CreateBooleanRegions(boundaries, plane, false, tolerance);
             
             Brep[] regionBreps = null;
 
-            if (regionResults != null && regionResults.RegionCount > 0)
+            try
             {
-                // CurveBooleanRegions might expose RegionCurves property
-                // Or we can iterate if it is IEnumerable (but previous error said no)
-                // Let's try reflection or dynamic to be safe if property name is uncertain, 
-                // but standard RhinoCommon has RegionCurves.
-                // However, to avoid compilation error if RegionCurves is missing in this version:
+                // Curve.CreateBooleanRegions finds enclosed regions from a set of curves
+                // combineRegions = false to get individual regions
+                // Use dynamic to avoid hard dependency on Rhino 7+ type at compile time if possible,
+                // but since we are compiling against RhinoCommon, we assume it's available.
+                // However, runtime on older Rhino might fail.
                 
-                IEnumerable<Curve> curves = null;
-                // Try to access RegionCurves property dynamically
-                try {
-                    var prop = regionResults.GetType().GetProperty("RegionCurves");
-                    if (prop != null)
-                        curves = (IEnumerable<Curve>)prop.GetValue(regionResults);
-                    else {
-                        // Fallback: maybe it implements IEnumerable explicitly?
-                         if (regionResults is IEnumerable<Curve> enumerable)
-                            curves = enumerable;
+                // Reflection to call static method Curve.CreateBooleanRegions
+                var createMethod = typeof(Curve).GetMethod("CreateBooleanRegions", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+                
+                if (createMethod != null)
+                {
+                    var regionResults = createMethod.Invoke(null, new object[] { boundaries, plane, false, tolerance });
+                    
+                    if (regionResults != null)
+                    {
+                         // CurveBooleanRegions has RegionBreps property or method?
+                         // In Rhino 7, it has RegionBreps property (Brep[]).
+                         // Let's try to access it via dynamic/reflection to be safe.
+                         var prop = regionResults.GetType().GetProperty("RegionBreps");
+                         if (prop != null)
+                         {
+                             regionBreps = (Brep[])prop.GetValue(regionResults);
+                         }
+                         else
+                         {
+                             // Fallback to RegionCurves
+                             var curvesProp = regionResults.GetType().GetProperty("RegionCurves");
+                             if (curvesProp != null)
+                             {
+                                 var curvesObj = curvesProp.GetValue(regionResults);
+                                 if (curvesObj is System.Collections.IEnumerable enumerable)
+                                 {
+                                     var curveList = new List<Curve>();
+                                     foreach (var obj in enumerable) if (obj is Curve c) curveList.Add(c);
+                                     if (curveList.Count > 0)
+                                         regionBreps = Brep.CreatePlanarBreps(curveList, tolerance);
+                                 }
+                             }
+                         }
                     }
-                } catch {}
-
-                if (curves != null)
-                    regionBreps = Brep.CreatePlanarBreps(curves, tolerance);
+                }
+            }
+            catch 
+            {
+                // Ignore errors from CreateBooleanRegions (e.g. missing method on older Rhino)
             }
             
             if (regionBreps == null || regionBreps.Length == 0)

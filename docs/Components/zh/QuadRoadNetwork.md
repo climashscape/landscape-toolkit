@@ -31,6 +31,8 @@ Quad Road Network 是本工具箱的核心组件之一，用于将二维中心�
 | :--- | :--- | :--- | :--- |
 | **QuadMesh** | M | Mesh | 生成的路网网格。全四边面结构，可直接转换为 SubD。 |
 | **Graph** | G | Generic | 内部生成的图结构数据（用于调试或高级分析）。 |
+| **Junctions** | J | Mesh (List) | 单独的路口网格列表（便于赋予不同材质）。 |
+| **Streets** | S | Mesh (List) | 单独的路段网格列表（便于赋予不同材质）。 |
 
 ## 5. 使用建议 (Tips)
 *   **SubD 转换**: 生成的 Mesh 建议在 Grasshopper 中连接 `SubD from Mesh` 运算器，以获得最终的光滑路面效果。

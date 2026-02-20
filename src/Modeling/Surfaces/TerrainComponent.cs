@@ -2,7 +2,6 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LandscapeToolkit.Modeling
 {
@@ -17,14 +16,14 @@ namespace LandscapeToolkit.Modeling
 
         protected override System.Drawing.Bitmap Icon => Icons.Terrain;
 
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGeometryParameter("Input", "G", "Input Points or Curves (Contours)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Target Quad Count", "QC", "Target number of quads for the remeshed terrain", GH_ParamAccess.item, 2000);
             pManager.AddBooleanParameter("Smooth", "S", "Apply smoothing to the initial mesh before remeshing", GH_ParamAccess.item, true);
         }
 
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddMeshParameter("Quad Mesh", "QM", "Resulting Quad Mesh terrain", GH_ParamAccess.item);
             pManager.AddGeometryParameter("SubD", "SD", "Resulting SubD surface (Class-A quality)", GH_ParamAccess.item);
@@ -56,8 +55,7 @@ namespace LandscapeToolkit.Modeling
                     {
                         // Adaptive division based on length, e.g., every 1 unit
                         // Or just simple division for now
-                        Point3d[] pts;
-                        crv.DivideByCount(Math.Max(10, (int)len), true, out pts);
+                        crv.DivideByCount(Math.Max(10, (int)len), true, out Point3d[] pts);
                         if (pts != null) points.AddRange(pts);
                     }
                 }
@@ -135,6 +133,6 @@ namespace LandscapeToolkit.Modeling
 
 
 
-        public override Guid ComponentGuid => new Guid("2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e");
+        public override Guid ComponentGuid => new Guid("4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a");
     }
 }

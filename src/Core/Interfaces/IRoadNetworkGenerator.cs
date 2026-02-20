@@ -1,5 +1,4 @@
 using Rhino.Geometry;
-using System.Collections.Generic;
 
 namespace LandscapeToolkit.Core.Interfaces
 {

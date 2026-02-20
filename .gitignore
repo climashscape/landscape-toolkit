@@ -1,0 +1,54 @@
+# Visual Studio / Rider / .NET
+.vs/
+.idea/
+.vscode/
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.userprefs
+*.suo
+*.cache
+*.pdb
+*.dll
+*.exe
+TestResults/
+
+# Grasshopper / Rhino
+*.gha
+*.rhp
+*.3dmbak
+*.rhl
+*.ghx
+*.gh
+*.autosave
+
+# Temporary Files
+*.log
+*.tmp
+*.bak
+*.swp
+*.~*
+
+# OS Generated
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Trae (AI Context)
+.trae/temp/
+.trae/chat_history/
+.trae/diffs/
+
+# Distribution / Build Artifacts
+dist/
+artifacts/
+*.zip
+*.nupkg
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
