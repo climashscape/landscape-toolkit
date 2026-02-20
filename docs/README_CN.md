@@ -1,5 +1,7 @@
 # Landscape Toolkit (景观工具箱) - 工程规划文档
 
+[**English Documentation**](README.md)
+
 **当前版本: 1.2.1**
 
 > **v1.2.1 更新**: 全面统一了插件与网页的 UI 设计，采用带立体感的“卡片式”图标，并规范了分类色系。详情请参阅 [UI 设计规范](Dev_Guides/UI_Design_Standards_zh.md)。
@@ -64,9 +66,15 @@ src/
 *   **Phase 4**: [已完成] 集成环境分析工具（坡度、光照、水文、碳汇、风影），建立数据仪表盘。
 *   **Phase 5**: [进行中] 高级 GIS 集成与施工图自动生成。
 
-## 5. 文档索引 (Documentation Index)
+## 5. 分支管理策略 (Branch Strategy)
+
+*   **`main`**: **稳定版 / 发布版**。仅包含经过验证的稳定代码，随版本号更新发布。
+*   **`dev`**: **开发版 / 先锋版**。包含最新的功能特性与改进，更新频率较高。
+
+## 6. 文档索引 (Documentation Index)
 
 ### 用户指南 (User Guides)
+*   [**UI Design Standards (UI 设计规范)**](Dev_Guides/UI_Design_Standards_zh.md)
 *   [**Component Reference (运算器参考手册)**](Components/README.md)
 *   [**Workflows (工作流指南)**](Workflows/README.md)
 

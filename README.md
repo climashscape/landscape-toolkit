@@ -16,6 +16,11 @@
 
 ---
 
+## 🌿 Branch Strategy (分支策略)
+
+*   **`main`**: **Stable / Release**. Only contains verified, stable versions. Updates coincide with new version releases.
+*   **`dev`**: **Development / Bleeding Edge**. Contains the latest features and improvements. Updates frequently.
+
 ## 📦 Build & Release (构建与发布)
 
 To build the project and create a release package:

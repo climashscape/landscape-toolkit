@@ -1,5 +1,7 @@
 # Landscape Toolkit - Project Documentation
 
+[**中文文档 (Chinese Documentation)**](README_CN.md)
+
 **Current Version: 1.2.1**
 
 > **New in v1.2.1**: Unified UI design with 3D "Tile" icons and standardized category colors. Check out the [UI Design Standards](../Dev_Guides/UI_Design_Standards.md) for details.
@@ -64,7 +66,12 @@ src/
 *   **Phase 4**: [Completed] Integrated environmental analysis tools (Slope, Solar, Hydrology, Carbon, Wind Shadow) and established data dashboards.
 *   **Phase 5**: [In Progress] Advanced GIS integration and detailed construction drawing generation.
 
-## 5. Documentation Index
+## 5. Branch Strategy
+
+*   **`main`**: **Stable / Release**. Only contains verified, stable versions. Updates coincide with new version releases.
+*   **`dev`**: **Development / Bleeding Edge**. Contains the latest features and improvements. Updates frequently.
+
+## 6. Documentation Index
 
 ### User Guides
 *   [**UI Design Standards**](Dev_Guides/UI_Design_Standards.md)

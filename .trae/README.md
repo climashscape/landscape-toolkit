@@ -18,6 +18,11 @@
 2.  **代码审查**: 使用 `prompts/code_review.md` 中的内容作为 Prompt，让 AI 对代码进行质量检查。
 3.  **文档生成**: 使用 `prompts/doc_generation.md` 快速生成组件说明书。
 
+## Branch Strategy (分支策略)
+
+*   **`main`**: **Stable / Release**. Only contains verified, stable versions.
+*   **`dev`**: **Development**. Contains the latest features and improvements. Updates frequently.
+
 ## Active Specs (进行中的需求)
 
 | Spec Name | Status | Description |
