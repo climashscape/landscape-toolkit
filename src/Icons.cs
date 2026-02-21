@@ -312,9 +312,64 @@ namespace LandscapeToolkit
             // CO2 cloud
             using (Font font = new Font("Arial", 8, FontStyle.Bold))
             {
-                 g.DrawString("CO2", font, Brushes.OrangeRed, 0, 0); // Use bg color
+                 g.DrawString("CO2", font, Brushes.White, 0, 0); // Use white for visibility
             }
         };
+
+        public static Action<Graphics> DrawProjectDoc = g =>
+        {
+            // Book/Doc
+            g.FillRectangle(Brushes.White, 4, 2, 16, 20);
+            using (Pen p = new Pen(Color.Gray, 2))
+            {
+                g.DrawLine(p, 8, 6, 16, 6);
+                g.DrawLine(p, 8, 10, 16, 10);
+                g.DrawLine(p, 8, 14, 16, 14);
+            }
+        };
+
+        public static Action<Graphics> DrawUIStandards = g =>
+        {
+            // UI Layout
+            g.DrawRectangle(Pens.White, 2, 2, 20, 20); // Window
+            g.FillRectangle(Brushes.White, 2, 2, 20, 4); // Header
+            g.FillRectangle(Brushes.White, 2, 6, 6, 16); // Sidebar
+        };
+
+        public static Action<Graphics> DrawSketchToRoad = g =>
+        {
+            // Curve to Road
+            // Curve
+            using (Pen p = new Pen(Color.White, 1))
+            {
+                 g.DrawBezier(p, 2, 20, 5, 10, 10, 15, 12, 5);
+            }
+            // Arrow
+            using (Pen p = new Pen(Color.White, 1))
+            {
+                g.DrawLine(p, 12, 12, 16, 12);
+                g.DrawLine(p, 14, 10, 16, 12);
+                g.DrawLine(p, 14, 14, 16, 12);
+            }
+            // Road
+            g.FillRectangle(Brushes.White, 18, 2, 4, 20);
+            using (Pen p = new Pen(Color.ForestGreen, 1))
+            {
+                p.DashPattern = new float[] { 2, 2 };
+                g.DrawLine(p, 20, 2, 20, 22);
+            }
+        };
+
+        public static Action<Graphics> DrawTerrainPlanting = g =>
+        {
+            // Terrain
+             Point[] p1 = { new Point(2, 22), new Point(8, 12), new Point(14, 22) };
+             g.FillPolygon(Brushes.White, p1);
+             // Tree
+             g.FillEllipse(Brushes.White, 14, 6, 8, 8); // Top
+             g.FillRectangle(Brushes.White, 17, 14, 2, 8); // Trunk
+        };
+
 
         public static Action<Graphics> DrawWindShadowAnalysis = g =>
         {
@@ -328,6 +383,26 @@ namespace LandscapeToolkit
                 // Shadow area
                 g.DrawLine(p, 14, 10, 22, 6);
                 g.DrawLine(p, 14, 14, 22, 18);
+            }
+        };
+
+        public static Action<Graphics> DrawChangelog = g =>
+        {
+            // Document
+            Point[] doc = { new Point(4, 2), new Point(16, 2), new Point(20, 6), new Point(20, 22), new Point(4, 22) };
+            g.FillPolygon(Brushes.White, doc);
+            
+            // Folded corner
+            Point[] fold = { new Point(16, 2), new Point(16, 6), new Point(20, 6) };
+            g.FillPolygon(Brushes.LightGray, fold); // Subtle fold
+
+            // Lines (use bg color or dark gray)
+            // Since we are in a WithBackground context usually, let's use a color that stands out on white
+            using (Pen p = new Pen(Color.Gray, 2))
+            {
+                g.DrawLine(p, 6, 10, 14, 10);
+                g.DrawLine(p, 6, 14, 18, 14);
+                g.DrawLine(p, 6, 18, 18, 18);
             }
         };
 

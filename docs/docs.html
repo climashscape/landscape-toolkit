@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Landscape Toolkit Documentation</title>
+  <title>Landscape Toolkit v1.2.3 - Documentation</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Landscape Toolkit - High-performance parametric landscape design tools for Rhino/Grasshopper">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -16,29 +16,1610 @@
       border-right: 2px solid var(--theme-color);
       font-weight: 600;
     }
+    /* Hide Sidebar Scrollbar */
+     .sidebar::-webkit-scrollbar {
+         display: none;
+     }
+     .sidebar {
+         -ms-overflow-style: none;  /* IE and Edge */
+         scrollbar-width: none;  /* Firefox */
+         padding-left: 10px; /* Add some global left padding */
+     }
+
+     /* --- Smart Sidebar Centering (Desktop Only) --- */
+     @media screen and (min-width: 768px) {
+        /* CSS Fixed Positioning: Replaces JS-based centering */
+        .sidebar {
+             position: fixed !important;
+             top: 50% !important;
+             transform: translateY(-50%) !important;
+             
+             /* Ensure base styles */
+             bottom: auto !important;
+             max-height: 90vh !important;
+             overflow-y: auto !important;
+             z-index: 1000; 
+        }
+     }
+     
+     /* Make sure the nav doesn't overflow */
+     .sidebar-nav {
+         padding-bottom: 20px;
+         padding-right: 10px; /* Right padding for scrollbar space if needed */
+     }
+
+    /* Sidebar Hierarchy & Spacing */
+     .sidebar-nav > ul > li {
+         margin: 0 0 20px 0 !important; /* Spacing between main sections */
+     }
+     
+     /* Main Section Headers (e.g. COMPONENTS, WORKFLOWS) */
+     .sidebar-nav > ul > li > p > strong,
+     .sidebar-nav > ul > li > strong {
+         font-size: 14px;
+         color: #777;
+         font-weight: 700;
+         letter-spacing: 0.5px;
+         text-transform: uppercase;
+         display: block;
+         margin-bottom: 12px;
+         padding-left: 5px;
+         border-bottom: 1px solid #eee; /* Add divider */
+         padding-bottom: 4px;
+     }
+ 
+     /* Sub-headers (e.g. Roads & Paths) */
+     .sidebar-nav li > ul > li > strong {
+         font-size: 15px;
+         color: #333;
+         font-weight: 600;
+         margin-top: 14px;
+         margin-bottom: 8px;
+         display: block;
+         padding-left: 5px;
+     }
+ 
+     /* --- Refactored Sidebar CSS --- */
+
+    /* Reset default li styles - Hardened */
+    .sidebar-nav li {
+        margin: 0;
+        padding: 0;
+        list-style: none !important;
+        list-style-type: none !important;
+        position: relative;
+    }
+    
+    /* Remove any default markers or generated content */
+    .sidebar-nav li::marker {
+        display: none !important;
+        content: "";
+    }
+    .sidebar-nav li::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* Main Link Styling (Container for Icon + Text) */
+    .sidebar-nav li > a {
+        display: flex !important;
+        align-items: center; /* Vertically center icon and text */
+        padding: 8px 10px;
+        color: #505d6b;
+        text-decoration: none;
+        transition: all 0.2s;
+        border-right: 2px solid transparent;
+        font-size: 15px;
+        line-height: 1.4;
+        position: relative; /* Ensure pseudo-elements are positioned relative to the link */
+    }
+    
+    /* Hover Effect */
+    .sidebar-nav li > a:hover {
+        color: var(--theme-color);
+        background-color: rgba(34, 139, 34, 0.03);
+    }
+    
+    /* Active State */
+    .sidebar-nav li > a.active {
+        color: var(--theme-color);
+        border-right-color: var(--theme-color);
+        background-color: rgba(34, 139, 34, 0.08);
+        font-weight: 600;
+    }
+
+    /* Icon Styling (Targeting the class added by refactor script) */
+    .sidebar-nav img.sidebar-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 12px;
+        object-fit: contain;
+        flex-shrink: 0;
+        /* Ensure icon doesn't look weird if text wraps */
+        align-self: flex-start; 
+        margin-top: 2px; /* Optical adjustment */
+    }
+
+    /* Text Wrapper (if needed, but flex item works) */
+    /* Docsify renders: <a> <img...> Text </a> */
+    /* So text is a text node. Flexbox handles it fine. */
+    
+    /* --- Improved Sidebar Hierarchy & Collapse --- */
+    
+    /* Level 1: Main Items (Headers) are handled by .sidebar-nav > ul > li > strong */
+    
+    /* Level 2: Primary Folders (e.g. Roads & Paths) */
+    /* These usually have sub-menus */
+    .sidebar-nav > ul > li > ul > li > a {
+        font-weight: 500;
+        color: #333;
+        background-color: transparent; /* Cleaner look */
+        padding-left: 15px; /* Base indent */
+    }
+
+    /* Level 3: Leaf Items (Actual Pages) */
+    .sidebar-nav > ul > li > ul > li > ul > li > a {
+        font-size: 14px;
+        color: #666;
+        padding-left: 20px; /* Reduced indent to be left of L4 */
+        /* border-left: 1px solid #eee; */ /* Removed vertical line */
+        /* margin-left: 15px; */ /* Removed offset */
+    }
+    
+    /* Add Dash Marker for Level 3 */
+    .sidebar-nav > ul > li > ul > li > ul > li > a::before {
+        content: "";
+        position: absolute;
+        left: 8px; /* Positioned left */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 1px;
+        background-color: #999;
+        pointer-events: none;
+        /* border-radius: 0.5px; */
+    }
+    
+    /* Fix active state for leaf items */
+    .sidebar-nav > ul > li > ul > li > ul > li > a.active {
+        color: var(--theme-color);
+        /* border-left: 2px solid var(--theme-color); */ /* Removed left border */
+        border-right: 2px solid var(--theme-color); /* Restored right border style */
+        background-color: transparent; /* Minimalist active */
+        font-weight: 600;
+    }
+    
+    /* Level 4: TOC Items (Sub-menu inside page) */
+    .sidebar-nav .app-sub-sidebar li > a {
+        font-size: 13px;
+        padding-left: 40px !important; /* Indented more than L3 (Page) */
+        color: #777;
+    }
+    
+    /* Add Dash Marker for Level 4 */
+    .sidebar-nav .app-sub-sidebar li > a::before {
+        content: "";
+        position: absolute;
+        left: 28px; /* Positioned left */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 1px;
+        background-color: #999;
+        pointer-events: none;
+        /* border-radius: 0.5px; */
+    }
+    
+    /* Active state for TOC items */
+    .sidebar-nav .app-sub-sidebar li > a.active {
+        color: var(--theme-color);
+        font-weight: 500;
+    }
+    
+    /* Collapse Arrow Styling */
+    .app-sub-sidebar-collapse-icon {
+        width: 18px;
+        height: 18px;
+        margin-left: auto;
+        opacity: 0.4;
+        transition: transform 0.2s, opacity 0.2s;
+        /* Use a nice SVG or shape if possible, but plugin usually provides SVG */
+        /* Center it */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Hover on parent row makes arrow darker */
+    .sidebar-nav li:hover > .app-sub-sidebar-collapse-icon,
+    .sidebar-nav li:hover > a .app-sub-sidebar-collapse-icon {
+        opacity: 0.8;
+    }
+
+    /* Rotate arrow when open */
+    /* Plugin typically toggles a class on the LI or the icon */
+    /* Assuming standard behavior: li.open or li.collapse.open */
+    /* Check plugin docs or inspect: usually it rotates the icon itself */
+    
+    /* Ensure arrow is clickable and doesn't block link if separate */
+    /* If inside A tag: */
+    /* .sidebar-nav li > a .app-sub-sidebar-collapse-icon {} */
+    
+    /* If outside A tag (sibling): */
+    .sidebar-nav li > .app-sub-sidebar-collapse-icon {
+        position: absolute;
+        right: 10px;
+        top: 10px; /* Center vertically relative to ~40px height */
+        cursor: pointer;
+        z-index: 5;
+    }
+    
+    /* Adjust standard indent for nested UL */
+    .sidebar-nav li > ul {
+        padding-left: 0; /* Reset padding */
+        margin-left: 0;
+    }
+    
+    /* But we used padding-left before. Let's be more specific */
+    /* Reset global UL padding first */
+    .sidebar-nav ul {
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Indent only the link content, not the container, to allow full-width hover */
+    /* Actually, full-width hover on nested items is nice. */
+    /* So we should use padding on the A tag for indentation. */
+    
+    /* Level 2 Indent */
+    .sidebar-nav > ul > li > ul > li > a {
+        padding-left: 20px;
+    }
+    
+    /* Add Dash Marker for Level 2 Links (e.g. Project Document) */
+    .sidebar-nav > ul > li > ul > li > a::before {
+        content: "";
+        position: absolute;
+        left: 8px; /* Positioned left */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 1px;
+        background-color: #999;
+        pointer-events: none;
+        /* border-radius: 0.5px; */
+    }
+    
+    /* Level 3 Indent */
+    .sidebar-nav > ul > li > ul > li > ul > li > a {
+        padding-left: 45px;
+    }
+    
+    /* Icon Styling (Targeting the class added by refactor script) */
+    .sidebar-nav img.sidebar-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 12px;
+        opacity: 0.8; /* Slightly mute icons */
+    }
+    
+    /* Sidebar Text Wrapper (for language visibility control) */
+    .sidebar-nav .sidebar-text {
+        display: flex; /* Keep inline text structure */
+        flex: 1; /* Take remaining space */
+    }
+    
+    /* --- Strict Language Visibility for Sidebar --- */
+     /* Use high specificity to override any other display rules */
+     body.lang-zh .sidebar-nav .lang-en,
+     body.lang-zh .sidebar-nav .sidebar-text .lang-en {
+         display: none !important;
+     }
+     body.lang-en .sidebar-nav .lang-zh,
+     body.lang-en .sidebar-nav .sidebar-text .lang-zh {
+         display: none !important;
+     }
+     
+     /* H1 in TOC: Hide the link but keep the children (nested list) */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item > a {
+         display: none !important;
+     }
+     
+     /* If hidden by language, ensure display: none overrides block from script */
+     .sidebar-nav .app-sub-sidebar li.hidden-lang-item {
+         display: none !important;
+     }
+     
+     /* Reset indentation for nested list under H1 */
+     .sidebar-nav .app-sub-sidebar li > ul {
+         padding-left: 0 !important;
+         margin-left: 0 !important;
+         /* display: block !important; */ /* REMOVED: This was forcing all submenus open */
+     }
+     
+     /* --- Fixed Sidebar Hierarchy Levels --- */
+     
+     /* 
+        Requirement: Level 1 and Level 2 menus should be ALWAYS OPEN and NOT collapsible.
+        Only Level 3 (and deeper) should be collapsible.
+     */
+
+     /* --- Level 1 (e.g. COMPONENTS) --- */
+     
+     /* Hide collapse icon */
+     .sidebar-nav > ul > li > .app-sub-sidebar-collapse-icon {
+         display: none !important;
+     }
+     
+     /* Force sub-menu (Level 2 list) to be visible */
+     .sidebar-nav > ul > li > ul {
+         display: block !important;
+     }
+     
+     /* Disable click interaction on the header itself to prevent toggle attempts */
+     .sidebar-nav > ul > li > p,
+     .sidebar-nav > ul > li > strong {
+         pointer-events: none;
+         cursor: default;
+     }
+
+     /* --- Level 2 (e.g. Roads & Paths) --- */
+     
+     /* Hide collapse icon */
+     .sidebar-nav > ul > li > ul > li > .app-sub-sidebar-collapse-icon {
+         display: none !important;
+     }
+     
+     /* Force sub-menu (Level 3 list) to be visible */
+     /* L2 (Category) -> Always shows L3 (Pages) */
+     .sidebar-nav > ul > li > ul > li > ul {
+         display: block !important;
+     }
+     
+     /* Disable click interaction on Level 2 headers (Categories) */
+     .sidebar-nav > ul > li > ul > li > strong {
+         pointer-events: none;
+         cursor: default;
+     }
+     
+     /* --- Level 3 (Pages with Sub-headers / H2s in content) --- */
+     /* These are the actual page links. They might have sub-menus (Table of Contents / H2s). */
+     /* These SHOULD be collapsible. */
+     
+     /* Ensure the arrow is visible for Level 3 items if they have children */
+     .sidebar-nav > ul > li > ul > li > ul > li > .app-sub-sidebar-collapse-icon {
+         display: flex !important;
+     }
+     
+     /* Ensure sub-menus (H2 lists) are NOT forced open */
+     .sidebar-nav > ul > li > ul > li > ul > li > ul {
+         display: none; /* Let plugin manage this via .open class */
+     }
+     
+     /* Plugin open state */
+     .sidebar-nav > ul > li > ul > li > ul > li.open > ul,
+     .sidebar-nav > ul > li > ul > li > ul > li.collapse.open > ul {
+         display: block !important;
+     }
+
+     /* --- Special Handling for H1 Expansion Logic (Universal Fix) --- */
+     /* 
+        Goal: Hide the H1 link (redundant or hidden lang) but ALWAYS show its children (H2s).
+        This ensures that when L3 (Page) is expanded, the H2s are immediately visible.
+     */
+     
+     /* 1. Force the H1 LI container to be visible (overriding language hiding if needed) */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item {
+         display: block !important;
+     }
+     
+     /* 2. Hide the H1 LINK <a> itself */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item > a {
+         display: none !important;
+     }
+     
+     /* 3. Force expand the sub-menu (H2 list) under the H1 */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item > ul {
+         display: block !important;
+         padding-left: 0 !important;
+     }
+     
+     /* 4. Ensure grandchildren (H3s) remain collapsible (default hidden) */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item > ul > li > ul {
+         display: none; 
+     }
+     
+     /* 5. Allow plugin to open grandchildren */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item > ul > li.open > ul,
+     .sidebar-nav .app-sub-sidebar li.is-h1-item > ul > li.collapse.open > ul {
+         display: block !important;
+     }
+
+     /* 7. Ensure app-sub-sidebar is visible when parent is open */
+     .sidebar-nav li.open > ul.app-sub-sidebar,
+     .sidebar-nav li.active > ul.app-sub-sidebar {
+         display: block !important;
+     }
+     
+     /* 8. Fix for potential empty L3 expansion */
+     /* If L3 is expanded, we want to see the H2 list directly. */
+     /* The H1 LI wrapper (which we hide the link for) must be visible. */
+     .sidebar-nav .app-sub-sidebar li.is-h1-item {
+         display: block !important;
+         margin: 0 !important;
+         padding: 0 !important;
+     }
+     
+     /* Force all ULs in the sub-sidebar to be visible if the parent is active/open */
+     /* This is the nuclear option to ensure content is shown */
+     .sidebar-nav li.active > ul.app-sub-sidebar ul,
+     .sidebar-nav li.open > ul.app-sub-sidebar ul {
+         display: block !important;
+     }
+
+
+     /* --- DISABLE CONTENT SCROLL POWER --- */
+     /* As requested by user: "Disable right side mouse scroll page power" */
+     /* This stops the mouse wheel from scrolling the content area. */
+     /* We rely on JS to preventDefault, but we can also hide overflow to be sure? */
+     /* No, hiding overflow removes scrollbar. User might want to drag scrollbar. */
+     /* We will stick to JS prevention. */
+
+
+     .sidebar-nav li > a:hover img.sidebar-icon,
+     .sidebar-nav li > a.active img.sidebar-icon {
+          opacity: 1;
+      }
+
+    
+    /* If the arrow is outside the <a> link (plugin behavior varies) */
+    /* Common plugin behavior: <li class="collapse"> <div class="app-sub-sidebar-collapse-icon"></div> <a...>...</a> <ul>...</ul> </li> */
+    /* Or inside the link. */
+    
+    /* Let's ensure li is relative for absolute positioning of arrow if needed */
+    .sidebar-nav li.collapse .app-sub-sidebar-collapse-icon {
+        position: absolute;
+        right: 10px;
+        top: 12px;
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    /* Section Headers */
+    .sidebar-nav > ul > li > p > strong,
+    .sidebar-nav > ul > li > strong {
+        font-size: 13px;
+        color: #999;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        display: block;
+        width: 100%; /* Ensure full width */
+        margin-bottom: 8px;
+        margin-top: 20px;
+        padding-left: 2px;
+        border-bottom: none;
+    }
+
+    /* Sub-category Headers (e.g. Roads & Paths) */
+    .sidebar-nav li > ul > li > strong {
+        font-size: 14px;
+        color: #333;
+        font-weight: 600;
+        margin-top: 12px;
+        margin-bottom: 6px;
+        display: block;
+        width: 100%; /* Ensure full width */
+        padding-left: 2px;
+    }
+    
+    /* Fix for Folder items that might be wrapped in p */
+    .sidebar-nav li > p {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    
+    /* Ensure they are inline */
+    .app-nav > ul {
+      display: flex;
+      gap: 15px;
+      padding-right: 10px;
+    }
+    .app-nav > ul > li {
+      display: block;
+      margin: 0;
+      font-weight: 500;
+    }
+    .app-nav a {
+      text-decoration: none;
+      color: #333;
+      font-size: 15px;
+    }
+    .app-nav a:hover {
+      color: var(--theme-color);
+      text-decoration: underline;
+    }
+
+    /* Language Support - New Implementation */
+    body.lang-zh .lang-en { display: none !important; }
+    body.lang-en .lang-zh { display: none !important; }
+
+    /* Language Switcher */
+    .lang-switcher-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        display: flex;
+        gap: 8px;
+        background: white;
+        padding: 8px;
+        border-radius: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        border: 1px solid #f0f0f0;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .lang-switcher-container:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    
+    .lang-btn {
+        padding: 6px 16px;
+        border: 1px solid #eee;
+        border-radius: 20px;
+        background: #f9f9f9;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+        color: #666;
+    }
+    
+    .lang-btn:hover {
+        background: #f0f0f0;
+        color: #333;
+    }
+    
+    .lang-btn.active {
+        background: var(--theme-color);
+        color: white;
+        border-color: var(--theme-color);
+        box-shadow: 0 2px 5px rgba(34, 139, 34, 0.3);
+    }
+    
+    /* Page Flip Toast/Indicator - REMOVED */
+    
+    /* Navigation Toolbar (Vertical, Right Side) */
+     .nav-toolbar {
+         position: fixed;
+         right: 20px;
+         top: 50%;
+         transform: translateY(-50%);
+         display: flex;
+         flex-direction: column;
+         gap: 10px;
+         z-index: 1000;
+     }
+     
+     .nav-btn {
+         width: 44px;
+         height: 44px;
+         background: white;
+         border: 1px solid #e0e0e0;
+         border-radius: 4px; /* Slight rounding like language toggle */
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+         transition: all 0.2s ease;
+         color: #666;
+     }
+     
+     .nav-btn:hover {
+         background: var(--theme-color);
+         color: white;
+         border-color: var(--theme-color);
+         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+     }
+     
+     .nav-btn:active {
+         transform: scale(0.95);
+     }
+     
+     .nav-btn svg {
+         width: 24px;
+         height: 24px;
+         fill: currentColor;
+     }
+
+    /* Mobile handling for switcher */
+    @media screen and (max-width: 768px) {
+        .lang-switcher-container {
+            bottom: 20px;
+            right: 20px;
+            /* Reset any top positioning if previously set */
+            top: auto; 
+        }
+        
+        .lang-btn {
+            padding: 5px 12px;
+            font-size: 12px;
+        }
+    }
+
+    /* Version Tag in Sidebar */
+    .version-tag {
+        background: rgba(34, 139, 34, 0.1);
+        color: var(--theme-color);
+        padding: 0.1rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        vertical-align: middle;
+        margin-left: 8px;
+        font-weight: 600;
+        border: 1px solid rgba(34, 139, 34, 0.2);
+    }
   </style>
 </head>
 <body>
   <div id="app"></div>
+  
+  <!-- Language Switcher Element (injected via JS) -->
+  <div class="lang-switcher-container">
+      <button class="lang-btn" onclick="window.setLanguage('en')" id="btn-en">English</button>
+      <button class="lang-btn" onclick="window.setLanguage('zh')" id="btn-zh">中文</button>
+  </div>
+  
+  <!-- Page Flip Toast - REMOVED -->
+  
+  <!-- Navigation Toolbar (Vertical) -->
+  <div class="nav-toolbar">
+      <div class="nav-btn up" id="nav-btn-up" title="Click: Scroll Up / DblClick: Prev Item">
+          <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+      </div>
+      <div class="nav-btn down" id="nav-btn-down" title="Click: Scroll Down / DblClick: Next Item">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </div>
+  </div>
+
+  <!-- Custom Scroll Lock Assets - REMOVED -->
+
   <script>
+    // Language Management Logic
+    window.setLanguage = function(lang) {
+        document.body.classList.remove('lang-en', 'lang-zh');
+        document.body.classList.add('lang-' + lang);
+        localStorage.setItem('docs-language', lang);
+        
+        // Update buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('btn-' + lang).classList.add('active');
+        
+        // Re-run sidebar TOC filter if available
+        if (window.filterSidebarTOC) {
+            window.filterSidebarTOC();
+        }
+        
+        // Force sidebar to center on active item (with delay for DOM update)
+        setTimeout(function() {
+            if (window.ensureActiveVisible) {
+                window.ensureActiveVisible('smooth', true);
+            }
+        }, 100);
+    };
+
+    // Initialize Language
+    var savedLang = localStorage.getItem('docs-language') || 'en';
+    
+    // Check URL params for language override (e.g. docs.html?lang=zh)
+    var urlParams = new URLSearchParams(window.location.search);
+    var langParam = urlParams.get('lang');
+    if (langParam && (langParam === 'en' || langParam === 'zh')) {
+        savedLang = langParam;
+    }
+    
+    window.setLanguage(savedLang);
+
     window.$docsify = {
-      name: 'Landscape Toolkit',
-      nameLink: 'index.html',
+      name: 'Landscape Toolkit <span class="version-tag">v1.2.3</span>',
+      nameLink: 'index.html', // Point back to landing page? Or self? Usually /
       repo: 'https://github.com/climashscape/landscape-toolkit',
       loadSidebar: true,
-      alias: {
-        '.*?/zh/_sidebar.md': '/_sidebar_zh.md',
-        '.*?/_sidebar.md': '/_sidebar.md'
-      },
-      subMaxLevel: 3,
-      auto2top: true,
-      search: 'auto', // default
-      coverpage: false
-    }
+      loadNavbar: true,
+      subMaxLevel: 6, // Increased to ensure deep headers (H1-H6) are captured
+      auto2top: true, // Enable auto scroll to top on route change
+      sidebarDisplayLevel: 0, // Let the plugin manage collapse state fully, or set to 2
+      // sidebarDisplayLevel: 2, 
+      search: 'auto',
+      coverpage: false,
+      plugins: [
+        function(hook, vm) {
+          // --- 1. Global Scroll State Management ---
+          // Prevent Sidebar Scroll Reset on Route/Hash Change
+          // Use sessionStorage to persist across refreshes, and memory for quick access
+          var getStoredScroll = function() {
+              return parseInt(sessionStorage.getItem('sidebar-scroll') || '0', 10);
+          };
+          var setStoredScroll = function(val) {
+              sessionStorage.setItem('sidebar-scroll', val);
+          };
+          
+          var lastSidebarScroll = getStoredScroll();
+          var isNavigating = false; 
+          var navLockTimer = null;
+          
+          var lockNavigation = function() {
+              isNavigating = true;
+              if (navLockTimer) clearTimeout(navLockTimer);
+              navLockTimer = setTimeout(function() {
+                  isNavigating = false;
+              }, 400); // Lock for 400ms
+          };
+          
+          // Listen to Sidebar Scroll
+          function initSidebarScrollListener() {
+              var sidebar = document.querySelector('.sidebar');
+              if (sidebar && !sidebar._hasScrollListener) {
+                  sidebar.addEventListener('scroll', function() {
+                      // If we are in the middle of a navigation/restore process, DO NOT save 0
+                      if (isNavigating) return;
+                      
+                      // Also ignore if it's 0 but we have a stored non-zero value
+                      // This might happen during transient DOM updates
+                      if (sidebar.scrollTop === 0 && lastSidebarScroll > 10) {
+                           // Ignore transient 0
+                           return;
+                      }
+                      
+                      lastSidebarScroll = sidebar.scrollTop;
+                      setStoredScroll(lastSidebarScroll);
+                  }, { passive: true });
+                  sidebar._hasScrollListener = true;
+              }
+          }
+          
+          // --- 2. Smart Scroll-to-Active Logic ---
+          var isAnimating = false; // Animation Lock
+          var currentAnimationFrame = null; // To cancel animation
+          var userInteractionLock = false; // User interaction lock
+          var userInteractionTimer = null;
+          
+          // Detect User Interaction
+          var onUserInteraction = function() {
+              userInteractionLock = true;
+              // Clear any pending scroll destination? Maybe not, just block new ones.
+              // But if an animation is running, we should probably stop it?
+              if (currentAnimationFrame) {
+                  cancelAnimationFrame(currentAnimationFrame);
+                  isAnimating = false;
+                  currentAnimationFrame = null;
+              }
+              
+              if (userInteractionTimer) clearTimeout(userInteractionTimer);
+              userInteractionTimer = setTimeout(function() {
+                  userInteractionLock = false;
+              }, 1000); // Lock for 1s after last interaction
+          };
+          
+          // Custom Smooth Scroll for cross-browser consistency and duration control
+          // Duration: 300-500ms, Easing: ease-in-out
+          var smoothScrollTo = function(element, target, duration) {
+              // If user is interacting, don't start animation
+              if (userInteractionLock) return;
+              
+              // Cancel previous animation if any
+              if (currentAnimationFrame) {
+                  cancelAnimationFrame(currentAnimationFrame);
+                  isAnimating = false;
+              }
+              
+              isAnimating = true;
+              
+              var start = element.scrollTop;
+              var change = target - start;
+              var startTime = performance.now();
+              
+              // Easing function: easeInOutQuad
+              var easeInOutQuad = function(t) {
+                  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+              };
+              
+              var animateScroll = function(currentTime) {
+                  // Double check user interaction during animation
+                  if (userInteractionLock) {
+                      isAnimating = false;
+                      currentAnimationFrame = null;
+                      return;
+                  }
+                  
+                  var elapsed = currentTime - startTime;
+                  if (elapsed > duration) {
+                      element.scrollTop = target;
+                      isAnimating = false;
+                      currentAnimationFrame = null;
+                      // Update stored scroll position
+                      setStoredScroll(target);
+                      return;
+                  }
+                  
+                  var t = elapsed / duration;
+                  var easedT = easeInOutQuad(t);
+                  
+                  element.scrollTop = start + (change * easedT);
+                  currentAnimationFrame = requestAnimationFrame(animateScroll);
+              };
+              
+              currentAnimationFrame = requestAnimationFrame(animateScroll);
+          };
+
+          var ensureActiveVisible = function(behaviorType, forceCenter) {
+              var sidebar = document.querySelector('.sidebar');
+              // We need to find the REAL active item, which might be an 'li' or an 'a'
+              // Docsify adds 'active' class to 'li' usually, but let's be robust
+              var active = document.querySelector('.sidebar-nav .active');
+              
+              if (!sidebar || !active) return;
+              
+              // If user is interacting, DO NOT auto-scroll unless forced (e.g. click)
+              if (userInteractionLock && !forceCenter) return;
+              
+              // Only proceed if forceCenter is true (e.g. from click or initial load)
+              // OR if we detect that the active item is OUT OF VIEW (auto-scroll)
+              
+              var sidebarRect = sidebar.getBoundingClientRect();
+              var activeRect = active.getBoundingClientRect();
+              
+              // Check if Active is visible
+              // We consider "visible" if it's mostly in view, not just 1px
+              var isVisible = (
+                  activeRect.top >= sidebarRect.top &&
+                  activeRect.bottom <= sidebarRect.bottom
+              );
+              
+              // Enhanced Visibility Check for Long Items or Partial Visibility
+              if (!isVisible) {
+                  // If item top is visible and it's a large item, or covers significant area
+                  if (activeRect.top >= sidebarRect.top && activeRect.top < sidebarRect.bottom - 40) {
+                      // Top is visible, and there is at least 40px visible
+                      isVisible = true;
+                  }
+                  // If item covers the entire viewport (top above, bottom below)
+                  if (activeRect.top < sidebarRect.top && activeRect.bottom > sidebarRect.bottom) {
+                      isVisible = true;
+                  }
+              }
+              
+              if (isVisible && !forceCenter) {
+                  return; // Already visible, do nothing
+              }
+
+              // Resolve effective target element (handle hidden items)
+              var target = active;
+              
+              // If active element is hidden (e.g. H1 link in Chinese mode), 
+              // try to find a visible proxy (e.g. first child link)
+              if (active.offsetParent === null) {
+                  var siblingUl = active.nextElementSibling;
+                  if (siblingUl && siblingUl.tagName === 'UL') {
+                      var firstLink = siblingUl.querySelector('li a');
+                      if (firstLink && firstLink.offsetParent !== null) {
+                          target = firstLink;
+                      } else {
+                          // Fallback to the UL container itself if no link found
+                          target = siblingUl;
+                      }
+                  } else {
+                      // Fallback to parent LI if no UL
+                      target = active.closest('li');
+                  }
+              }
+              
+              // Double check if we have a visible target now
+              if (!target || target.offsetParent === null) return;
+
+              var targetRect = target.getBoundingClientRect();
+              
+              var padding = 20;
+
+              // Calculate scroll position
+              var currentScroll = sidebar.scrollTop;
+              var targetTopRelative = targetRect.top - sidebarRect.top;
+              
+              // Strategy:
+              // 1. If target is taller than viewport (e.g. a long list), align top with padding.
+              // 2. Otherwise, center it.
+              
+              var destination = 0;
+              
+              if (targetRect.height > sidebar.clientHeight * 0.8) {
+                  // Large item: Align top
+                  destination = currentScroll + targetTopRelative - padding;
+              } else {
+                  // Standard item: Center it
+                  // Destination = Current Scroll + (Target Top - Sidebar Top) - (Sidebar Height / 2) + (Target Height / 2)
+                  // But wait, targetTopRelative is already (Target Top - Sidebar Top)
+                  destination = currentScroll + targetTopRelative - (sidebar.clientHeight / 2) + (targetRect.height / 2);
+              }
+              
+              // Clamp destination
+              destination = Math.max(0, Math.min(destination, sidebar.scrollHeight - sidebar.clientHeight));
+              
+              // Unlock the sidebar for programmatic scrolling
+              if (window.unlockSidebar) {
+                  window.unlockSidebar(1000);
+              }
+
+              if (behaviorType === 'smooth') {
+                  smoothScrollTo(sidebar, destination, 400); // 400ms duration
+              } else {
+                  sidebar.scrollTop = destination;
+                  setStoredScroll(destination);
+              }
+          };
+          
+          // EXPOSE GLOBALLY for language switcher
+          window.ensureActiveVisible = ensureActiveVisible;
+          
+          // Global flag to track if initial scroll has happened
+          window.__docsify_sidebar_initialized = false;
+          
+          // MutationObserver to track active class changes
+          var observer = new MutationObserver(function(mutations) {
+              var shouldScroll = false;
+              mutations.forEach(function(mutation) {
+                  if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                      var target = mutation.target;
+                      if (target.classList.contains('active')) {
+                          shouldScroll = true;
+                      }
+                  }
+              });
+              
+              if (shouldScroll) {
+                  // Debounce slightly to avoid rapid updates
+                  setTimeout(function() {
+                       if (!isNavigating) {
+                           ensureActiveVisible('smooth', false);
+                       }
+                  }, 150); // Increased debounce to 150ms
+              }
+          });
+          
+          // Hook before route change to lock scroll saving
+          hook.beforeEach(function(content) {
+              lockNavigation();
+              return content;
+          });
+          
+          // Also hook into hashchange for anchor scrolling (which might not trigger beforeEach)
+          window.addEventListener('hashchange', function() {
+              lockNavigation();
+          });
+
+          hook.doneEach(function() {
+              var sidebar = document.querySelector('.sidebar');
+              
+              // Initialize listener if not present
+              initSidebarScrollListener();
+              
+              // Add User Interaction Listeners
+              if (sidebar && !sidebar._hasInteractionListener) {
+                  sidebar.addEventListener('wheel', onUserInteraction, { passive: true });
+                  sidebar.addEventListener('touchmove', onUserInteraction, { passive: true });
+                  sidebar.addEventListener('mousedown', onUserInteraction, { passive: true }); // Scrollbar drag
+                  sidebar._hasInteractionListener = true;
+              }
+              
+              // Initialize MutationObserver
+              if (sidebar && !sidebar._hasObserver) {
+                  // Observe all list items for class changes
+                  // We need to observe the subtree because 'active' class is added to LI or A
+                  observer.observe(sidebar, {
+                      attributes: true,
+                      subtree: true,
+                      attributeFilter: ['class']
+                  });
+                  sidebar._hasObserver = true;
+              }
+              
+              // Extend lock to cover rendering time
+              lockNavigation();
+              
+              // Restore Sidebar Scroll Position (if re-rendered)
+              // We try immediately, and also with a small delay to handle async DOM updates
+              var restoreScroll = function() {
+                  if (sidebar && lastSidebarScroll > 0) {
+                      // Only restore if it's currently at 0 (reset state)
+                      // OR if we are forcing it back
+                      if (sidebar.scrollTop === 0) {
+                          sidebar.scrollTop = lastSidebarScroll;
+                      }
+                  }
+              };
+              
+              restoreScroll();
+              // Retry after small delay (Docsify sometimes updates DOM slightly later)
+              setTimeout(restoreScroll, 0);
+              setTimeout(restoreScroll, 50);
+              
+              // Check Active Visibility and Auto-Scroll
+              // This ensures that if the active item moved out of view, we scroll to it.
+              setTimeout(function() {
+                   ensureActiveVisible('smooth', false);
+              }, 100);
+              
+              // --- Initial Scroll Handling ---
+              // Only run ONCE per page load to avoid interference during scroll/hash changes.
+              // If sidebar is reset (scrollTop is 0) or it's a fresh load, 
+              // snap instantly to center to avoid "scroll to top" glitch.
+              if (!window.__docsify_sidebar_initialized && sidebar) {
+                  setTimeout(function() {
+                      ensureActiveVisible('auto', true); // Force center on init
+                      window.__docsify_sidebar_initialized = true;
+                  }, 200); // Increased delay for initial load
+              }
+              
+              // Add click listener to sidebar (delegation)
+              if (sidebar && !sidebar._hasClickListener) {
+                  sidebar.addEventListener('click', function(e) {
+                      // Check if a link was clicked
+                      var link = e.target.tagName === 'A' ? e.target : e.target.closest('a');
+                      if (link) {
+                          // Allow time for navigation to happen, then force center
+                          setTimeout(function() {
+                              ensureActiveVisible('smooth', true);
+                          }, 100);
+                          
+                          // FORCE SCROLL TOP for navigation
+                          // If clicking a main nav item (not an anchor on same page), scroll to top.
+                          // Check if href is different from current page (ignoring query/hash)
+                          // OR if it's just a standard navigation
+                          
+                          var href = link.getAttribute('href');
+                          if (href && !href.startsWith('#/')) { 
+                               // External link or non-hash link?
+                          } else if (href) {
+                               // It's a docsify link
+                               // We want to scroll content to top.
+                               // auto2top handles route changes, but sometimes fails if hash is just updated?
+                               // Let's manually force it.
+                               setTimeout(function() {
+                                    window.scrollTo(0, 0);
+                               }, 50);
+                          }
+                      }
+                  });
+                  sidebar._hasClickListener = true;
+              }
+              
+              // Run dynamic updates on route change
+              if (window.filterSidebarTOC) window.filterSidebarTOC();
+          });
+
+              // --- Removed: MutationObserver to track active class changes ---
+              // Reason: User explicitly requested to completely disable sidebar-content scroll sync.
+              // Sidebar will ONLY move when clicked or initially loaded.
+              
+              // --- 3. Filter Sidebar TOC by Language ---
+              window.filterSidebarTOC = function() {
+                   var currentLang = document.body.classList.contains('lang-zh') ? 'zh' : 'en';
+                   var hiddenLang = currentLang === 'zh' ? 'en' : 'zh';
+                   
+                   // Find all headers in the main content
+                   var headers = document.querySelectorAll('.markdown-section :is(h1, h2, h3, h4, h5, h6)');
+                   
+                   headers.forEach(function(header) {
+                       // Check if this header is inside a hidden language block
+                       var hiddenParent = header.closest('.lang-' + hiddenLang);
+                       var isHidden = !!hiddenParent;
+                       
+                       var headerId = header.getAttribute('id');
+                        if (headerId) {
+                            // Try to find the corresponding link in the sidebar TOC
+                            var sidebarLinks = document.querySelectorAll('.sidebar-nav .app-sub-sidebar a');
+                            sidebarLinks.forEach(function(link) {
+                                var href = link.getAttribute('href');
+                                if (!href) return;
+                                
+                                // Decode href to handle Chinese characters
+                                var decodedHref = decodeURIComponent(href);
+                                
+                                // Docsify links are usually relative, e.g. "?id=intro"
+                                // We check if href contains the ID
+                                if (decodedHref.indexOf('?id=' + headerId) !== -1 || decodedHref.endsWith('#' + headerId)) {
+                                    var parentLi = link.parentElement;
+                                    
+                                    // H1 Handling: Add class for CSS targeting
+                                    // We add this BEFORE hiding, so our CSS override works
+                                    if (header.tagName === 'H1') {
+                                        parentLi.classList.add('is-h1-item');
+                                        // DIRECTLY FORCE UL DISPLAY in JS to be safe
+                                        var childUl = parentLi.querySelector('ul');
+                                        if (childUl) {
+                                            childUl.style.display = 'block';
+                                        }
+                                    }
+                                    
+                                    // Language visibility control
+                                    if (isHidden) {
+                                        parentLi.style.display = 'none';
+                                        parentLi.classList.add('hidden-lang-item'); // Mark as hidden
+                                    } else {
+                                        parentLi.style.display = 'block';
+                                        parentLi.classList.remove('hidden-lang-item');
+                                        
+                                        // If it is an H1 item and shown, ensure its parent UL is also visible if needed?
+                                        // No, the parent UL (app-sub-sidebar) visibility is controlled by the L3 click.
+                                        // But we can ensure the H1's child UL is definitely visible.
+                                        if (header.tagName === 'H1') {
+                                             var visibleChildUl = parentLi.querySelector('ul');
+                                             if (visibleChildUl) {
+                                                 visibleChildUl.style.display = 'block';
+                                             }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                };
+              
+              // Run initial filter
+              window.filterSidebarTOC();
+              
+              // --- 4. Disable Right Content Scroll & Enable Header Navigation ---
+              hook.mounted(function() {
+                  var contentEl = document.querySelector('.content');
+              if (contentEl) {
+
+
+                   // Navigation Helper Function: Unified Smart Navigate
+                   function smartNavigate(direction, isForceJump, isKeyboard) {
+                        // 1. Get ALL Sidebar Links
+                        var allLinks = Array.from(document.querySelectorAll('.sidebar-nav a'));
+                        // Filter out hidden links, external links, and empty links
+                        var pageLinks = allLinks.filter(function(link) {
+                            var href = link.getAttribute('href');
+                            if (!href || href === '#' || href.startsWith('javascript:')) return false;
+                            
+                            // Check for visibility
+                            if (link.offsetParent === null) return false;
+                            
+                            // Check for external links (heuristic: starts with http/https and not same origin, 
+                            // but simpler: Docsify internal links usually start with #/ or /)
+                            // Actually, let's just skip absolute URLs that don't match current origin?
+                            // Or simpler: just skip anything starting with http/https?
+                            if (href.startsWith('http://') || href.startsWith('https://')) return false;
+                            
+                            return true;
+                        });
+                        
+                        if (pageLinks.length === 0) {
+                            scrollContent(direction, isKeyboard);
+                            return;
+                        }
+                        
+                        // 2. Determine Current Position in Sidebar
+                        var currentPath = window.location.hash;
+                        var currentIndex = -1;
+
+                        // Priority 1: Use the visual "active" element from DOM
+                        // Docsify assigns 'active' class to the current list item or link
+                        var activeNode = document.querySelector('.sidebar-nav .active');
+                        if (activeNode) {
+                            var activeLink = activeNode.tagName === 'A' ? activeNode : activeNode.querySelector('a');
+                            if (activeLink) {
+                                currentIndex = pageLinks.indexOf(activeLink);
+                            }
+                        }
+                        
+                        // Priority 2: Precise matching
+                        if (currentIndex === -1) {
+                            currentIndex = pageLinks.findIndex(function(link) {
+                                var href = link.getAttribute('href');
+                                if (!href) return false;
+                                return href === currentPath;
+                            });
+                        }
+
+                        // Fallback: fuzzy match with query params
+                        if (currentIndex === -1) {
+                            currentIndex = pageLinks.findIndex(function(link) {
+                                var href = link.getAttribute('href');
+                                if (!href) return false;
+                                return href.indexOf(currentPath) !== -1 && currentPath.length > 2;
+                            });
+                        }
+                        
+                        // Fallback: match base path without query
+                        if (currentIndex === -1) {
+                             var cleanCurrentPath = currentPath.split('?')[0]; 
+                             currentIndex = pageLinks.findIndex(function(link) {
+                                var href = link.getAttribute('href');
+                                if (!href) return false;
+                                var cleanHref = href.split('?')[0];
+                                return cleanHref === cleanCurrentPath;
+                            });
+                        }
+                        
+                        if (currentIndex === -1) currentIndex = 0; 
+                        
+                        // 3. Determine Target
+                        var targetIndex = currentIndex;
+                        var foundNewPage = false;
+                        
+                        // Helper to get base path (remove query/hash params for page comparison)
+                        // Assuming href format: #/page or #/page?id=xxx
+                        var getBasePath = function(href) {
+                            if (!href) return '';
+                            return href.split('?')[0];
+                        };
+                        
+                        var currentBasePath = getBasePath(pageLinks[currentIndex].getAttribute('href'));
+                        
+                        // Loop to find next/prev link that is actually a different page
+                        // This skips anchor links within the same page (e.g. #/page?id=header1)
+                        // unless we are just scrolling? No, "smartNavigate" with isForceJump usually implies page flip.
+                        // Actually, for ArrowUp/Down (scroll), we might want to visit anchors?
+                        // But user specifically complained about "double click flip" behavior.
+                        // Let's apply this logic ONLY when isForceJump is true (Double Click / Left-Right Arrow)
+                        
+                        if (isForceJump) {
+                            while (true) {
+                                targetIndex += direction;
+                                
+                                // Boundary Check & Loop
+                                if (targetIndex < 0) {
+                                    // If at top, loop to bottom?
+                                    // User only requested "at bottom, flip to first".
+                                    // But let's implement loop for both directions for consistency
+                                    targetIndex = pageLinks.length - 1;
+                                    // We need to check if this new index is different page
+                                    // But since we just jumped from 0 to end, it's likely different.
+                                    // Unless length=1.
+                                }
+                                if (targetIndex >= pageLinks.length) {
+                                    // Loop to start
+                                    targetIndex = 0;
+                                }
+                                
+                                // Safety break for single page
+                                if (pageLinks.length <= 1) {
+                                    targetIndex = 0;
+                                    break;
+                                }
+                                
+                                var checkLink = pageLinks[targetIndex];
+                                var checkHref = checkLink.getAttribute('href');
+                                var checkBasePath = getBasePath(checkHref);
+                                
+                                if (checkBasePath !== currentBasePath) {
+                                    foundNewPage = true;
+                                    break;
+                                }
+                                
+                                // Prevent infinite loop if all links point to same base page (unlikely but possible)
+                                // If we looped back to currentIndex, break.
+                                if (targetIndex === currentIndex) {
+                                    break;
+                                }
+                            }
+                        } else {
+                            // Standard single step for normal navigation (if we ever use it for non-scroll)
+                            // But currently ArrowUp/Down uses isForceJump=false (Scroll)
+                            // Wait, logic below handles scroll vs jump.
+                            // If isForceJump is false, we don't really use targetIndex for jumping,
+                            // we just scroll pixel-wise.
+                            // SO targetIndex is only relevant for JUMPING.
+                            // However, we do have a check: "If we are already at the target index... just scroll"
+                            targetIndex = currentIndex + direction;
+                            if (targetIndex < 0) targetIndex = 0;
+                            if (targetIndex >= pageLinks.length) targetIndex = pageLinks.length - 1;
+                        }
+                        
+                        // If we are already at the target index (boundary), just scroll
+                        if (targetIndex === currentIndex && !isForceJump) {
+                             scrollContent(direction, isKeyboard);
+                             return;
+                        }
+                        
+                        var targetLink = pageLinks[targetIndex];
+                        var targetHref = targetLink.getAttribute('href');
+                        
+                        // 4. Logic: Scroll or Jump?
+                        
+                        if (isForceJump) {
+                            // Double Click / Arrow Left-Right: Force Jump
+                            // Ensure we actually found a different page or reached valid boundary
+                            // If we didn't find a new page (e.g. at end of list and only anchors left), 
+                            // targetIndex might be same as currentIndex (if logic above was different)
+                            // But with while loop, targetIndex stops at end.
+                            // If we are at end, targetHref might be same base path.
+                            
+                            // Double check if we are just jumping to an anchor on same page?
+                            // No, loop ensures different base path OR boundary.
+                            
+                            navigateToUrl(targetHref);
+                        } else {
+                            // Single Click / Arrow Up-Down: Smart Scroll
+                            // Calculate distances
+                            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                            var windowHeight = window.innerHeight;
+                            var docHeight = document.documentElement.scrollHeight;
+                            
+                            // Check if at edge
+                            var isAtTop = scrollTop <= 10;
+                            var isAtBottom = scrollTop + windowHeight >= docHeight - 10;
+                            
+                            if (direction === 1) { // DOWN
+                                if (isAtBottom) {
+                                    // At bottom, do nothing (wait for double click to flip)
+                                    // Or maybe nudge user? No, user said "touch bottom then double click is flip"
+                                    // But single click should just scroll. Since we are at bottom, scrolling does nothing.
+                                    // We can just return.
+                                    return;
+                                } else {
+                                    scrollContent(direction, isKeyboard);
+                                }
+                            } else { // UP
+                                if (isAtTop) {
+                                    return;
+                                } else {
+                                    scrollContent(direction, isKeyboard);
+                                }
+                            }
+                        }
+                   }
+                   
+                   function navigateToUrl(href) {
+                        var currentPath = window.location.hash;
+                        if (href !== currentPath) {
+                            window.location.href = href;
+                            // Force scroll to top after hash change (slight delay to let docsify render)
+                            setTimeout(function() {
+                                window.scrollTo(0, 0);
+                            }, 50);
+                        } else {
+                             // Already on page, force scroll top
+                             window.scrollTo(0, 0);
+                        }
+                   }
+
+                   // Navigation Helper Function: Scroll (Pixel)
+                   function scrollContent(direction, isInstant) {
+                       var windowHeight = window.innerHeight;
+                       var scrollStep = windowHeight * 0.8; // Scroll 80% of screen height
+                       var behavior = isInstant ? 'auto' : 'smooth';
+                       
+                       if (direction === 1) { // DOWN
+                           window.scrollBy({ top: scrollStep, behavior: behavior });
+                       } else { // UP
+                           window.scrollBy({ top: -scrollStep, behavior: behavior });
+                       }
+                   }
+
+                   // Click Handling Logic (Instant Single Click + Double Click Check)
+                   // No timer delay for single click to ensure responsiveness!
+                   
+                   function handleNavClick(direction) {
+                       // Immediate Scroll
+                       smartNavigate(direction, false, false);
+                   }
+                   
+                   function handleNavDblClick(direction) {
+                       // Double Click Logic: Check if at edge, then Flip
+                       var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                       var windowHeight = window.innerHeight;
+                       var docHeight = document.documentElement.scrollHeight;
+                       
+                       var isAtTop = scrollTop <= 10;
+                       var isAtBottom = scrollTop + windowHeight >= docHeight - 10;
+                       
+                       if (direction === 1 && isAtBottom) {
+                           smartNavigate(1, true, false); // Force Jump
+                       } else if (direction === -1 && isAtTop) {
+                           smartNavigate(-1, true, false); // Force Jump
+                       }
+                   }
+ 
+                   // 1. Button Click Handlers
+                   var btnUp = document.getElementById('nav-btn-up');
+                   var btnDown = document.getElementById('nav-btn-down');
+                   
+                   if (btnUp) {
+                       // Single Click: Scroll
+                       btnUp.addEventListener('click', function(e) {
+                           e.preventDefault();
+                           handleNavClick(-1);
+                       });
+                       // Double Click: Flip if at edge
+                       btnUp.addEventListener('dblclick', function(e) {
+                           e.preventDefault();
+                           handleNavDblClick(-1);
+                       });
+                   }
+                   
+                   if (btnDown) {
+                       // Single Click: Scroll
+                       btnDown.addEventListener('click', function(e) {
+                           e.preventDefault();
+                           handleNavClick(1);
+                       });
+                       // Double Click: Flip if at edge
+                       btnDown.addEventListener('dblclick', function(e) {
+                           e.preventDefault();
+                           handleNavDblClick(1);
+                       });
+                   }
+                   
+                   // 2. Keyboard Handlers
+                   // Keep separation: Up/Down = Scroll, Left/Right = Force Flip
+                   document.addEventListener('keydown', function(e) {
+                       // Ignore if typing in an input
+                       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                       
+                       if (e.key === 'ArrowUp') {
+                           e.preventDefault(); 
+                           smartNavigate(-1, false, true); // True for instant scroll
+                       } else if (e.key === 'ArrowDown') {
+                           e.preventDefault();
+                           smartNavigate(1, false, true);
+                       } else if (e.key === 'ArrowLeft') {
+                           e.preventDefault();
+                           smartNavigate(-1, true, true);
+                       } else if (e.key === 'ArrowRight') {
+                           e.preventDefault();
+                           smartNavigate(1, true, true);
+                       }
+                   });
+
+              // 3. Disable Docsify's Auto-Scroll (Global Patch of scrollIntoView)
+              // We want to allow content scroll (unban wheel) but STOP sidebar from syncing.
+              // Docsify uses .scrollIntoView() on the active element. We intercept this globally for sidebar items.
+              // This is more robust than iterating elements, as it handles dynamic DOM updates.
+              
+              (function() {
+                   // Ensure we don't patch twice
+                   if (Element.prototype._originalScrollIntoView) return;
+                   
+                   Element.prototype._originalScrollIntoView = Element.prototype.scrollIntoView;
+                   
+                   // Throttling Utility for Sidebar Scroll
+                   var lastScrollTime = 0;
+                   var THROTTLE_MS = 300;
+                   
+                   // Interaction State
+                   var isUserInteracting = false;
+                   var interactionTimeout;
+                   
+                   function handleInteraction() {
+                       isUserInteracting = true;
+                       if (interactionTimeout) clearTimeout(interactionTimeout);
+                       
+                       // Reset after 1 second of no interaction
+                       interactionTimeout = setTimeout(function() {
+                           isUserInteracting = false;
+                       }, 1000);
+                   }
+                   
+                   // Global listeners to track sidebar interaction (handles dynamic sidebar)
+                   document.addEventListener('wheel', function(e) {
+                       if (e.target.closest('.sidebar')) handleInteraction();
+                   }, { passive: true });
+                   
+                   document.addEventListener('touchstart', function(e) {
+                       if (e.target.closest('.sidebar')) handleInteraction();
+                   }, { passive: true });
+                   
+                   document.addEventListener('mouseover', function(e) {
+                       if (e.target.closest('.sidebar')) handleInteraction();
+                   });
+                   
+                   // Use mouseout to detect leaving the sidebar
+                   document.addEventListener('mouseout', function(e) {
+                       // If we left an element inside sidebar
+                       if (e.target.closest('.sidebar')) {
+                           // Check where we went
+                           if (!e.relatedTarget || !e.relatedTarget.closest('.sidebar')) {
+                               // Left the sidebar completely
+                               // Short timeout to allow re-entry
+                               if (interactionTimeout) clearTimeout(interactionTimeout);
+                               interactionTimeout = setTimeout(function() {
+                                   isUserInteracting = false;
+                               }, 500);
+                           }
+                       }
+                   });
+
+                   function smartSidebarScroll(targetEl) {
+                       // 1. Check User Interaction
+                       if (isUserInteracting) return;
+                       
+                       // 2. Check Throttle
+                       var now = Date.now();
+                       if (now - lastScrollTime < THROTTLE_MS) {
+                           return; // Skip if throttled
+                       }
+                       
+                       var sidebar = document.querySelector('.sidebar');
+                       if (!sidebar) return;
+                       
+                       // Find the containing block (e.g. the secondary menu item with its children)
+                       var block = targetEl.closest('li') || targetEl;
+                       
+                       var sidebarRect = sidebar.getBoundingClientRect();
+                       var blockRect = block.getBoundingClientRect();
+                       
+                       // Define "Optimal Viewing Area": 20% to 80% of viewport height
+                       var viewHeight = sidebarRect.height;
+                       var safeTop = sidebarRect.top + (viewHeight * 0.2);
+                       var safeBottom = sidebarRect.top + (viewHeight * 0.8);
+                       
+                       // Calculate intersection with safe area
+                       var blockTop = blockRect.top;
+                       var blockBottom = blockRect.bottom;
+                       var blockHeight = blockRect.height;
+                       
+                       var visibleTop = Math.max(blockTop, safeTop);
+                       var visibleBottom = Math.min(blockBottom, safeBottom);
+                       var visibleHeight = Math.max(0, visibleBottom - visibleTop);
+                       
+                       var visibilityRatio = visibleHeight / blockHeight;
+                       
+                       // If 75% or more is visible in the safe zone, DO NOT SCROLL.
+                       if (visibilityRatio >= 0.75) {
+                           return;
+                       }
+                       
+                       // Check if it's already fully visible (even if small) inside the safe zone?
+                       // The ratio handles this: if height is small and fully inside, ratio is 1.0.
+                       
+                       // If we are here, we need to scroll.
+                       // Update timestamp
+                       lastScrollTime = now;
+                       
+                       // Use the ORIGINAL scrollIntoView to actually scroll
+                       // block: 'nearest' ensures minimal movement (no jump to top)
+                       targetEl._originalScrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                   }
+                   
+                   Element.prototype.scrollIntoView = function(arg) {
+                       // Check if this element is inside the sidebar
+                       var sidebar = document.querySelector('.sidebar');
+                       
+                       // Only intercept if it is inside the sidebar AND specifically part of the nav
+                       if (sidebar && sidebar.contains(this) && this.closest && this.closest('.sidebar-nav')) {
+                           // Redirect to Smart Scroll Logic
+                           smartSidebarScroll(this);
+                           return;
+                       }
+                       
+                       // Otherwise, proceed as normal
+                       return this._originalScrollIntoView.apply(this, arguments);
+                   };
+               })();
+              
+              }
+            }); // End of mounted
+        }
+      ]
+    };
   </script>
-  <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script>
+    // --- Smart Sidebar Layout Manager ---
+    // Requirement: Keep sidebar vertically centered relative to viewport
+    // Implementation: CSS Fixed Positioning (Restored for performance)
+    // Removed JS Absolute Positioning which caused jitter/lag on scroll.
+
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
 </body>
 </html>

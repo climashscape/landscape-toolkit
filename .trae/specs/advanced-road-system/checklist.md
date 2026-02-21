@@ -1,6 +1,6 @@
 - [x] Project documentation (README.md) is comprehensive and in Chinese.
 - [x] Folder structure includes `src/Optimization` and `src/Data`.
-- [x] Advanced Road Network supports multiple road types/widths. (Partially implemented in `RoadNetworkComponent` via width param, hierarchy logic pending).
-- [x] Road output is separated by layer. (Supported via RoadType data model, distinct mesh output pending).
+- [x] Advanced Road Network supports multiple road types/widths. (Implemented in `MultiLevelRoadComponent`).
+- [x] Road output is separated by layer. (Implemented via distinct outputs L1/L2/L3).
 - [x] Plaza connection generates valid fillets. (Handled by `QuadRoadGenerator` junction logic).
 - [x] Path Optimizer component runs and smooths/optimizes input curves.

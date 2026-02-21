@@ -42,6 +42,19 @@ class Program
 
             // Utility
             SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawRhinoPicker), "rhino_picker", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawChangelog), "changelog", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawProjectDoc), "project_doc", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawUIStandards), "ui_standards", outputDir);
+
+            // Workflows (Using Modeling Color)
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Modeling, Icons.DrawSketchToRoad), "sketch_to_road", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Modeling, Icons.DrawTerrainPlanting), "terrain_planting", outputDir);
+
+            // Core Logic Impl (Using Utility Color)
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawRoadNetwork), "roads_impl", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawTerrain), "surfaces_impl", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawSteps), "features_impl", outputDir);
+            SaveIcon(Icons.WithBackground(Icons.CategoryColors.Utility, Icons.DrawSolarAnalysis), "analysis_impl", outputDir);
 
             // Logo (Keep original)
             SaveIcon(Icons.DrawMainIcon, "logo", outputDir);

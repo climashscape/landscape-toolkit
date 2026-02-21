@@ -1,4 +1,4 @@
-<div class="lang-en">
+﻿<div class="lang-en">
 
 # Changelog
 

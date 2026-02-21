@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landscape Toolkit - Documentation</title>
+    <title>Landscape Toolkit v1.2.3 - Documentation</title>
     <style>
         :root {
             --primary: #228B22; /* ForestGreen */
@@ -20,6 +20,11 @@
             margin: 0;
             line-height: 1.6;
         }
+        
+        /* Language Support */
+        body.lang-zh .lang-en { display: none !important; }
+        body.lang-en .lang-zh { display: none !important; }
+        
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -28,6 +33,16 @@
         }
         h1 { margin: 0; font-size: 2.5rem; }
         .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 1rem; }
+        .warning-text {
+            color: #ffeeba;
+            background-color: rgba(0,0,0,0.2);
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,238,186,0.3);
+        }
         
         nav {
             background: white;
@@ -38,6 +53,7 @@
             z-index: 100;
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 1rem;
             flex-wrap: wrap;
         }
@@ -58,6 +74,26 @@
         .tab-btn.active { 
             color: var(--primary); 
             border-bottom-color: var(--primary); 
+        }
+        
+        /* Language Switcher in Nav */
+        .lang-switch {
+            margin-left: auto;
+            display: flex;
+            gap: 5px;
+        }
+        .lang-btn {
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
         
         main {
@@ -137,6 +173,8 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            /* Modern sans-serif font stack for readability */
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         .timeline-item {
             position: relative;
@@ -147,19 +185,47 @@
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -6px;
-            top: 0;
-            width: 10px;
-            height: 10px;
+            left: -7px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--primary);
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px var(--border);
         }
         .timeline-date {
-            font-size: 0.85rem;
-            color: #999;
-            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+            font-weight: 600;
+            /* Monospace font for dates adds a technical feel */
+            font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
         }
-        .timeline-content h3 { margin-top: 0; }
+        .timeline-content h3 { 
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+        }
+        .timeline-content ul {
+            padding-left: 1.2rem;
+        }
+        .timeline-content li {
+            margin-bottom: 0.6rem;
+            line-height: 1.7;
+            color: #343a40;
+        }
+        /* Enhanced code block style */
+        .timeline-content code {
+            font-family: "Fira Code", Consolas, Monaco, "Courier New", monospace;
+            background-color: rgba(0, 0, 0, 0.04);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #c7254e; /* Distinctive color for code/components */
+            border: 1px solid rgba(0,0,0,0.05);
+        }
         
         footer {
             text-align: center;
@@ -188,20 +254,52 @@
 
     </style>
 </head>
-<body>
+<body class="lang-en">
 
 <header>
-    <h1>Landscape Toolkit <span class="version-tag">v1.2.2</span></h1>
-    <p class="subtitle">High-performance parametric landscape design tools for Rhino/Grasshopper</p>
-    <a href="../dist/LandscapeToolkit_v1.2.2.zip" class="download-btn">Download v1.2.2</a>
+    <div onclick="goToDocs()" style="cursor: pointer;" title="Go to Documentation">
+        <h1>Landscape Toolkit <span class="version-tag">v1.2.3</span></h1>
+        <p class="subtitle">
+            <span class="lang-en">High-performance parametric landscape design tools for Rhino/Grasshopper</span>
+            <span class="lang-zh">基于 Rhino/Grasshopper 的高性能参数化景观设计工具</span>
+        </p>
+        <div class="warning-text">
+            <span class="lang-en">⚠️ <strong>Alpha Preview</strong>: All tools are under active development and review.</span>
+            <span class="lang-zh">⚠️ <strong>Alpha 预览</strong>: 所有工具均处于开发和审查阶段，尚未发布正式版。</span>
+        </div>
+    </div>
+    <a href="../dist/LandscapeToolkit_v1.2.3.zip" class="download-btn">
+        <span class="lang-en">Download v1.2.3</span>
+        <span class="lang-zh">下载 v1.2.3</span>
+    </a>
 </header>
 
 <nav>
-    <button class="tab-btn active" onclick="showTab('modeling')">Modeling</button>
-    <button class="tab-btn" onclick="showTab('optimization')">Optimization</button>
-    <button class="tab-btn" onclick="showTab('analysis')">Analysis</button>
-    <button class="tab-btn" onclick="showTab('workflows')">Workflows</button>
-    <button class="tab-btn" onclick="showTab('changelog')">Changelog</button>
+    <button class="tab-btn active" onclick="showTab('modeling')">
+        <span class="lang-en">Modeling</span>
+        <span class="lang-zh">建模工具</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('optimization')">
+        <span class="lang-en">Optimization</span>
+        <span class="lang-zh">算法优化</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('analysis')">
+        <span class="lang-en">Analysis</span>
+        <span class="lang-zh">环境分析</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('workflows')">
+        <span class="lang-en">Workflows</span>
+        <span class="lang-zh">工作流</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('changelog')">
+        <span class="lang-en">Changelog</span>
+        <span class="lang-zh">更新日志</span>
+    </button>
+    
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')" id="btn-en">🇺🇸 EN</button>
+        <button class="lang-btn" onclick="setLanguage('zh')" id="btn-zh">🇨🇳 中文</button>
+    </div>
 </nav>
 
 <main>
@@ -209,92 +307,152 @@
     <div id="modeling" class="grid active">
         <div class="card">
             <img src="assets/icons/road_network.png" class="card-icon" alt="Quad Road Network">
-            <h3>Quad Road Network</h3>
-            <p>Generate high-quality all-quad mesh road networks from centerlines. Perfect for SubD workflows.</p>
+            <h3>
+                <span class="lang-en">Quad Road Network</span>
+                <span class="lang-zh">四边形路网</span>
+            </h3>
+            <p>
+                <span class="lang-en">Generate high-quality all-quad mesh road networks from centerlines. Perfect for SubD workflows.</span>
+                <span class="lang-zh">基于中心线生成高质量全四边面网格路网。完美支持 SubD 工作流。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/QuadRoadNetwork.md">English Doc</a>
-                <a href="docs.html#/Components/zh/QuadRoadNetwork.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/QuadRoadNetwork.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/QuadRoadNetwork.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/road_network.png" class="card-icon" alt="Multi-Level Road">
-            <h3>Multi-Level Road</h3>
-            <p>Generate hierarchical road networks with priority junctions (L1/L2/L3).</p>
+            <h3>
+                <span class="lang-en">Multi-Level Road</span>
+                <span class="lang-zh">多级路网</span>
+            </h3>
+            <p>
+                <span class="lang-en">Generate hierarchical road networks with priority junctions (L1/L2/L3).</span>
+                <span class="lang-zh">生成具有优先级路口 (L1/L2/L3) 的分级路网系统。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/MultiLevelRoad.md">English Doc</a>
-                <a href="docs.html#/Components/zh/MultiLevelRoad.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/MultiLevelRoad.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/MultiLevelRoad.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/terrain.png" class="card-icon" alt="Landscape Terrain">
-            <h3>Landscape Terrain</h3>
-            <p>Create smooth, flowing "Class-A" terrain surfaces from contours or points using relaxation.</p>
+            <h3>
+                <span class="lang-en">Landscape Terrain</span>
+                <span class="lang-zh">景观地形</span>
+            </h3>
+            <p>
+                <span class="lang-en">Create smooth, flowing "Class-A" terrain surfaces from contours or points using relaxation.</span>
+                <span class="lang-zh">基于等高线或点云，使用松弛算法生成光顺流畅的“A级”地形曲面。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/Terrain.md">English Doc</a>
-                <a href="docs.html#/Components/zh/Terrain.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/Terrain.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/Terrain.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/plot_generator.png" class="card-icon" alt="Plot Generator">
-            <h3>Plot Generator</h3>
-            <p>Automatically extract and mesh enclosed plots from road boundaries.</p>
+            <h3>
+                <span class="lang-en">Plot Generator</span>
+                <span class="lang-zh">地块生成</span>
+            </h3>
+            <p>
+                <span class="lang-en">Automatically extract and mesh enclosed plots from road boundaries.</span>
+                <span class="lang-zh">自动识别路网边界并生成封闭的地块网格。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/PlotGenerator.md">English Doc</a>
-                <a href="docs.html#/Components/zh/PlotGenerator.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/PlotGenerator.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/PlotGenerator.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/steps.png" class="card-icon" alt="Landscape Steps">
-            <h3>Landscape Steps</h3>
-            <p>Parametric step generation that adapts to path slope and length.</p>
+            <h3>
+                <span class="lang-en">Landscape Steps</span>
+                <span class="lang-zh">景观台阶</span>
+            </h3>
+            <p>
+                <span class="lang-en">Parametric step generation that adapts to path slope and length.</span>
+                <span class="lang-zh">自适应路径坡度与长度的参数化台阶生成。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/Steps.md">English Doc</a>
-                <a href="docs.html#/Components/zh/Steps.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/Steps.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/Steps.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/wall.png" class="card-icon" alt="Landscape Wall">
-            <h3>Landscape Wall</h3>
-            <p>Generate retaining walls with thickness and height control.</p>
+            <h3>
+                <span class="lang-en">Landscape Wall</span>
+                <span class="lang-zh">挡土墙</span>
+            </h3>
+            <p>
+                <span class="lang-en">Generate retaining walls with thickness and height control.</span>
+                <span class="lang-zh">生成具有厚度与高度控制的挡土墙。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/Wall.md">English Doc</a>
-                <a href="docs.html#/Components/zh/Wall.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/Wall.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/Wall.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/boardwalk.png" class="card-icon" alt="Boardwalk">
-            <h3>Boardwalk</h3>
-            <p>Generate raised boardwalks with customizable width and supports.</p>
+            <h3>
+                <span class="lang-en">Boardwalk</span>
+                <span class="lang-zh">栈道</span>
+            </h3>
+            <p>
+                <span class="lang-en">Generate raised boardwalks with customizable width and supports.</span>
+                <span class="lang-zh">生成具有可自定义宽度与支撑结构的架空栈道。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/Boardwalk.md">English Doc</a>
-                <a href="docs.html#/Components/zh/Boardwalk.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/Boardwalk.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/Boardwalk.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/scatter.png" class="card-icon" alt="Scatter System">
-            <h3>Scatter System</h3>
-            <p>Rule-based distribution of trees and furniture along paths or surfaces.</p>
+            <h3>
+                <span class="lang-en">Scatter System</span>
+                <span class="lang-zh">散布系统</span>
+            </h3>
+            <p>
+                <span class="lang-en">Rule-based distribution of trees and furniture along paths or surfaces.</span>
+                <span class="lang-zh">基于规则沿路径或表面分布树木与小品家具。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/Scatter.md">English Doc</a>
-                <a href="docs.html#/Components/zh/Scatter.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/Scatter.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/Scatter.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/minimal_surface.png" class="card-icon" alt="Minimal Surface">
-            <h3>Minimal Surface</h3>
-            <p>Create minimal surfaces from boundary curves using relaxation algorithms.</p>
+            <h3>
+                <span class="lang-en">Minimal Surface</span>
+                <span class="lang-zh">极小曲面</span>
+            </h3>
+            <p>
+                <span class="lang-en">Create minimal surfaces from boundary curves using relaxation algorithms.</span>
+                <span class="lang-zh">使用松弛算法基于边界曲线生成极小曲面。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/MinimalSurface.md">English Doc</a>
-                <a href="docs.html#/Components/zh/MinimalSurface.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/MinimalSurface.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/MinimalSurface.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/rhino_picker.png" class="card-icon" alt="Rhino Picker">
-            <h3>Rhino Picker</h3>
-            <p>Directly filter and select Rhino objects by Layer, Name, or Type in GH.</p>
+            <h3>
+                <span class="lang-en">Rhino Picker</span>
+                <span class="lang-zh">Rhino 对象拾取</span>
+            </h3>
+            <p>
+                <span class="lang-en">Directly filter and select Rhino objects by Layer, Name, or Type in GH.</span>
+                <span class="lang-zh">在 GH 中直接通过图层、名称或类型筛选并拾取 Rhino 对象。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/RhinoPicker.md">English Doc</a>
-                <a href="docs.html#/Components/zh/RhinoPicker.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/RhinoPicker.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/RhinoPicker.md">阅读文档</a></span>
             </div>
         </div>
     </div>
@@ -303,20 +461,32 @@
     <div id="optimization" class="grid">
         <div class="card">
             <img src="assets/icons/wooly_path_optimizer.png" class="card-icon" alt="Wooly Path Optimizer">
-            <h3>Wooly Path Optimizer</h3>
-            <p>Bio-mimetic Slime Mold algorithm for finding organic, efficient path networks.</p>
+            <h3>
+                <span class="lang-en">Wooly Path Optimizer</span>
+                <span class="lang-zh">羊毛线路径优化</span>
+            </h3>
+            <p>
+                <span class="lang-en">Bio-mimetic Slime Mold algorithm for finding organic, efficient path networks.</span>
+                <span class="lang-zh">基于仿生粘菌算法寻找有机且高效的路径网络。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/WoolyPathOptimizer.md">English Doc</a>
-                <a href="docs.html#/Components/zh/WoolyPathOptimizer.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/WoolyPathOptimizer.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/WoolyPathOptimizer.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/path_optimizer.png" class="card-icon" alt="Bio-Path Optimizer">
-            <h3>Bio-Path Optimizer</h3>
-            <p>Simple Laplacian smoothing to relax rigid hand-drawn sketches.</p>
+            <h3>
+                <span class="lang-en">Bio-Path Optimizer</span>
+                <span class="lang-zh">生物路径优化</span>
+            </h3>
+            <p>
+                <span class="lang-en">Simple Laplacian smoothing to relax rigid hand-drawn sketches.</span>
+                <span class="lang-zh">简单的拉普拉斯平滑算法，用于松弛生硬的手绘草图。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/PathOptimizer.md">English Doc</a>
-                <a href="docs.html#/Components/zh/PathOptimizer.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/PathOptimizer.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/PathOptimizer.md">阅读文档</a></span>
             </div>
         </div>
     </div>
@@ -325,56 +495,92 @@
     <div id="analysis" class="grid">
         <div class="card">
             <img src="assets/icons/path_optimizer.png" class="card-icon" alt="Space Syntax">
-            <h3>Space Syntax</h3>
-            <p>Analyze network integration, choice, and depth metrics.</p>
+            <h3>
+                <span class="lang-en">Space Syntax</span>
+                <span class="lang-zh">空间句法</span>
+            </h3>
+            <p>
+                <span class="lang-en">Analyze network integration, choice, and depth metrics.</span>
+                <span class="lang-zh">分析路网的集成度、穿行度与深度指标。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/SpaceSyntax.md">English Doc</a>
-                <a href="docs.html#/Components/zh/SpaceSyntax.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/SpaceSyntax.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/SpaceSyntax.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/slope_analysis.png" class="card-icon" alt="Slope Analysis">
-            <h3>Slope Analysis</h3>
-            <p>Real-time slope visualization with color gradients for terrain assessment.</p>
+            <h3>
+                <span class="lang-en">Slope Analysis</span>
+                <span class="lang-zh">坡度分析</span>
+            </h3>
+            <p>
+                <span class="lang-en">Real-time slope visualization with color gradients for terrain assessment.</span>
+                <span class="lang-zh">实时坡度可视化与颜色渐变，用于地形评估。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/SlopeAnalysis.md">English Doc</a>
-                <a href="docs.html#/Components/zh/SlopeAnalysis.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/SlopeAnalysis.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/SlopeAnalysis.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/solar_analysis.png" class="card-icon" alt="Solar Analysis">
-            <h3>Solar Analysis</h3>
-            <p>Fast solar exposure estimation using mesh normals (Sun/Shadow map).</p>
+            <h3>
+                <span class="lang-en">Solar Analysis</span>
+                <span class="lang-zh">日照分析</span>
+            </h3>
+            <p>
+                <span class="lang-en">Fast solar exposure estimation using mesh normals (Sun/Shadow map).</span>
+                <span class="lang-zh">基于网格法线的快速日照估算（日照/阴影图）。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/SolarAnalysis.md">English Doc</a>
-                <a href="docs.html#/Components/zh/SolarAnalysis.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/SolarAnalysis.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/SolarAnalysis.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/wind_shadow_analysis.png" class="card-icon" alt="Wind Shadow">
-            <h3>Wind Shadow</h3>
-            <p>Simplified wind environment analysis based on raycasting.</p>
+            <h3>
+                <span class="lang-en">Wind Shadow</span>
+                <span class="lang-zh">风影分析</span>
+            </h3>
+            <p>
+                <span class="lang-en">Simplified wind environment analysis based on raycasting.</span>
+                <span class="lang-zh">基于光线投射的简化风环境分析。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/WindShadowAnalysis.md">English Doc</a>
-                <a href="docs.html#/Components/zh/WindShadowAnalysis.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/WindShadowAnalysis.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/WindShadowAnalysis.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/carbon_analysis.png" class="card-icon" alt="Carbon Analysis">
-            <h3>Carbon Analysis</h3>
-            <p>Estimate carbon sequestration benefits of landscape designs.</p>
+            <h3>
+                <span class="lang-en">Carbon Analysis</span>
+                <span class="lang-zh">碳汇分析</span>
+            </h3>
+            <p>
+                <span class="lang-en">Estimate carbon sequestration benefits of landscape designs.</span>
+                <span class="lang-zh">估算景观设计的碳汇效益。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/CarbonAnalysis.md">English Doc</a>
-                <a href="docs.html#/Components/zh/CarbonAnalysis.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/CarbonAnalysis.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/CarbonAnalysis.md">阅读文档</a></span>
             </div>
         </div>
         <div class="card">
             <img src="assets/icons/hydrology.png" class="card-icon" alt="Hydrology Analysis">
-            <h3>Hydrology Analysis</h3>
-            <p>Simulate surface water runoff and identify drainage paths using steepest descent.</p>
+            <h3>
+                <span class="lang-en">Hydrology Analysis</span>
+                <span class="lang-zh">水文分析</span>
+            </h3>
+            <p>
+                <span class="lang-en">Simulate surface water runoff and identify drainage paths using steepest descent.</span>
+                <span class="lang-zh">模拟地表径流并使用最速下降法识别排水路径。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Components/en/Hydrology.md">English Doc</a>
-                <a href="docs.html#/Components/zh/Hydrology.md">中文文档</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Components/Hydrology.md">Read Docs</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Components/Hydrology.md">阅读文档</a></span>
             </div>
         </div>
     </div>
@@ -382,21 +588,33 @@
     <!-- Workflows Tab -->
     <div id="workflows" class="grid">
         <div class="card">
-            <img src="assets/icons/road_network.png" class="card-icon" alt="Sketch to Road">
-            <h3>Sketch to Road</h3>
-            <p>Tutorial: Converting 2D sketches into 3D road networks.</p>
+            <img src="assets/icons/sketch_to_road.png" class="card-icon" alt="Sketch to Road">
+            <h3>
+                <span class="lang-en">Sketch to Road</span>
+                <span class="lang-zh">草图转路网</span>
+            </h3>
+            <p>
+                <span class="lang-en">Tutorial: Converting 2D sketches into 3D road networks.</span>
+                <span class="lang-zh">教程：将 2D 草图转换为 3D 路网。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Workflows/en/Sketch_to_Road.md">English</a>
-                <a href="docs.html#/Workflows/zh/Sketch_to_Road.md">中文教程</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Workflows/Sketch_to_Road.md">Read Tutorial</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Workflows/Sketch_to_Road.md">阅读教程</a></span>
             </div>
         </div>
         <div class="card">
-            <img src="assets/icons/terrain.png" class="card-icon" alt="Terrain & Planting">
-            <h3>Terrain & Planting</h3>
-            <p>Tutorial: Best practices for terrain sculpting and plant scattering.</p>
+            <img src="assets/icons/terrain_planting.png" class="card-icon" alt="Terrain & Planting">
+            <h3>
+                <span class="lang-en">Terrain & Planting</span>
+                <span class="lang-zh">地形与种植</span>
+            </h3>
+            <p>
+                <span class="lang-en">Tutorial: Best practices for terrain sculpting and plant scattering.</span>
+                <span class="lang-zh">教程：地形雕刻与植物散布的最佳实践。</span>
+            </p>
             <div class="card-links">
-                <a href="docs.html#/Workflows/en/Terrain_Planting.md">English</a>
-                <a href="docs.html#/Workflows/zh/Terrain_Planting.md">中文教程</a>
+                <span class="lang-en"><a target="_top" href="docs.html#/Workflows/Terrain_Planting.md">Read Tutorial</a></span>
+                <span class="lang-zh"><a target="_top" href="docs.html#/Workflows/Terrain_Planting.md">阅读教程</a></span>
             </div>
         </div>
     </div>
@@ -404,59 +622,160 @@
     <!-- Changelog Tab -->
     <div id="changelog" class="timeline" style="display: none;">
         <div class="timeline-item">
-            <div class="timeline-date">2026-02-20</div>
+            <div class="timeline-date">2026-02-21</div>
             <div class="timeline-content">
-                <h3>v1.2.2 - Documentation Update</h3>
+                <h3>
+                    <span class="lang-en">v1.2.3 - Documentation Standardization</span>
+                    <span class="lang-zh">v1.2.3 - 文档标准化</span>
+                </h3>
                 <ul>
-                    <li><strong>Documentation</strong>: Added comprehensive docs for Multi-Level Road and Space Syntax components.</li>
-                    <li><strong>Content</strong>: Synchronized version numbers (v1.2.2), project progress, and Chinese/English translations across all files.</li>
-                    <li><strong>Links</strong>: Verified and fixed cross-file links in documentation.</li>
+                    <li>
+                        <span class="lang-en"><strong>Added</strong>: New documentation assets (<code>glossary.md</code>, <code>_navbar.md</code>, icons) and automated link validation tool (<code>tools/check_links.py</code>).</span>
+                        <span class="lang-zh"><strong>新增</strong>: 新的文档资源 (<code>glossary.md</code>, <code>_navbar.md</code>, 图标) 和自动化链接验证工具 (<code>tools/check_links.py</code>)。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Changed</strong>: Unified documentation architecture to bilingual single-file structure and standardized version numbers.</span>
+                        <span class="lang-zh"><strong>变更</strong>: 将文档架构统一为双语单文件结构，并标准化版本号。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Fixed</strong>: Resolved broken relative links and verified Chinese translations across all components.</span>
+                        <span class="lang-zh"><strong>修复</strong>: 修复断裂的相对链接并验证所有组件的中文翻译。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Removed</strong>: Cleaned up legacy separate language directories (<code>docs/en</code>, <code>docs/zh</code>).</span>
+                        <span class="lang-zh"><strong>移除</strong>: 清理了遗留的分离语言目录 (<code>docs/en</code>, <code>docs/zh</code>)。</span>
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="timeline-item">
             <div class="timeline-date">2026-02-20</div>
             <div class="timeline-content">
-                <h3>v1.2.1 - UI & Design System</h3>
+                <h3>
+                    <span class="lang-en">v1.2.2 - Documentation Update</span>
+                    <span class="lang-zh">v1.2.2 - 文档更新</span>
+                </h3>
                 <ul>
-                    <li><strong>UI & Icons</strong>: Unified "Tile" design language with 3D effects.</li>
-                    <li><strong>Color Coding</strong>: Standardized colors for Modeling, Analysis, Hydrology, Optimization, and Utility.</li>
-                    <li><strong>Docs</strong>: Updated UI Design Standards.</li>
+                    <li>
+                        <span class="lang-en"><strong>Documentation</strong>: Synchronized version numbers (v1.2.2) and added missing docs for <strong>Multi-Level Road</strong> and <strong>Space Syntax</strong>.</span>
+                        <span class="lang-zh"><strong>文档</strong>: 同步版本号 (v1.2.2) 并补充了 <strong>多级路网</strong> 和 <strong>空间句法</strong> 的文档。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Content</strong>: Updated project introductory text and progress tracking.</span>
+                        <span class="lang-zh"><strong>内容</strong>: 更新了项目介绍文本和进度跟踪。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>QA</strong>: Verified Chinese/English translations and fixed file links.</span>
+                        <span class="lang-zh"><strong>质量保证</strong>: 验证了中英文翻译并修复了文件链接。</span>
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="timeline-item">
             <div class="timeline-date">2026-02-20</div>
             <div class="timeline-content">
-                <h3>v1.2.0 - Analysis & Integration</h3>
+                <h3>
+                    <span class="lang-en">v1.2.1 - UI & Design System</span>
+                    <span class="lang-zh">v1.2.1 - UI 与设计系统</span>
+                </h3>
                 <ul>
-                    <li><strong>Analysis</strong>: Carbon Analysis, Wind Shadow Analysis.</li>
-                    <li><strong>Integration</strong>: Rhino Picker (Layer/Name selection).</li>
-                    <li><strong>Roads</strong>: Junction/Street outputs for material assignment.</li>
+                    <li>
+                        <span class="lang-en"><strong>Unified Design</strong>: Adopted "Tile" style with category-specific rounded backgrounds and 3D visual effects.</span>
+                        <span class="lang-zh"><strong>统一设计</strong>: 采用“磁贴”风格，使用特定类别的圆角背景和 3D 视觉效果。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Color Coding</strong>: Standardized colors for Modeling (Green), Analysis (OrangeRed), Hydrology (Blue), Optimization (Purple), and Utility (Gray).</span>
+                        <span class="lang-zh"><strong>颜色编码</strong>: 标准化颜色编码：建模（绿色）、分析（橙红）、水文（蓝色）、优化（紫色）和工具（灰色）。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>High-Res Support</strong>: Icons are programmatically generated at high resolution (scalable to 128x128).</span>
+                        <span class="lang-zh"><strong>高清支持</strong>: 图标以高分辨率编程生成（可缩放至 128x128）。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Standards</strong>: Updated <a href="docs.html#/Dev_Guides/UI_Design_Standards.md">UI Design Standards</a> and added Chinese translation.</span>
+                        <span class="lang-zh"><strong>规范</strong>: 更新了 <a href="docs.html#/Dev_Guides/UI_Design_Standards.md">UI 设计规范</a> 并添加了中文翻译。</span>
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="timeline-item">
             <div class="timeline-date">2026-02-20</div>
             <div class="timeline-content">
-                <h3>v1.1.0 - Feature Update</h3>
+                <h3>
+                    <span class="lang-en">v1.2.0 - Analysis & Integration</span>
+                    <span class="lang-zh">v1.2.0 - 分析与集成</span>
+                </h3>
                 <ul>
-                    <li><strong>Features</strong>: Boardwalk, Scatter System (Vegetation/Furniture).</li>
-                    <li><strong>Surfaces</strong>: Minimal Surface generation.</li>
-                    <li><strong>Integration</strong>: GIS Connector framework.</li>
+                    <li>
+                        <span class="lang-en"><strong>Integration</strong>: Added <code>RhinoPickerComponent</code> to select Rhino objects by Layer, Name, or Type.</span>
+                        <span class="lang-zh"><strong>集成</strong>: 新增 <code>RhinoPickerComponent</code> 以通过图层、名称或类型选择 Rhino 对象。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Analysis</strong>: Added <code>CarbonAnalysisComponent</code> (Sequestration) and <code>WindShadowAnalysisComponent</code> (Raycasting).</span>
+                        <span class="lang-zh"><strong>分析</strong>: 新增 <code>CarbonAnalysisComponent</code> (碳汇) 和 <code>WindShadowAnalysisComponent</code> (光线投射风影)。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Roads</strong>: Added <code>Junctions</code> and <code>Streets</code> outputs to <code>RoadNetworkComponent</code> for better material assignment.</span>
+                        <span class="lang-zh"><strong>路网</strong>: 为 <code>RoadNetworkComponent</code> 添加 <code>Junctions</code> 和 <code>Streets</code> 输出以优化材质赋予。</span>
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="timeline-item">
             <div class="timeline-date">2026-02-20</div>
             <div class="timeline-content">
-                <h3>v1.0.0 - Initial Release</h3>
+                <h3>
+                    <span class="lang-en">v1.1.0 - Feature Update</span>
+                    <span class="lang-zh">v1.1.0 - 功能更新</span>
+                </h3>
                 <ul>
-                    <li><strong>Roads</strong>: Quad Road Network with variable width support.</li>
-                    <li><strong>Terrain</strong>: Class-A surface generation and Plot meshing.</li>
-                    <li><strong>Analysis</strong>: Slope, Solar, and Hydrology tools.</li>
-                    <li><strong>Optimization</strong>: Wooly Path (Slime Mold) and Bio-Path (Laplacian).</li>
-                    <li><strong>Features</strong>: Parametric Steps and Walls.</li>
+                    <li>
+                        <span class="lang-en"><strong>Features</strong>: Added <code>BoardwalkComponent</code> (Raised paths) and <code>ScatterComponent</code> (Rule-based distribution).</span>
+                        <span class="lang-zh"><strong>功能</strong>: 新增 <code>BoardwalkComponent</code> (架空路径) 和 <code>ScatterComponent</code> (基于规则的散布)。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Surfaces</strong>: Added <code>MinimalSurfaceComponent</code> for tensile structures using relaxation algorithms.</span>
+                        <span class="lang-zh"><strong>曲面</strong>: 新增 <code>MinimalSurfaceComponent</code>，使用松弛算法生成张拉结构。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>GIS</strong>: Added <code>GISConnector</code> framework (Placeholder for future integration).</span>
+                        <span class="lang-zh"><strong>GIS</strong>: 新增 <code>GISConnector</code> 框架（为未来集成预留）。</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-date">2026-02-20</div>
+            <div class="timeline-content">
+                <h3>
+                    <span class="lang-en">v1.0.0 - Initial Release</span>
+                    <span class="lang-zh">v1.0.0 - 初始发布</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-en"><strong>Roads</strong>: <code>QuadRoadGenerator</code> with variable width support and robust junction logic (3-way/4-way).</span>
+                        <span class="lang-zh"><strong>路网</strong>: 支持变宽和稳健路口逻辑（三岔/十字）的 <code>QuadRoadGenerator</code>。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Terrain</strong>: <code>TerrainComponent</code> (Delaunay + QuadRemesh) and <code>PlotGenerator</code>.</span>
+                        <span class="lang-zh"><strong>地形</strong>: <code>TerrainComponent</code> (Delaunay + QuadRemesh) 和 <code>PlotGenerator</code>。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Analysis</strong>: Slope, Solar, and Hydrology (Runoff simulation) tools.</span>
+                        <span class="lang-zh"><strong>分析</strong>: 坡度、日照和水文（径流模拟）工具。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Optimization</strong>: <code>WoolyPathOptimizer</code> (Slime Mold) and <code>PathOptimizer</code> (Laplacian).</span>
+                        <span class="lang-zh"><strong>优化</strong>: <code>WoolyPathOptimizer</code> (粘菌) 和 <code>PathOptimizer</code> (拉普拉斯)。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Features</strong>: Parametric <code>StepsComponent</code> and <code>WallComponent</code>.</span>
+                        <span class="lang-zh"><strong>功能</strong>: 参数化 <code>StepsComponent</code> 和 <code>WallComponent</code>。</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><strong>Dev</strong>: Refactored architecture (Core/Data/Modeling/Analysis) and initialized Dev Tools.</span>
+                        <span class="lang-zh"><strong>开发</strong>: 重构架构 (Core/Data/Modeling/Analysis) 并初始化开发工具。</span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -465,7 +784,10 @@
 </main>
 
 <footer>
-    <p>&copy; 2026 Landscape Toolkit. Open Source under MIT License.</p>
+    <p>
+        <span class="lang-en">&copy; 2026 Landscape Toolkit. Open Source under MIT License.</span>
+        <span class="lang-zh">&copy; 2026 Landscape Toolkit. 基于 MIT 协议开源。</span>
+    </p>
 </footer>
 
 <script>
@@ -492,8 +814,32 @@
         }
         
         // Activate button
-        event.target.classList.add('active');
+        // Find the button that called this, but since we have two spans inside, event.target might be the span
+        // We need to find the button element
+        // Simplest way is to find by onclick attribute or just re-select by index, but tabId is unique
+        const buttons = document.querySelectorAll(`.tab-btn[onclick="showTab('${tabId}')"]`);
+        if(buttons.length > 0) buttons[0].classList.add('active');
     }
+
+    function goToDocs() {
+        const lang = document.body.classList.contains('lang-zh') ? 'zh' : 'en';
+        window.location.href = `docs.html?lang=${lang}#/README`;
+    }
+
+    function setLanguage(lang) {
+        document.body.className = 'lang-' + lang;
+        
+        // Update active state of lang buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('btn-' + lang).classList.add('active');
+        
+        // Save preference
+        localStorage.setItem('docs-language', lang);
+    }
+    
+    // Initialize language
+    const savedLang = localStorage.getItem('docs-language') || 'en';
+    setLanguage(savedLang);
 </script>
 
 </body>
