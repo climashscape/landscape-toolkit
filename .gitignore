@@ -14,6 +14,7 @@ obj/
 *.dll
 *.exe
 TestResults/
+*.lock.json
 
 # Grasshopper / Rhino
 *.gha
@@ -23,32 +24,34 @@ TestResults/
 *.ghx
 *.gh
 *.autosave
-
-# Temporary Files
-*.log
-*.tmp
-*.bak
-*.swp
-*.~*
-
-# OS Generated
-Thumbs.db
-.DS_Store
-Desktop.ini
-
-# Trae (AI Context)
-.trae/temp/
-.trae/chat_history/
-.trae/diffs/
-
-# Distribution / Build Artifacts
-dist/
-artifacts/
-*.zip
-*.nupkg
+*.gh.bak
+*.ghlink
 
 # Python
 __pycache__/
-*.pyc
-.venv/
+*.py[cod]
+*$py.class
+venv/
 env/
+.env
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS Generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+dist/

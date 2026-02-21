@@ -1,4 +1,4 @@
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using System;
 using System.Drawing;
 
@@ -20,6 +20,8 @@ namespace LandscapeToolkit
 
         public override string AuthorContact => "";
 
-        public override string Version => "1.2.2";
+        public override string Version => "1.2.3";
     }
 }
+
+

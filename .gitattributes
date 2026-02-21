@@ -2,12 +2,14 @@
 # and leave all files detected as binary untouched.
 * text=auto
 
-# Text files that should always use CRLF line endings on checkout.
+# Text files that should always use CRLF line endings on checkout (Windows-centric project)
 *.cs      text eol=crlf
 *.csproj  text eol=crlf
 *.sln     text eol=crlf
+*.config  text eol=crlf
+*.xml     text eol=crlf
 
-# Text files that should always use LF line endings on checkout.
+# Text files that should always use LF line endings on checkout (Cross-platform/Web)
 *.sh      text eol=lf
 *.md      text eol=lf
 *.json    text eol=lf
@@ -16,6 +18,9 @@
 *.html    text eol=lf
 *.css     text eol=lf
 *.js      text eol=lf
+*.py      text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
 
 # Binary files
 *.png binary
@@ -23,6 +28,11 @@
 *.jpeg binary
 *.gif binary
 *.ico binary
+*.svg binary
 *.dll binary
 *.pdb binary
 *.exe binary
+*.zip binary
+*.3dm binary
+*.gh binary
+*.gha binary
