@@ -13,8 +13,14 @@ obj/
 *.pdb
 *.dll
 *.exe
+*.log
+*.tmp
+*.bak
 TestResults/
 *.lock.json
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
 # Grasshopper / Rhino
 *.gha
@@ -26,6 +32,7 @@ TestResults/
 *.autosave
 *.gh.bak
 *.ghlink
+*.3dm.rhl
 
 # Python
 __pycache__/
@@ -54,4 +61,8 @@ _site/
 .jekyll-cache/
 .jekyll-metadata
 
+# Distribution
 dist/
+
+# Trae (Optional: Keep specs/prompts if shared, ignore if personal)
+# .trae/
